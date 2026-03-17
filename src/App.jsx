@@ -1,7 +1,9 @@
 function App() {
   return (
-    <h1>Pantrix</h1>
-  );
+    <div className="container mt-lg">
+      <button className="btn btn-primary">Test Button</button>
+    </div>
+  )
 }
 
-export default App;
+export default App
