@@ -1,52 +1,66 @@
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import "../styles/admin-dashboard.css";
 import pantrixLogo from "../assets/images/Pantrix.png";
 
 function AdminDashboard() {
+  const [toast, setToast] = useState("");
+
   const user = {
     name: "Sarah",
     email: "sarah@pantrix.com",
   };
 
-  const firstName = user.name ? user.name.charAt(0).toUpperCase() + user.name.slice(1) : "Admin";
+  const firstName = user.name
+    ? user.name.charAt(0).toUpperCase() + user.name.slice(1)
+    : "Admin";
 
   const adminMenuItems = [
     {
       title: "Manage User Accounts",
       description: "View, edit, and delete user accounts",
       icon: "👥",
+      path: "/admin/users",
     },
     {
       title: "Manage Filter Settings",
       description: "Edit cooking times, food types, and dietary options",
       icon: "⚙️",
+      path: "/admin/filters",
     },
     {
       title: "Search Results Limit",
       description: "Set maximum recipes shown per search query",
       icon: "📊",
+      path: "/admin/limits",
     },
     {
       title: "Manage Comments",
       description: "View and moderate recipe reviews",
       icon: "💬",
+      path: "/admin/comments",
     },
     {
       title: "Review User Reports",
       description: "Review messages from Contact Us form",
       icon: "🛡️",
+      path: "/admin/reports",
     },
   ];
 
-  const handleLogout = () => {
-    alert("Logged out successfully");
+  const showToast = (message) => {
+    setToast(message);
+    setTimeout(() => setToast(""), 2000);
   };
 
-  const handleOpenSection = (title) => {
-    alert(`Open: ${title}`);
+  const handleLogout = () => {
+    showToast("Logged out successfully");
   };
 
   return (
     <div className="admin-page">
+      {toast && <div className="toast">{toast}</div>}
+
       <header className="admin-header">
         <div className="container">
           <div className="admin-header__content">
@@ -104,12 +118,12 @@ function AdminDashboard() {
               </div>
 
               <div className="card-content">
-                <button
+                <Link
+                  to={item.path}
                   className="btn btn-secondary admin-card__button"
-                  onClick={() => handleOpenSection(item.title)}
                 >
                   Open
-                </button>
+                </Link>
               </div>
             </div>
           ))}
