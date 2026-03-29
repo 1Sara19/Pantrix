@@ -1,13 +1,7 @@
-import Profile from "./pages/Profile";
 import ContactUs from "./pages/ContactUs";
 
 function App() {
-  return (
-    <>
-      <Profile />
-      <ContactUs />
-    </>
-  );
+  return <ContactUs />;
 }
 
 export default App;
