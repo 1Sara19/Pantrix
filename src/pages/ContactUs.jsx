@@ -1,8 +1,10 @@
 import { useState } from "react";
+import Menu from "../components/Menu";
 import "../styles/theme.css";
 import "../styles/contact-us.css";
 
-function ContactUs() {
+function ContactUs({ setPage }) {
+  const [menuOpen, setMenuOpen] = useState(false);
   const [formData, setFormData] = useState({
     email: "sarah.alsa@gmail.com",
     subject: "",
@@ -46,7 +48,12 @@ function ContactUs() {
     <div className="contact-page">
       <header className="contact-header">
         <div className="contact-brand">
-          <button className="contact-icon-btn" aria-label="Open menu">
+          <button
+            type="button"
+            className="contact-icon-btn"
+            aria-label="Open menu"
+            onClick={() => setMenuOpen(true)}
+          >
             ☰
           </button>
 
@@ -56,16 +63,26 @@ function ContactUs() {
           </div>
         </div>
 
-        <button className="contact-icon-btn contact-logout-btn" aria-label="Logout">
+        <button
+          type="button"
+          className="contact-icon-btn contact-logout-btn"
+          aria-label="Logout"
+        >
           ↪
         </button>
       </header>
 
       <main className="contact-content">
-        <button className="contact-back-link">← Back to Home</button>
+        <button
+          type="button"
+          className="contact-back-link"
+          onClick={() => setPage && setPage("home")}
+        >
+          ← Back to Home
+        </button>
 
         <div className="contact-title-wrap">
-          <div className="contact-title-icon">✉</div>
+          <div className="contact-title-icon">✉️</div>
           <div>
             <h1>Contact Us</h1>
             <p className="contact-subtitle">Send us feedback or report an issue</p>
@@ -85,8 +102,8 @@ function ContactUs() {
         <section className="contact-card">
           <h3>Get In Touch</h3>
           <p className="contact-card-text">
-            We&apos;d love to hear from you! Whether you have feedback, found a bug,
-            or just want to say hello.
+            We&apos;d love to hear from you! Whether you have feedback, found a
+            bug, or just want to say hello.
           </p>
 
           <form onSubmit={handleSubmit}>
@@ -141,8 +158,9 @@ function ContactUs() {
         <section className="contact-info-card">
           <h3>Demo Application</h3>
           <p>
-            This is a demonstration app. In a real application, your message would be
-            sent to our support team. For now, messages are simulated locally.
+            This is a demonstration app. In a real application, your message
+            would be sent to our support team. For now, messages are simulated
+            locally.
           </p>
         </section>
       </main>
@@ -151,6 +169,13 @@ function ContactUs() {
         <p>© 2026 Pantrix - Helping you cook smart and reduce food waste</p>
         <small>Demo prototype - All data is simulated</small>
       </footer>
+
+      <Menu
+        isOpen={menuOpen}
+        onClose={() => setMenuOpen(false)}
+        activeItem="contact"
+        setPage={setPage}
+      />
     </div>
   );
 }

@@ -1,8 +1,10 @@
 import { useState } from "react";
+import Menu from "../components/Menu";
 import "../styles/theme.css";
 import "../styles/profile.css";
 
-function Profile() {
+function Profile({ setPage }) {
+  const [menuOpen, setMenuOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -57,7 +59,12 @@ function Profile() {
     <div className="profile-page">
       <header className="profile-header">
         <div className="profile-brand">
-          <button className="icon-btn" aria-label="Open menu">
+          <button
+            type="button"
+            className="icon-btn"
+            aria-label="Open menu"
+            onClick={() => setMenuOpen(true)}
+          >
             ☰
           </button>
 
@@ -67,13 +74,23 @@ function Profile() {
           </div>
         </div>
 
-        <button className="icon-btn logout-btn" aria-label="Logout">
+        <button
+          type="button"
+          className="icon-btn logout-btn"
+          aria-label="Logout"
+        >
           ↪
         </button>
       </header>
 
       <main className="profile-content">
-        <button className="back-link">← Back to Home</button>
+        <button
+          type="button"
+          className="back-link"
+          onClick={() => setPage && setPage("home")}
+        >
+          ← Back to Home
+        </button>
 
         <div className="profile-title-row">
           <div>
@@ -94,7 +111,15 @@ function Profile() {
           )}
         </div>
 
-        {message && <div className="alert alert-success profile-message">{message}</div>}
+        {message && (
+          <div
+            className={`alert ${
+              message.includes("successfully") ? "alert-success" : "alert-error"
+            } profile-message`}
+          >
+            {message}
+          </div>
+        )}
 
         <form onSubmit={handleSave}>
           <section className="profile-card">
@@ -128,7 +153,8 @@ function Profile() {
                     onChange={handleChange}
                   />
                   <small className="field-note">
-                    Note: Email changes may require verification in a production app
+                    Note: Email changes may require verification in a production
+                    app
                   </small>
                 </>
               ) : (
@@ -187,6 +213,13 @@ function Profile() {
         <p>© 2026 Pantrix - Helping you cook smart and reduce food waste</p>
         <small>Demo prototype - All data is simulated</small>
       </footer>
+
+      <Menu
+        isOpen={menuOpen}
+        onClose={() => setMenuOpen(false)}
+        activeItem="profile"
+        setPage={setPage}
+      />
     </div>
   );
 }
