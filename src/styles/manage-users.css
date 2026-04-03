@@ -91,6 +91,7 @@
 .manage-users-value {
   font-size: var(--text-base);
   font-weight: var(--font-weight-medium);
+  word-break: break-word;
 }
 
 .manage-users-role {
@@ -217,6 +218,33 @@
   font-weight: var(--font-weight-medium);
 }
 
+.edit-user-modal .input,
+.edit-user-modal select.input {
+  background-color: #f7f1e8;
+  width: 100%;
+}
+
+.edit-user-modal select.input {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+}
+
+.edit-user-modal .input:focus,
+.edit-user-modal select.input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(154, 119, 72, 0.15);
+}
+
+.manage-users-error {
+  margin-top: 2px;
+  font-size: var(--text-xs);
+  color: var(--destructive-color);
+  line-height: 1.4;
+}
+
 .edit-user-modal__actions {
   display: flex;
   flex-direction: column;
@@ -227,10 +255,6 @@
 .edit-user-modal__actions .btn {
   width: 100%;
   justify-content: center;
-}
-
-.edit-user-modal .input {
-  background-color: #f7f1e8;
 }
 
 /* delete modal */

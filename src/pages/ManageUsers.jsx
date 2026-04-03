@@ -17,6 +17,11 @@ function ManageUsers() {
   const [editForm, setEditForm] = useState({
     name: "",
     email: "",
+    role: "user",
+  });
+  const [errors, setErrors] = useState({
+    name: "",
+    email: "",
     role: "",
   });
   const [toast, setToast] = useState("");
@@ -47,18 +52,80 @@ function ManageUsers() {
       email: user.email,
       role: user.role,
     });
+    setErrors({
+      name: "",
+      email: "",
+      role: "",
+    });
     setShowEditDialog(true);
   };
 
+  const validateEmail = (email) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
   const handleSaveEdit = () => {
+    const trimmedName = editForm.name.trim();
+    const trimmedEmail = editForm.email.trim().toLowerCase();
+    const selectedRole = editForm.role;
+
+    const newErrors = {
+      name: "",
+      email: "",
+      role: "",
+    };
+
+    if (!trimmedName) {
+      newErrors.name = "Name is required";
+    }
+
+    if (!trimmedEmail) {
+      newErrors.email = "Email is required";
+    } else if (!validateEmail(trimmedEmail)) {
+      newErrors.email = "Enter a valid email address";
+    } else {
+      const duplicateEmail = users.some(
+        (user) =>
+          user.email.toLowerCase() === trimmedEmail &&
+          user.id !== selectedUser.id
+      );
+
+      if (duplicateEmail) {
+        newErrors.email = "This email is already in use";
+      }
+    }
+
+    if (!selectedRole) {
+      newErrors.role = "Role is required";
+    }
+
+    setErrors(newErrors);
+
+    if (newErrors.name || newErrors.email || newErrors.role) {
+      return;
+    }
+
     if (selectedUser) {
       setUsers(
         users.map((user) =>
-          user.id === selectedUser.id ? { ...user, ...editForm } : user
+          user.id === selectedUser.id
+            ? {
+                ...user,
+                name: trimmedName,
+                email: trimmedEmail,
+                role: selectedRole,
+              }
+            : user
         )
       );
+
       setShowEditDialog(false);
       setSelectedUser(null);
+      setErrors({
+        name: "",
+        email: "",
+        role: "",
+      });
       showToast("User updated successfully");
     }
   };
@@ -71,9 +138,9 @@ function ManageUsers() {
         <div className="container">
           <div className="manage-users-header__content">
             <div className="manage-users-header__left">
-                <Link to="/admin" className="btn btn-ghost manage-users-back" >
-                    ← Back to Dashboard
-                </Link>
+              <Link to="/admin" className="btn btn-ghost manage-users-back">
+                ← Back to Dashboard
+              </Link>
 
               <div className="manage-users-brand">
                 <img
@@ -114,7 +181,9 @@ function ManageUsers() {
 
                 <div className="manage-users-field">
                   <p className="manage-users-label">Role</p>
-                  <p className="manage-users-value manage-users-role">{user.role}</p>
+                  <p className="manage-users-value manage-users-role">
+                    {user.role}
+                  </p>
                 </div>
               </div>
 
@@ -203,10 +272,14 @@ function ManageUsers() {
                   className="input"
                   type="text"
                   value={editForm.name}
-                  onChange={(e) =>
-                    setEditForm({ ...editForm, name: e.target.value })
-                  }
+                  onChange={(e) => {
+                    setEditForm({ ...editForm, name: e.target.value });
+                    setErrors({ ...errors, name: "" });
+                  }}
                 />
+                {errors.name && (
+                  <p className="manage-users-error">{errors.name}</p>
+                )}
               </div>
 
               <div className="manage-users-form-group">
@@ -216,23 +289,33 @@ function ManageUsers() {
                   className="input"
                   type="email"
                   value={editForm.email}
-                  onChange={(e) =>
-                    setEditForm({ ...editForm, email: e.target.value })
-                  }
+                  onChange={(e) => {
+                    setEditForm({ ...editForm, email: e.target.value });
+                    setErrors({ ...errors, email: "" });
+                  }}
                 />
+                {errors.email && (
+                  <p className="manage-users-error">{errors.email}</p>
+                )}
               </div>
 
               <div className="manage-users-form-group">
                 <label htmlFor="edit-role">Role</label>
-                <input
+                <select
                   id="edit-role"
                   className="input"
-                  type="text"
                   value={editForm.role}
-                  onChange={(e) =>
-                    setEditForm({ ...editForm, role: e.target.value })
-                  }
-                />
+                  onChange={(e) => {
+                    setEditForm({ ...editForm, role: e.target.value });
+                    setErrors({ ...errors, role: "" });
+                  }}
+                >
+                  <option value="user">User</option>
+                  <option value="admin">Admin</option>
+                </select>
+                {errors.role && (
+                  <p className="manage-users-error">{errors.role}</p>
+                )}
               </div>
             </div>
 

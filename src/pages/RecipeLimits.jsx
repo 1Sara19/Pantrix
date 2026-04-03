@@ -1,31 +1,72 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../styles/recipe-limits.css";
 import pantrixLogo from "../assets/images/Pantrix.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function RecipeLimits() {
+  const navigate = useNavigate();
+
+  const [savedMaxRecipes, setSavedMaxRecipes] = useState("20");
   const [maxRecipes, setMaxRecipes] = useState("20");
   const [toast, setToast] = useState("");
+  const [error, setError] = useState("");
 
   const showToast = (message) => {
     setToast(message);
     setTimeout(() => setToast(""), 2200);
   };
 
+  const parsedValue = parseInt(maxRecipes, 10);
+  const isValid = !isNaN(parsedValue) && parsedValue >= 1;
+  const hasUnsavedChanges = maxRecipes !== savedMaxRecipes;
+
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      if (hasUnsavedChanges) {
+        e.preventDefault();
+        e.returnValue = "";
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [hasUnsavedChanges]);
+
+  const handleBackClick = (e) => {
+    if (hasUnsavedChanges) {
+      e.preventDefault();
+
+      const confirmLeave = window.confirm(
+        "You have unsaved changes. Are you sure you want to leave without saving?"
+      );
+
+      if (confirmLeave) {
+        navigate("/admin");
+      }
+    }
+  };
+
   const handleSave = () => {
     const value = parseInt(maxRecipes, 10);
 
     if (isNaN(value) || value < 1) {
-      showToast("Please enter a valid number greater than 0.");
+      setError("Please enter a valid number greater than 0.");
       return;
     }
 
+    setError("");
+    setSavedMaxRecipes(String(value));
+    setMaxRecipes(String(value));
     showToast(`Search results limit updated to ${value} recipes.`);
   };
 
-  const displayValue = parseInt(maxRecipes, 10);
-  const isValid = !isNaN(displayValue) && displayValue >= 1;
+  const handleChange = (e) => {
+    setMaxRecipes(e.target.value);
 
+    if (error) {
+      setError("");
+    }
+  };
 
   return (
     <div className="recipe-limits-page">
@@ -35,9 +76,13 @@ function RecipeLimits() {
         <div className="container">
           <div className="recipe-limits-header__content">
             <div className="recipe-limits-header__left">
-                <Link to="/admin" className="btn btn-ghost recipe-limits-back" >
-                    ← Back to Dashboard
-                </Link>
+              <Link
+                to="/admin"
+                className="btn btn-ghost recipe-limits-back"
+                onClick={handleBackClick}
+              >
+                ← Back to Dashboard
+              </Link>
 
               <div className="recipe-limits-brand">
                 <img
@@ -65,7 +110,7 @@ function RecipeLimits() {
             <div className="card-header">
               <h2 className="card-title">Search Results Maximum Limit</h2>
               <p className="card-description">
-                Set the maximum number of recipes displayed per search.
+                Choose how many recipes can appear in one search result.
               </p>
             </div>
 
@@ -79,63 +124,35 @@ function RecipeLimits() {
                   max="200"
                   className="input recipe-limits-input"
                   value={maxRecipes}
-                  onChange={(e) => setMaxRecipes(e.target.value)}
+                  onChange={handleChange}
                   placeholder="20"
                 />
-                <p className="text-small">
-                  This defines how many recipes appear in the search results page.
-                </p>
-              </div>
 
-              <div className="recipe-limits-summary">
-                <h3 className="recipe-limits-summary__title">Current Setting</h3>
+                {error && <p className="recipe-limits-error">{error}</p>}
 
-                <p className="recipe-limits-summary__value">
-                  {isValid ? `Maximum ${displayValue} recipes per search` : "—"}
+                <p className="recipe-limits-help-text">
+                  Enter a number greater than 0.
                 </p>
 
-                {isValid && (
-                  <p className="recipe-limits-summary__text">
-                    When a user performs a search, only the top{" "}
-                    <strong>{displayValue}</strong> matching recipes will be displayed.
+                {isValid && !error && (
+                  <p className="recipe-limits-preview">
+                    Current value: <strong>{parsedValue}</strong> recipes per search
                   </p>
                 )}
               </div>
 
-              <div className="recipe-limits-actions">
-                <button className="btn btn-primary" onClick={handleSave}>
-                  Save Settings
-                </button>
-              </div>
-            </div>
-          </div>
+              <div className="recipe-limits-actions-wrap">
+                {hasUnsavedChanges && (
+                  <p className="recipe-limits-unsaved">
+                    You have unsaved changes.
+                  </p>
+                )}
 
-          <div className="card recipe-limits-info">
-            <div className="card-header">
-              <h3 className="card-title">How This Setting Works</h3>
-            </div>
-
-            <div className="card-content recipe-limits-info__content">
-              <div className="recipe-limits-info__item">
-                <span className="recipe-limits-info__icon">🔍</span>
-                <p>
-                  When a user performs a search, the system ranks all matching recipes.
-                </p>
-              </div>
-
-              <div className="recipe-limits-info__item">
-                <span className="recipe-limits-info__icon">📋</span>
-                <p>
-                  Only the top results based on this limit are shown to the user.
-                </p>
-              </div>
-
-              <div className="recipe-limits-info__item">
-                <span className="recipe-limits-info__icon">📊</span>
-                <p>
-                  This is a display limit only. It does not limit how many searches
-                  the user can perform.
-                </p>
+                <div className="recipe-limits-actions">
+                  <button className="btn btn-primary" onClick={handleSave}>
+                    Save Settings
+                  </button>
+                </div>
               </div>
             </div>
           </div>

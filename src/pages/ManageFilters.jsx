@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../styles/manage-filters.css";
 import pantrixLogo from "../assets/images/Pantrix.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function ManageFilters() {
+  const navigate = useNavigate();
+
   const [cookingTimes, setCookingTimes] = useState([
     "0-15 minutes",
     "15-30 minutes",
@@ -33,31 +35,69 @@ function ManageFilters() {
   const [newCookingTime, setNewCookingTime] = useState("");
   const [newFoodType, setNewFoodType] = useState("");
   const [newDietaryOption, setNewDietaryOption] = useState("");
+
   const [toast, setToast] = useState("");
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   const showToast = (msg) => {
     setToast(msg);
     setTimeout(() => setToast(""), 2000);
   };
 
-  const handleAdd = (value, setValue, list, setList, label) => {
-    if (value.trim()) {
-      setList([...list, value.trim()]);
-      setValue("");
-      showToast(`${label} added`);
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      if (hasUnsavedChanges) {
+        e.preventDefault();
+        e.returnValue = "";
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [hasUnsavedChanges]);
+
+  const handleBackClick = (e) => {
+    if (hasUnsavedChanges) {
+      e.preventDefault();
+
+      const confirmLeave = window.confirm(
+        "You have unsaved changes. Are you sure you want to leave without saving?"
+      );
+
+      if (confirmLeave) {
+        navigate("/admin");
+      }
+      return;
     }
   };
 
-  const handleRemove = (index, list, setList, label) => {
+  const handleAdd = (value, setValue, list, setList) => {
+    const trimmedValue = value.trim();
+
+    if (!trimmedValue) return;
+
+    const isDuplicate = list.some(
+      (item) => item.toLowerCase() === trimmedValue.toLowerCase()
+    );
+
+    if (isDuplicate) return;
+
+    setList([...list, trimmedValue]);
+    setValue("");
+    setHasUnsavedChanges(true);
+  };
+
+  const handleRemove = (index, list, setList) => {
     setList(list.filter((_, i) => i !== index));
-    showToast(`${label} removed`);
+    setHasUnsavedChanges(true);
   };
 
   const handleSaveChanges = () => {
-    showToast("Filter settings saved");
+    setHasUnsavedChanges(false);
+    showToast("Filter settings saved successfully");
   };
 
-  const renderSection = (title, list, setList, value, setValue, label) => (
+  const renderSection = (title, list, setList, value, setValue) => (
     <div className="card manage-filters-card">
       <h3>{title}</h3>
 
@@ -66,7 +106,9 @@ function ManageFilters() {
           <div key={index} className="manage-filters-tag">
             <span>{item}</span>
             <button
-              onClick={() => handleRemove(index, list, setList, label)}
+              type="button"
+              aria-label={`Remove ${item}`}
+              onClick={() => handleRemove(index, list, setList)}
             >
               ×
             </button>
@@ -79,16 +121,16 @@ function ManageFilters() {
           value={value}
           onChange={(e) => setValue(e.target.value)}
           placeholder="Add new..."
-          onKeyDown={(e) =>
-            e.key === "Enter" &&
-            handleAdd(value, setValue, list, setList, label)
-          }
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              handleAdd(value, setValue, list, setList);
+            }
+          }}
         />
         <button
+          type="button"
           className="btn btn-primary"
-          onClick={() =>
-            handleAdd(value, setValue, list, setList, label)
-          }
+          onClick={() => handleAdd(value, setValue, list, setList)}
         >
           Add
         </button>
@@ -100,22 +142,29 @@ function ManageFilters() {
     <div className="manage-filters-page">
       {toast && <div className="toast">{toast}</div>}
 
-      {/* Header */}
-        <header className="manage-filters-header">
-            <div className="container">
-                <Link to="/admin" className="btn btn-ghost manage-filters-back" >
-                 ← Back to Dashboard
-                </Link>
+      <header className="manage-filters-header">
+        <div className="container">
+          <Link
+            to="/admin"
+            className="btn btn-ghost manage-filters-back"
+            onClick={handleBackClick}
+          >
+            ← Back to Dashboard
+          </Link>
 
-                <div className="manage-filters-brand">
-                <img src={pantrixLogo} className="manage-filters-logo" alt="Pantrix logo" />
-                <div>
-                    <h1>Manage Filters</h1>
-                    <p>Edit cooking times, food types, and dietary options</p>
-                </div>
-                </div>
+          <div className="manage-filters-brand">
+            <img
+              src={pantrixLogo}
+              className="manage-filters-logo"
+              alt="Pantrix logo"
+            />
+            <div>
+              <h1>Manage Filters</h1>
+              <p>Edit cooking times, food types, and dietary options</p>
             </div>
-        </header>
+          </div>
+        </div>
+      </header>
 
       <main className="container manage-filters-main">
         {renderSection(
@@ -123,8 +172,7 @@ function ManageFilters() {
           cookingTimes,
           setCookingTimes,
           newCookingTime,
-          setNewCookingTime,
-          "Cooking time"
+          setNewCookingTime
         )}
 
         {renderSection(
@@ -132,8 +180,7 @@ function ManageFilters() {
           foodTypes,
           setFoodTypes,
           newFoodType,
-          setNewFoodType,
-          "Food type"
+          setNewFoodType
         )}
 
         {renderSection(
@@ -141,14 +188,21 @@ function ManageFilters() {
           dietaryOptions,
           setDietaryOptions,
           newDietaryOption,
-          setNewDietaryOption,
-          "Dietary option"
+          setNewDietaryOption
         )}
 
-        <div className="manage-filters-save">
-          <button className="btn btn-primary" onClick={handleSaveChanges}>
-            Save Changes
-          </button>
+        <div className="manage-filters-save-wrap">
+          {hasUnsavedChanges && (
+            <p className="manage-filters-unsaved">
+              You have unsaved changes.
+            </p>
+          )}
+
+          <div className="manage-filters-save">
+            <button className="btn btn-primary" onClick={handleSaveChanges}>
+              Save Changes
+            </button>
+          </div>
         </div>
       </main>
     </div>

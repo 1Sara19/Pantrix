@@ -31,56 +31,6 @@ function ManageComments() {
       date: "Feb 24, 2026",
       hidden: false,
     },
-    {
-      id: "3",
-      recipeId: "3",
-      recipeName: "Quick Veggie Omelet",
-      recipeImage:
-        "https://images.unsplash.com/photo-1525351484163-7529414344d8?w=200",
-      userName: "Bob Johnson",
-      rating: 5,
-      comment: "Perfect for breakfast! Quick and healthy.",
-      date: "Feb 23, 2026",
-      hidden: false,
-    },
-    {
-      id: "4",
-      recipeId: "4",
-      recipeName: "Garlic Butter Salmon",
-      recipeImage:
-        "https://images.unsplash.com/photo-1485921325833-c519f76c4927?w=200",
-      userName: "Alice Williams",
-      rating: 5,
-      comment: "Best salmon recipe ever! The garlic butter sauce is incredible.",
-      date: "Feb 22, 2026",
-      hidden: false,
-    },
-    {
-      id: "5",
-      recipeId: "5",
-      recipeName: "Spicy Beef Tacos",
-      recipeImage:
-        "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=200",
-      userName: "Mike Torres",
-      rating: 2,
-      comment:
-        "Way too spicy for me, and the instructions were confusing. Not recommended.",
-      date: "Feb 21, 2026",
-      hidden: false,
-    },
-    {
-      id: "6",
-      recipeId: "6",
-      recipeName: "Honey Garlic Shrimp",
-      recipeImage:
-        "https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?w=200",
-      userName: "Sarah Lee",
-      rating: 3,
-      comment:
-        "Decent flavor but the shrimp got overcooked. Timing needs to be adjusted.",
-      date: "Feb 20, 2026",
-      hidden: false,
-    },
   ];
 
   const [comments, setComments] = useState(initialComments);
@@ -121,11 +71,6 @@ function ManageComments() {
     }
   };
 
-  const handleKeep = () => {
-    showToast("Comment approved.");
-  };
-
-
   const totalCount = comments.length;
   const hiddenCount = comments.filter((c) => c.hidden).length;
   const visibleCount = totalCount - hiddenCount;
@@ -149,9 +94,9 @@ function ManageComments() {
         <div className="container">
           <div className="manage-comments-header__content">
             <div className="manage-comments-header__left">
-                <Link to="/admin" className="btn btn-ghost manage-comments-back">
+              <Link to="/admin" className="btn btn-ghost manage-comments-back">
                 ← Back to Dashboard
-                </Link>
+              </Link>
 
               <div className="manage-comments-brand">
                 <img
@@ -160,7 +105,9 @@ function ManageComments() {
                   className="manage-comments-brand__logo"
                 />
                 <div>
-                  <h1 className="manage-comments-brand__title">Manage Comments</h1>
+                  <h1 className="manage-comments-brand__title">
+                    Manage Comments
+                  </h1>
                   <p className="manage-comments-brand__subtitle">
                     View and moderate recipe reviews
                   </p>
@@ -174,7 +121,6 @@ function ManageComments() {
       <main className="container manage-comments-main">
         <div className="manage-comments-top">
           <div className="manage-comments-top__title">
-            <span className="manage-comments-icon">💬</span>
             <h2>All Comments</h2>
           </div>
 
@@ -187,99 +133,73 @@ function ManageComments() {
           </div>
         </div>
 
-        {comments.length === 0 ? (
-          <div className="card manage-comments-empty">
-            <span className="manage-comments-empty__icon">💬</span>
-            <p className="text-muted">No comments to moderate.</p>
-          </div>
-        ) : (
-          <div className="manage-comments-list">
-            {comments.map((comment) => (
-              <div
-                key={comment.id}
-                className={`card manage-comments-card ${
-                  comment.hidden ? "manage-comments-card--hidden" : ""
-                }`}
-              >
-                <div className="manage-comments-card__row">
-                  <div className="manage-comments-thumb-wrap">
-                    <img
-                      src={comment.recipeImage}
-                      alt={comment.recipeName}
-                      className={`manage-comments-thumb ${
-                        comment.hidden ? "manage-comments-thumb--hidden" : ""
-                      }`}
-                    />
+        <div className="manage-comments-list">
+          {comments.map((comment) => (
+            <div
+              key={comment.id}
+              className={`card manage-comments-card ${
+                comment.hidden ? "manage-comments-card--hidden" : ""
+              }`}
+            >
+              <div className="manage-comments-card__row">
+                <div className="manage-comments-thumb-wrap">
+                  <img
+                    src={comment.recipeImage}
+                    alt={comment.recipeName}
+                    className={`manage-comments-thumb ${
+                      comment.hidden ? "manage-comments-thumb--hidden" : ""
+                    }`}
+                  />
+                  {comment.hidden && (
+                    <div className="manage-comments-thumb__overlay">🙈</div>
+                  )}
+                </div>
+
+                <div className="manage-comments-body">
+                  <div className="manage-comments-title-row">
+                    <h3>{comment.recipeName}</h3>
                     {comment.hidden && (
-                      <div className="manage-comments-thumb__overlay">🙈</div>
+                      <span className="badge badge-warning">Hidden</span>
                     )}
                   </div>
 
-                  <div className="manage-comments-body">
-                    <div className="manage-comments-body__top">
-                      <div className="manage-comments-title-row">
-                        <h3>{comment.recipeName}</h3>
-                        {comment.hidden && (
-                          <span className="badge badge-warning">Hidden</span>
-                        )}
-                      </div>
+                  <div className="manage-comments-meta">
+                    <span>
+                      by <strong>{comment.userName}</strong>
+                    </span>
+                    <span className="manage-comments-dot">•</span>
+                    <span>{comment.date}</span>
+                  </div>
 
-                      <div className="manage-comments-meta">
-                        <span>
-                          by{" "}
-                          <strong>{comment.userName}</strong>
-                        </span>
-                        <span className="manage-comments-dot">•</span>
-                        <span>{comment.date}</span>
-                      </div>
+                  <div className="manage-comments-rating">
+                    {renderStars(comment.rating)}
+                    <span className="manage-comments-rating__text">
+                      {comment.rating} / 5
+                    </span>
+                  </div>
 
-                      <div className="manage-comments-rating">
-                        {renderStars(comment.rating)}
-                        <span className="manage-comments-rating__text">
-                          {comment.rating} / 5
-                        </span>
-                      </div>
-                    </div>
+                  <p className="manage-comments-text">"{comment.comment}"</p>
 
-                    <p className="manage-comments-text">"{comment.comment}"</p>
+                  <div className="manage-comments-actions">
+                    <button
+                      className="btn btn-secondary manage-comments-action-btn"
+                      onClick={() => handleToggleHide(comment)}
+                    >
+                      {comment.hidden ? "Show" : "Hide"}
+                    </button>
 
-                    <div className="manage-comments-actions">
-                      <button
-                        className="btn btn-secondary manage-comments-action-btn"
-                        onClick={() => handleKeep(comment)}
-                      >
-                        Keep
-                      </button>
-
-                      {comment.hidden ? (
-                        <button
-                          className="btn btn-secondary manage-comments-action-btn"
-                          onClick={() => handleToggleHide(comment)}
-                        >
-                          Unhide
-                        </button>
-                      ) : (
-                        <button
-                          className="btn btn-secondary manage-comments-action-btn"
-                          onClick={() => handleToggleHide(comment)}
-                        >
-                          Hide
-                        </button>
-                      )}
-
-                      <button
-                        className="btn btn-destructive manage-comments-action-btn"
-                        onClick={() => handleDeleteClick(comment)}
-                      >
-                        Delete
-                      </button>
-                    </div>
+                    <button
+                      className="btn btn-destructive manage-comments-action-btn"
+                      onClick={() => handleDeleteClick(comment)}
+                    >
+                      Delete
+                    </button>
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
-        )}
+            </div>
+          ))}
+        </div>
       </main>
 
       {showDeleteDialog && (
@@ -307,7 +227,8 @@ function ManageComments() {
                   {selectedComment.recipeName}
                 </p>
                 <p className="delete-comment-modal__meta text-muted">
-                  Comment by <strong>{selectedComment.userName}</strong> · {selectedComment.date}
+                  Comment by <strong>{selectedComment.userName}</strong> ·{" "}
+                  {selectedComment.date}
                 </p>
                 <p className="delete-comment-modal__text">
                   "{selectedComment.comment}"
@@ -317,6 +238,13 @@ function ManageComments() {
 
             <div className="delete-comment-modal__actions">
               <button
+                className="btn btn-destructive"
+                onClick={handleConfirmDelete}
+              >
+                Confirm Delete
+              </button>
+
+              <button
                 className="btn btn-secondary"
                 onClick={() => {
                   setShowDeleteDialog(false);
@@ -324,9 +252,6 @@ function ManageComments() {
                 }}
               >
                 Cancel
-              </button>
-              <button className="btn btn-destructive" onClick={handleConfirmDelete}>
-                Confirm Delete
               </button>
             </div>
           </div>

@@ -72,10 +72,6 @@
   margin: 0;
 }
 
-.manage-comments-icon {
-  font-size: 1.3rem;
-}
-
 .manage-comments-stats {
   display: flex;
   gap: var(--spacing-sm);
@@ -93,9 +89,16 @@
   padding: var(--spacing-lg);
 }
 
+/* هذا أهم تعديل للحالة المخفية */
 .manage-comments-card--hidden {
-  opacity: 0.7;
-  background-color: #faf6f1;
+  opacity: 0.55;
+  filter: grayscale(60%);
+  background-color: #f5f2ee;
+  border: 1px dashed var(--border-color);
+}
+
+.manage-comments-card--hidden .manage-comments-text {
+  color: var(--muted-text-color);
 }
 
 .manage-comments-card__row {
@@ -104,7 +107,6 @@
   gap: var(--spacing-md);
 }
 
-/* مهم جدًا: تثبيت مساحة الصورة */
 .manage-comments-thumb-wrap {
   position: relative;
   width: 96px;
@@ -331,6 +333,7 @@
   font-size: var(--text-sm);
   color: #6b5744;
   line-height: 1.5;
+  font-style: italic;
 }
 
 .delete-comment-modal__actions {

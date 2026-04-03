@@ -63,14 +63,33 @@
   color: var(--muted-text-color);
 }
 
+/* 🔥 Logout Button (معدل كامل) */
 .admin-logout-btn {
   border: 1px solid var(--border-color);
   background-color: transparent;
+  font-size: 1.1rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.admin-logout-btn i {
+  transition: transform 0.2s ease, color 0.2s ease;
 }
 
 .admin-logout-btn:hover {
-  color: var(--destructive-color);
   background-color: #fff1f0;
+  border-color: #ff4d4f;
+}
+
+.admin-logout-btn:hover i {
+  color: #ff4d4f;
+  transform: scale(1.15);
 }
 
 .admin-main {
@@ -96,10 +115,11 @@
   height: 100%;
 }
 
+/* 🔥 ICON STYLE */
 .admin-card__icon-wrap {
-  width: 56px;
-  height: 56px;
-  border-radius: var(--radius-md);
+  width: 72px;
+  height: 72px;
+  border-radius: 16px;
   background-color: var(--primary-color);
   display: flex;
   align-items: center;
@@ -107,8 +127,13 @@
 }
 
 .admin-card__icon {
-  font-size: 1.5rem;
+  font-size: 2rem;
   line-height: 1;
+  color: #f8f3eb;
+}
+
+.admin-card__icon i {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.12));
 }
 
 .admin-card__title {

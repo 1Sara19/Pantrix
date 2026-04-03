@@ -59,8 +59,7 @@
   gap: var(--spacing-lg);
 }
 
-.recipe-limits-card,
-.recipe-limits-info {
+.recipe-limits-card {
   padding: var(--spacing-lg);
 }
 
@@ -86,51 +85,36 @@
   font-size: var(--text-lg);
 }
 
-.recipe-limits-summary {
-  background-color: #f5ede3;
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  padding: var(--spacing-lg);
-}
-
-.recipe-limits-summary__title {
-  margin-bottom: var(--spacing-sm);
-}
-
-.recipe-limits-summary__value {
-  font-size: var(--text-xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--primary-color);
-  margin-bottom: var(--spacing-sm);
-}
-
-.recipe-limits-summary__text {
+.recipe-limits-help-text {
   font-size: var(--text-sm);
   color: var(--muted-text-color);
-  line-height: 1.6;
+}
+
+.recipe-limits-preview {
+  font-size: var(--text-sm);
+  color: var(--text-color);
+}
+
+.recipe-limits-error {
+  font-size: var(--text-sm);
+  color: var(--destructive-color);
+}
+
+.recipe-limits-actions-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--spacing-xs);
+}
+
+.recipe-limits-unsaved {
+  font-size: var(--text-sm);
+  color: var(--muted-text-color);
 }
 
 .recipe-limits-actions {
   display: flex;
   justify-content: flex-end;
-}
-
-.recipe-limits-info__content {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-md);
-}
-
-.recipe-limits-info__item {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--spacing-sm);
-}
-
-.recipe-limits-info__icon {
-  font-size: 1rem;
-  line-height: 1.5;
-  flex-shrink: 0;
 }
 
 .toast {
@@ -168,6 +152,10 @@
 @media (max-width: 640px) {
   .recipe-limits-input {
     max-width: 100%;
+  }
+
+  .recipe-limits-actions-wrap {
+    align-items: stretch;
   }
 
   .recipe-limits-actions .btn {

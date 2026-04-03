@@ -19,31 +19,31 @@ function AdminDashboard() {
     {
       title: "Manage User Accounts",
       description: "View, edit, and delete user accounts",
-      icon: "👥",
+      icon: <i className="fa-solid fa-users"></i>,
       path: "/admin/users",
     },
     {
       title: "Manage Filter Settings",
       description: "Edit cooking times, food types, and dietary options",
-      icon: "⚙️",
+      icon: <i className="fa-solid fa-gear"></i>,
       path: "/admin/filters",
     },
     {
       title: "Search Results Limit",
       description: "Set maximum recipes shown per search query",
-      icon: "📊",
+      icon: <i className="fa-solid fa-chart-column"></i>,
       path: "/admin/limits",
     },
     {
       title: "Manage Comments",
       description: "View and moderate recipe reviews",
-      icon: "💬",
+      icon: <i className="fa-solid fa-comment"></i>,
       path: "/admin/comments",
     },
     {
       title: "Review User Reports",
       description: "Review messages from Contact Us form",
-      icon: "🛡️",
+      icon: <i className="fa-solid fa-shield-halved"></i>,
       path: "/admin/reports",
     },
   ];
@@ -82,13 +82,14 @@ function AdminDashboard() {
                 <p className="admin-user__email">{user.email}</p>
               </div>
 
+              {/* 🔥 Logout Icon (معدل) */}
               <button
                 className="btn btn-ghost btn-icon admin-logout-btn"
                 onClick={handleLogout}
                 aria-label="Logout"
                 title="Logout"
               >
-                ⎋
+                <i className="fa-solid fa-right-from-bracket"></i>
               </button>
             </div>
           </div>
@@ -108,7 +109,7 @@ function AdminDashboard() {
             <div key={item.title} className="card card-interactive admin-card">
               <div className="card-header">
                 <div className="admin-card__icon-wrap">
-                  <span className="admin-card__icon" aria-hidden="true">
+                  <span className="admin-card__icon">
                     {item.icon}
                   </span>
                 </div>
