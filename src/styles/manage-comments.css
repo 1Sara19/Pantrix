@@ -89,7 +89,6 @@
   padding: var(--spacing-lg);
 }
 
-/* هذا أهم تعديل للحالة المخفية */
 .manage-comments-card--hidden {
   opacity: 0.55;
   filter: grayscale(60%);
