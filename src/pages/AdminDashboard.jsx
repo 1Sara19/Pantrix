@@ -82,7 +82,7 @@ function AdminDashboard() {
                 <p className="admin-user__email">{user.email}</p>
               </div>
 
-              {/* 🔥 Logout Icon (معدل) */}
+              {/* Logout Icon */}
               <button
                 className="btn btn-ghost btn-icon admin-logout-btn"
                 onClick={handleLogout}

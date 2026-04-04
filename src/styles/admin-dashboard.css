@@ -63,7 +63,7 @@
   color: var(--muted-text-color);
 }
 
-/* 🔥 Logout Button (معدل كامل) */
+/* Logout Button */
 .admin-logout-btn {
   border: 1px solid var(--border-color);
   background-color: transparent;
@@ -115,7 +115,7 @@
   height: 100%;
 }
 
-/* 🔥 ICON STYLE */
+/* ICON STYLE */
 .admin-card__icon-wrap {
   width: 72px;
   height: 72px;
