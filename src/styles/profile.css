@@ -1,0 +1,169 @@
+.profile-page {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 120px 24px 24px;
+}
+
+/* زر الرجوع */
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-lg);
+  background: transparent;
+  border: none;
+  color: var(--muted-text-color);
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.back-btn:hover {
+  color: var(--text-color);
+}
+
+/* الهيدر */
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.profile-header p {
+  color: var(--muted-text-color);
+}
+
+/* كروت */
+.profile-card {
+  background: var(--card-color);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+  transition: 0.3s;
+}
+
+.profile-card:hover {
+  box-shadow: var(--shadow-md);
+}
+.profile-grid {
+  display: grid;
+  gap: var(--spacing-xl);
+}
+
+/* محتوى */
+.card-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+/* الفورم */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+
+/* نصوص */
+.info-text {
+  font-size: var(--text-lg);
+  font-weight: var(--font-weight-medium);
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  color: var(--muted-text-color);
+}
+
+/* الحساسية */
+.allergy-note {
+  color: var(--muted-text-color);
+  margin-bottom: var(--spacing-sm);
+}
+
+.allergy-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+/* بدل ما نخترع badge جديد → نستخدم الثيم */
+.allergy-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-xs);
+  background: var(--input-background);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+}
+
+.allergy-badge button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--muted-text-color);
+}
+
+.allergy-badge button:hover {
+  color: var(--destructive-color);
+}
+
+/* الأزرار */
+.action-buttons {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.action-buttons button {
+  flex: 1;
+}
+
+/* الإحصائيات */
+.stats-card {
+  background: var(--background-color);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-md);
+}
+
+.stat-box {
+  background: var(--card-color);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+}
+
+.stat-box h3 {
+  font-size: var(--text-2xl);
+  color: var(--primary-color);
+  margin-bottom: var(--spacing-xs);
+}
+
+.stat-box p {
+  font-size: var(--text-sm);
+  color: var(--muted-text-color);
+}
+
+/* ريسبونسف */
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+  }
+}

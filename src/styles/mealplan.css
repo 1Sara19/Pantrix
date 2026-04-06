@@ -1,0 +1,231 @@
+.mealplan-page {
+  padding-top: var(--spacing-xl);
+  padding-bottom: var(--spacing-xl);
+}
+
+.mealplan-header {
+  margin-bottom: var(--spacing-lg);
+}
+
+.mealplan-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.mealplan-icon-box {
+  width: 4rem;
+  height: 4rem;
+  border-radius: var(--radius-xl);
+  background-color: var(--primary-color);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.week-selector-card {
+  margin-bottom: var(--spacing-lg);
+}
+
+.week-selector {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.week-range {
+  text-align: center;
+}
+
+.week-range-title {
+  font-size: var(--text-lg);
+  font-weight: var(--font-weight-semibold);
+}
+
+.mealplan-days {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.day-card-header {
+  margin-bottom: var(--spacing-md);
+}
+
+.meal-slots-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-md);
+}
+
+.meal-slot-card {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  background-color: #fdfbf8;
+}
+
+.meal-type-label {
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--muted-text-color);
+  margin-bottom: var(--spacing-sm);
+  text-transform: capitalize;
+}
+
+.meal-slot-filled {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.meal-recipe-info {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.meal-recipe-image {
+  width: 3rem;
+  height: 3rem;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+}
+
+.meal-recipe-name {
+  font-weight: var(--font-weight-medium);
+}
+
+.meal-remove-btn {
+  justify-content: center;
+  color: var(--destructive-color);
+}
+
+.meal-add-recipe-btn {
+  width: 100%;
+  border-style: dashed;
+}
+
+.mealplan-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.clear-week-btn {
+  color: var(--destructive-color);
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-lg);
+  z-index: 1000;
+}
+
+.modal-card {
+  width: 100%;
+  max-width: 800px;
+  max-height: 80vh;
+  overflow: auto;
+  background: var(--card-color);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.meal-search-box {
+  position: relative;
+  margin-bottom: var(--spacing-lg);
+}
+
+.meal-search-icon {
+  position: absolute;
+  left: 0.9rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted-text-color);
+}
+
+.meal-search-input {
+  padding-left: 2.5rem;
+}
+
+.recipe-section {
+  margin-bottom: var(--spacing-lg);
+}
+
+.recipe-section-title {
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-color);
+  margin-bottom: var(--spacing-sm);
+}
+
+.recipe-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.recipe-list-scroll {
+  max-height: 24rem;
+  overflow-y: auto;
+}
+
+.recipe-list-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.2s ease;
+}
+
+.recipe-list-item:hover {
+  background-color: var(--hover-overlay);
+}
+
+.recipe-list-image {
+  width: 3rem;
+  height: 3rem;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+}
+
+.recipe-list-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.recipe-list-name {
+  font-weight: var(--font-weight-medium);
+}
+
+@media (min-width: 768px) {
+  .meal-slots-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
