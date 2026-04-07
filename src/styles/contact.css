@@ -1,0 +1,54 @@
+.contact-page {
+  padding-top: var(--spacing-xl);
+  padding-bottom: var(--spacing-xl);
+}
+
+/* Header */
+.contact-header {
+  margin-bottom: var(--spacing-lg);
+}
+
+.contact-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.contact-icon-box {
+  width: 4rem;
+  height: 4rem;
+  background: var(--primary-color);
+  color: white;
+  border-radius: var(--radius-xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Card spacing */
+.contact-card {
+  margin-bottom: var(--spacing-lg);
+}
+
+/* Form */
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.contact-readonly {
+  background: var(--input-background);
+  color: var(--muted-text-color);
+  cursor: not-allowed;
+}
+
+/* Info */
+.contact-info {
+  background: var(--background-color);
+}
+
+.contact-info-content {
+  text-align: center;
+}
