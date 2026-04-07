@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import "../styles/admin-dashboard.css";
+import "../styles/pages/admin-dashboard.css";
 import pantrixLogo from "../assets/images/Pantrix.png";
+import { useNavigate } from "react-router-dom";
 
 function AdminDashboard() {
   const [toast, setToast] = useState("");
-
+  const navigate = useNavigate();
+  
   const user = {
     name: "Sarah",
     email: "sarah@pantrix.com",
@@ -54,7 +56,7 @@ function AdminDashboard() {
   };
 
   const handleLogout = () => {
-    showToast("Logged out successfully");
+    showToast("/Login");
   };
 
   return (

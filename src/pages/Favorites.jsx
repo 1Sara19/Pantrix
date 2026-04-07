@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Heart, ArrowLeft, ChefHat, Clock3 } from "lucide-react";
-import "../styles/favorites.css";
+import "../styles/pages/favorites.css";
 
 function Favorites() {
   const navigate = useNavigate();

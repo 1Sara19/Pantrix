@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/login.css";
+import "../styles/pages/login.css";
 import pantrixLogo from "../assets/images/Pantrix.png";
 
 function Login() {

@@ -1,4 +1,4 @@
-import "../styles/FilterPanel.css";
+import "../styles/components/FilterPanel.css";
 
 export default function FilterPanel({ filters, setFilters }) {
   const handleCookTimeChange = (e) => {
