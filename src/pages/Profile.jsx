@@ -74,6 +74,12 @@ function Profile() {
     setIsEditing(false);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate("/login");
+  };
+
   return (
     <div className="container container-sm profile-page">
       <button
@@ -209,6 +215,23 @@ function Profile() {
                 ))}
               </div>
             </div>
+          </div>
+        </div>
+
+        <div className="profile-card">
+          <div className="card-header">
+            <h2>Account Actions</h2>
+            <p>Manage your session</p>
+          </div>
+
+          <div className="card-content">
+            <button
+              type="button"
+              className="btn btn-secondary logout-btn"
+              onClick={handleLogout}
+            >
+              Log Out
+            </button>
           </div>
         </div>
 

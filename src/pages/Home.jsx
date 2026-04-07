@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Navbar from "../components/Navbar";
 import SearchBar from "../components/SearchBar";
 import FilterPanel from "../components/FilterPanel";
 import RecipeList from "../components/RecipeList";
@@ -15,7 +14,7 @@ export default function Home() {
 
   return (
     <div className="home-page">
-      <Navbar />
+      
 
       <div className="home-container">
         <SearchBar
