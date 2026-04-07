@@ -43,7 +43,7 @@ function App() {
 
 export default App;*/
 
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+/*import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ContactUs from "./pages/ContactUs";
 
 function App() {
@@ -51,6 +51,29 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<ContactUs />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+export default App;*/
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import ContactUs from "./pages/ContactUs";
+import Favorites from "./pages/Favorites";
+import Profile from "./pages/Profile";
+import MealPlan from "./pages/MealPlan";
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<div>Home Page</div>} />
+        <Route path="/favorites" element={<Favorites />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/meal-planning" element={<MealPlan />} />
+        <Route path="/contact" element={<ContactUs />} />
       </Routes>
     </BrowserRouter>
   );

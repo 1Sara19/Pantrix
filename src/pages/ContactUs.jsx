@@ -6,7 +6,6 @@ import "../styles/contact.css";
 function ContactUs() {
   const navigate = useNavigate();
 
-  // بيانات مؤقتة بدل authService
   const [user] = useState({
     email: "sarah@example.com",
   });
@@ -51,7 +50,6 @@ function ContactUs() {
         Back to Home
       </button>
 
-      {/* Header */}
       <div className="contact-header">
         <div className="contact-title-wrap">
           <div className="contact-icon-box">
@@ -67,7 +65,6 @@ function ContactUs() {
         </div>
       </div>
 
-      {/* Form Card */}
       <div className="card contact-card">
         <div className="card-header">
           <h2 className="card-title">Get in Touch</h2>
@@ -78,7 +75,6 @@ function ContactUs() {
 
         <div className="card-content">
           <form onSubmit={handleSubmit} className="contact-form">
-            {/* Email */}
             <div className="form-group">
               <label>Your Email</label>
               <input
@@ -90,7 +86,6 @@ function ContactUs() {
               <small>We'll respond to this email</small>
             </div>
 
-            {/* Subject */}
             <div className="form-group">
               <label>Subject</label>
               <select
@@ -106,7 +101,6 @@ function ContactUs() {
               </select>
             </div>
 
-            {/* Message */}
             <div className="form-group">
               <label>Message</label>
               <textarea
@@ -118,7 +112,6 @@ function ContactUs() {
               />
             </div>
 
-            {/* Button */}
             <button
               type="submit"
               disabled={isSubmitting}
@@ -131,7 +124,6 @@ function ContactUs() {
         </div>
       </div>
 
-      {/* Info Card */}
       <div className="card contact-info">
         <div className="card-content">
           <div className="contact-info-content">
