@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import "../styles/Navbar.css";
+import "../styles/components/Navbar.css";
 import logo from "../assets/images/pantrix.png";
 
 export default function Navbar() {

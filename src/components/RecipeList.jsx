@@ -1,5 +1,5 @@
 import RecipeCard from "./RecipeCard";
-import "../styles/RecipeList.css";
+import "../styles/components/RecipeList.css";
 
 export default function RecipeList({ ingredients, filters }) {
   const recipes = [

@@ -2,7 +2,7 @@ import { useState } from "react";
 import SearchBar from "../components/SearchBar";
 import FilterPanel from "../components/FilterPanel";
 import RecipeList from "../components/RecipeList";
-import "../styles/Home.css";
+import "../styles/pages/Home.css";
 
 export default function Home() {
   const [ingredients, setIngredients] = useState([]);

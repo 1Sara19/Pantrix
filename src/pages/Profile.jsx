@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { User, Mail, Shield, Save, ArrowLeft, Edit2, X } from "lucide-react";
-import "../styles/profile.css";
+import "../styles/pages/Profile.css";
 
 function Profile() {
   const navigate = useNavigate();
