@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import "../styles/pages/manage-filters.css";
+import "../styles/pages/ManageFilters.css";
 import pantrixLogo from "../assets/images/Pantrix.png";
 import { Link, useNavigate } from "react-router-dom";
 

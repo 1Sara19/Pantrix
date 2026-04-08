@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "../styles/pages/manage-users.css";
+import "../styles/pages/ManageUsers.css";
 import pantrixLogo from "../assets/images/Pantrix.png";
 import { Link } from "react-router-dom";
 

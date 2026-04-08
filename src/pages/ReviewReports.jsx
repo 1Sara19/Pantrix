@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "../styles/pages/review-reports.css";
+import "../styles/pages/ReviewReports.css";
 import pantrixLogo from "../assets/images/Pantrix.png";
 import { Link } from "react-router-dom";
 

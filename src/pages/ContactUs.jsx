@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Mail, ArrowLeft, Send } from "lucide-react";
-import "../styles/pages/contact.css";
+import "../styles/pages/ContactUs.css";
 
 function ContactUs() {
   const navigate = useNavigate();
