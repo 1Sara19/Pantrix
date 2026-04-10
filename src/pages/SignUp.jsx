@@ -39,6 +39,11 @@ function SignUp() {
         setIsLoading(true);
 
         setTimeout(() => {
+            localStorage.setItem("isLoggedIn", "true");
+            localStorage.setItem("userRole", "user");
+            localStorage.setItem("userEmail", email);
+            localStorage.setItem("userId", email.toLowerCase().trim());
+            localStorage.setItem("userName", name);
             showToast("Account created successfully!");
             setIsLoading(false);
 
