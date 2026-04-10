@@ -11,7 +11,7 @@ import {
   Search,
   Trash2,
 } from "lucide-react";
-import "../styles/mealplan.css";
+import "../styles/pages/MealPlan.css";
 
 const DAYS = [
   "Saturday",

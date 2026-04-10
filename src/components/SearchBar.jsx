@@ -1,26 +1,28 @@
 import { useState } from "react";
-import "../styles/SearchBar.css";
+import { Search } from "lucide-react";
+import "../styles/components/SearchBar.css";
 
 export default function SearchBar({ ingredients, setIngredients }) {
   const [input, setInput] = useState("");
-  const [error, setError] = useState("");
 
   const addIngredient = () => {
-    const value = input.trim().toLowerCase();
+    const cleanedInput = input
+      .toLowerCase()
+      .replace(/[^a-z,\s]/g, ""); 
 
-    if (!value) {
-      setError("Please enter an ingredient");
-      return;
-    }
+    const values = cleanedInput
+      .split(",")
+      .map((item) => item.trim())
+      .filter((item) => item !== "");
 
-    if (ingredients.includes(value)) {
-      setError("This ingredient is already added");
-      return;
-    }
+    if (values.length === 0) return;
 
-    setIngredients([...ingredients, value]);
+    const newIngredients = values.filter(
+      (item) => !ingredients.includes(item)
+    );
+
+    setIngredients([...ingredients, ...newIngredients]);
     setInput("");
-    setError("");
   };
 
   const removeIngredient = (ingredient) => {
@@ -29,7 +31,6 @@ export default function SearchBar({ ingredients, setIngredients }) {
 
   const clearAll = () => {
     setIngredients([]);
-    setError("");
   };
 
   const handleKeyDown = (e) => {
@@ -40,53 +41,40 @@ export default function SearchBar({ ingredients, setIngredients }) {
   };
 
   return (
-    <div className="search-bar-container">
-      <div className="search-bar-header">
-        <h1 className="search-bar-title">What can you cook today?</h1>
-        <p className="search-bar-subtitle">
-          Add the ingredients you have, and we’ll match recipes based on them
-        </p>
-      </div>
+    <div className="search-card">
 
-      <div className="search-input-wrapper">
+      <h2 className="search-title">What ingredients do you have?</h2>
+
+      <div className="search-input-container">
+        <Search className="search-icon" />
+
         <input
           type="text"
-          className={`search-input ${error ? "search-input-error" : ""}`}
-          placeholder="e.g., chicken, tomatoes, garlic..."
+          placeholder="Type an ingredient (e.g., chicken, tomato)"
           value={input}
-          onChange={(e) => {
-            setInput(e.target.value);
-            if (error) setError("");
-          }}
+          onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
         />
-
-        <button className="search-button" onClick={addIngredient}>
-          <span className="search-icon">＋</span>
-          Add Ingredient
-        </button>
       </div>
 
-      {error && <p className="search-error-message">{error}</p>}
-
       {ingredients.length > 0 && (
-        <div className="ingredients-box">
-          <div className="ingredients-header">
-            <p className="ingredients-title">
-              Your Ingredients ({ingredients.length})
-            </p>
+        <div className="ingredients-section">
 
-            <button className="clear-ingredients-button" onClick={clearAll}>
-              Clear All
+          <div className="ingredients-header">
+            <span>Your Ingredients ({ingredients.length})</span>
+
+            <button className="clear-btn" onClick={clearAll}>
+              Clear all
             </button>
           </div>
 
           <div className="ingredients-tags">
             {ingredients.map((ingredient) => (
-              <div className="ingredient-tag" key={ingredient}>
-                <span>{ingredient}</span>
+              <div key={ingredient} className="ingredient-tag">
+                {ingredient}
+
                 <button
-                  className="ingredient-remove"
+                  className="remove-tag"
                   onClick={() => removeIngredient(ingredient)}
                 >
                   ×
@@ -94,18 +82,9 @@ export default function SearchBar({ ingredients, setIngredients }) {
               </div>
             ))}
           </div>
+
         </div>
       )}
-
-      <div className="match-score-info">
-        <div className="match-score-badge">
-          <span className="match-score-icon">✨</span>
-          <span>Smart Match Score</span>
-        </div>
-        <p className="match-score-description">
-          Recipes are ranked by how many of your ingredients they use
-        </p>
-      </div>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/login.css";
+import "../styles/pages/Login.css";
 import pantrixLogo from "../assets/images/Pantrix.png";
 
 function Login() {
@@ -28,8 +28,14 @@ function Login() {
         setIsLoading(true);
 
         setTimeout(() => {
+            // showToast(role === "admin" ? "Welcome Admin!" : "Welcome back!");
+            // setIsLoading(false);
+            localStorage.setItem("isLoggedIn", "true");
+            localStorage.setItem("userRole", role);
+            localStorage.setItem("userEmail", email);
+
             showToast(role === "admin" ? "Welcome Admin!" : "Welcome back!");
-            setIsLoading(false);
+        
 
             // يرجع للهوم بيج
             navigate("/");

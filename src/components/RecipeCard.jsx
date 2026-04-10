@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
-import "../styles/RecipeCard.css";
+import { Heart } from "lucide-react";
+import RestrictedModal from "./RestrictedModal";
+import "../styles/components/RecipeCard.css";
 
 export default function RecipeCard({
   id,
@@ -7,21 +9,24 @@ export default function RecipeCard({
   matchScore,
   cookTime,
   difficulty,
+  servings,
+  dietary = [],
   image,
   ingredients = [],
   instructions = [],
   missingIngredients = [],
 }) {
   const [showRecipe, setShowRecipe] = useState(false);
-  const [showReviewBox, setShowReviewBox] = useState(false);
   const [liked, setLiked] = useState(false);
+  const [showReviewBox, setShowReviewBox] = useState(false);
+  const [showRestrictedModal, setShowRestrictedModal] = useState(false);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
   const [reviews, setReviews] = useState([]);
-  const [toast, setToast] = useState("");
 
   const likeKey = `liked_recipe_${id}`;
   const reviewKey = `recipe_reviews_${id}`;
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
 
   useEffect(() => {
     const savedLike = localStorage.getItem(likeKey);
@@ -33,23 +38,28 @@ export default function RecipeCard({
     }
   }, [likeKey, reviewKey]);
 
-  const showToast = (message) => {
-    setToast(message);
-    setTimeout(() => setToast(""), 2000);
-  };
-
   const handleLike = () => {
+    if (!isLoggedIn) {
+      setShowRestrictedModal(true);
+      return;
+    }
+
     const next = !liked;
     setLiked(next);
     localStorage.setItem(likeKey, String(next));
-    showToast(next ? "Recipe added to favorites" : "Recipe removed from favorites");
+  };
+
+  const handleOpenReview = () => {
+    if (!isLoggedIn) {
+      setShowRestrictedModal(true);
+      return;
+    }
+
+    setShowReviewBox(true);
   };
 
   const handleSubmitReview = () => {
-    if (rating === 0) {
-      showToast("Please select a rating");
-      return;
-    }
+    if (rating === 0) return;
 
     const newReview = {
       id: Date.now(),
@@ -65,19 +75,32 @@ export default function RecipeCard({
     setRating(0);
     setComment("");
     setShowReviewBox(false);
-    showToast("Review submitted successfully");
   };
 
   return (
     <>
-      {toast && <div className="recipe-toast">{toast}</div>}
-
       <div className="recipe-card">
         <div className="recipe-card-image-wrapper">
-          <img src={image} alt={title} className="recipe-card-image" />
+          <img
+            src={image}
+            alt={title}
+            className="recipe-card-image"
+          />
+
+          <button
+            type="button"
+            className={`recipe-heart-btn ${liked ? "liked" : ""}`}
+            onClick={handleLike}
+          >
+            <Heart
+              size={18}
+              fill={liked ? "white" : "none"}
+              stroke={liked ? "white" : "black"}
+            />
+          </button>
+
           <div className="recipe-match-badge">
-            <span className="match-badge-icon">✨</span>
-            <span className="match-badge-text">{matchScore}% Match</span>
+            {matchScore}% Match
           </div>
         </div>
 
@@ -85,16 +108,20 @@ export default function RecipeCard({
           <h3 className="recipe-card-title">{title}</h3>
 
           <div className="recipe-card-meta">
-            <div className="recipe-meta-item">
-              <span className="recipe-meta-icon">⏱️</span>
-              <span className="recipe-meta-text">{cookTime}</span>
-            </div>
-
-            <div className="recipe-meta-item">
-              <span className="recipe-meta-icon">📊</span>
-              <span className="recipe-meta-text">{difficulty}</span>
-            </div>
+            <div className="recipe-meta-item">⏱️ {cookTime}</div>
+            <div className="recipe-meta-item">👥 {servings}</div>
+            <div className="recipe-meta-item">📊 {difficulty}</div>
           </div>
+
+          {dietary.length > 0 && (
+            <div className="recipe-dietary-tags">
+              {dietary.map((item, index) => (
+                <span className="recipe-dietary-tag" key={index}>
+                  {item}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="recipe-card-footer">
@@ -104,19 +131,18 @@ export default function RecipeCard({
           >
             View Recipe
           </button>
-
-          <button
-            className={`recipe-card-button recipe-card-button-secondary ${liked ? "liked" : ""}`}
-            onClick={handleLike}
-          >
-            ❤️
-          </button>
         </div>
       </div>
 
       {showRecipe && (
-        <div className="recipe-modal-overlay" onClick={() => setShowRecipe(false)}>
-          <div className="recipe-modal" onClick={(e) => e.stopPropagation()}>
+        <div
+          className="recipe-modal-overlay"
+          onClick={() => setShowRecipe(false)}
+        >
+          <div
+            className="recipe-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
             <button
               className="recipe-modal-close"
               onClick={() => setShowRecipe(false)}
@@ -124,30 +150,33 @@ export default function RecipeCard({
               ×
             </button>
 
-            <img src={image} alt={title} className="recipe-modal-image" />
+            <img
+              src={image}
+              alt={title}
+              className="recipe-modal-image"
+            />
 
             <h2 className="recipe-modal-title">{title}</h2>
 
             <div className="recipe-modal-meta">
               <span>{cookTime}</span>
               <span>•</span>
-              <span>{difficulty}</span>
+              <span>{servings}</span>
               <span>•</span>
-              <span>{matchScore}% Match</span>
+              <span>{difficulty}</span>
             </div>
 
             <div className="recipe-modal-section">
               <h3>Ingredients</h3>
               <ul>
-                {ingredients.map((item, index) => {
-                  const isMissing = missingIngredients.includes(item);
-
-                  return (
-                    <li key={index}>
-                      {item} {isMissing && <span className="missing-ingredient">(missing)</span>}
-                    </li>
-                  );
-                })}
+                {ingredients.map((item, index) => (
+                  <li key={index}>
+                    {item}
+                    {missingIngredients.includes(item) && (
+                      <span className="missing-ingredient">(missing)</span>
+                    )}
+                  </li>
+                ))}
               </ul>
             </div>
 
@@ -170,7 +199,7 @@ export default function RecipeCard({
 
               <button
                 className="recipe-card-button recipe-card-button-primary"
-                onClick={() => setShowReviewBox(true)}
+                onClick={handleOpenReview}
               >
                 Review
               </button>
@@ -198,8 +227,14 @@ export default function RecipeCard({
       )}
 
       {showReviewBox && (
-        <div className="recipe-modal-overlay" onClick={() => setShowReviewBox(false)}>
-          <div className="recipe-modal review-modal" onClick={(e) => e.stopPropagation()}>
+        <div
+          className="recipe-modal-overlay"
+          onClick={() => setShowReviewBox(false)}
+        >
+          <div
+            className="recipe-modal review-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
             <button
               className="recipe-modal-close"
               onClick={() => setShowReviewBox(false)}
@@ -239,6 +274,11 @@ export default function RecipeCard({
           </div>
         </div>
       )}
+
+      <RestrictedModal
+        isOpen={showRestrictedModal}
+        onClose={() => setShowRestrictedModal(false)}
+      />
     </>
   );
 }

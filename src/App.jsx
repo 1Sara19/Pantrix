@@ -1,5 +1,6 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
+import ScrollToTop from "./components/ScrollToTop";
 
 import Home from "./pages/Home";
 import Favorites from "./pages/Favorites";
@@ -14,13 +15,17 @@ import ManageFilters from "./pages/ManageFilters";
 import ManageComments from "./pages/ManageComments";
 import ReviewReports from "./pages/ReviewReports";
 import RecipeLimits from "./pages/RecipeLimits";
-import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
+  const location = useLocation();
+  const hideNavbar = ["/login", "/signup"].includes(location.pathname);
+
   return (
     <>
-      <Navbar />
       <ScrollToTop />
+
+      {!hideNavbar && <Navbar />}
+
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/favorites" element={<Favorites />} />
