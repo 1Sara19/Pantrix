@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { User, Mail, Shield, Save, ArrowLeft, Edit2, X } from "lucide-react";
+import { toast } from "sonner";
 import "../styles/profile.css";
 
 function Profile() {
@@ -21,6 +22,10 @@ function Profile() {
   const [allergies, setAllergies] = useState([]);
   const [allergyInput, setAllergyInput] = useState("");
 
+  const [errors, setErrors] = useState({
+    email: "",
+  });
+
   useEffect(() => {
     if (user) {
       setName(user.name);
@@ -28,6 +33,10 @@ function Profile() {
       setAllergies(user.allergies || []);
     }
   }, [user]);
+
+  const isValidEmail = (value) => {
+    return /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(value);
+  };
 
   const handleAddAllergy = (e) => {
     if (e.key === "Enter" && allergyInput.trim()) {
@@ -48,21 +57,30 @@ function Profile() {
   };
 
   const handleSave = () => {
-    if (!name.trim() || !email.trim()) return;
+    const trimmedEmail = email.trim();
 
+    if (!name.trim() || !trimmedEmail) return;
+
+    if (!isValidEmail(trimmedEmail)) {
+      setErrors({ email: "Please enter a valid email address" });
+      return;
+    }
+
+    setErrors({ email: "" });
     setIsLoading(true);
 
     setTimeout(() => {
       const updatedUser = {
         ...user,
         name: name.trim(),
-        email: email.trim(),
+        email: trimmedEmail,
         allergies,
       };
 
       setUser(updatedUser);
       setIsEditing(false);
       setIsLoading(false);
+      toast.success("Profile updated successfully!");
     }, 500);
   };
 
@@ -71,6 +89,7 @@ function Profile() {
     setEmail(user.email);
     setAllergies(user.allergies || []);
     setAllergyInput("");
+    setErrors({ email: "" });
     setIsEditing(false);
   };
 
@@ -141,15 +160,23 @@ function Profile() {
                 <>
                   <input
                     id="profile-email"
-                    className="input"
+                    className={`input ${errors.email ? "input-error" : ""}`}
                     type="email"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      if (errors.email) setErrors({ email: "" });
+                    }}
                   />
-                  <small>
-                    Note: Email changes may require verification in a production
-                    app
-                  </small>
+
+                  {errors.email ? (
+                    <small className="error-text">{errors.email}</small>
+                  ) : (
+                    <small>
+                      Note: Email changes may require verification in a
+                      production app
+                    </small>
+                  )}
                 </>
               ) : (
                 <div className="info-row">
@@ -169,7 +196,7 @@ function Profile() {
             </h2>
             <p>
               Add ingredients you want to exclude from recipes. These
-              preferences will be automatically applied to your searches.
+              preferences will be automatically applied.
             </p>
           </div>
 
@@ -188,7 +215,7 @@ function Profile() {
                     onChange={(e) => setAllergyInput(e.target.value)}
                     onKeyDown={handleAddAllergy}
                   />
-                  <small>Press Enter to add each allergy as a tag</small>
+                  <small>Press Enter to add each allergy</small>
                 </div>
               ) : (
                 <p className="allergy-note">
@@ -221,12 +248,9 @@ function Profile() {
         <div className="profile-card">
           <div className="card-header">
             <h2>Account Actions</h2>
-            <p>Manage your session</p>
           </div>
-
           <div className="card-content">
             <button
-              type="button"
               className="btn btn-secondary logout-btn"
               onClick={handleLogout}
             >
@@ -237,22 +261,10 @@ function Profile() {
 
         {isEditing && (
           <div className="action-buttons">
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={handleSave}
-              disabled={isLoading}
-            >
-              <Save size={16} />
-              {isLoading ? "Saving..." : "Save Changes"}
+            <button className="btn btn-primary" onClick={handleSave}>
+              <Save size={16} /> Save Changes
             </button>
-
-            <button
-              type="button"
-              className="btn btn-secondary"
-              onClick={handleCancel}
-              disabled={isLoading}
-            >
+            <button className="btn btn-secondary" onClick={handleCancel}>
               Cancel
             </button>
           </div>
@@ -261,7 +273,6 @@ function Profile() {
         <div className="profile-card stats-card">
           <div className="card-header">
             <h2>Your Cooking Stats</h2>
-            <p>Track your Pantrix journey</p>
           </div>
 
           <div className="stats-grid">

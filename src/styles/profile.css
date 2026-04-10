@@ -4,7 +4,6 @@
   padding: 120px 24px 24px;
 }
 
-/* زر الرجوع */
 .back-btn {
   display: inline-flex;
   align-items: center;
@@ -21,7 +20,6 @@
   color: var(--text-color);
 }
 
-/* الهيدر */
 .profile-header {
   display: flex;
   justify-content: space-between;
@@ -35,7 +33,6 @@
   color: var(--muted-text-color);
 }
 
-/* كروت */
 .profile-card {
   background: var(--card-color);
   border-radius: var(--radius-lg);
@@ -52,14 +49,12 @@
   gap: var(--spacing-xl);
 }
 
-/* محتوى */
 .card-content {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
 }
 
-/* الفورم */
 .form-group {
   display: flex;
   flex-direction: column;
@@ -67,7 +62,6 @@
 }
 
 
-/* نصوص */
 .info-text {
   font-size: var(--text-lg);
   font-weight: var(--font-weight-medium);
@@ -80,7 +74,6 @@
   color: var(--muted-text-color);
 }
 
-/* الحساسية */
 .allergy-note {
   color: var(--muted-text-color);
   margin-bottom: var(--spacing-sm);
@@ -92,7 +85,6 @@
   gap: var(--spacing-sm);
 }
 
-/* بدل ما نخترع badge جديد → نستخدم الثيم */
 .allergy-badge {
   display: inline-flex;
   align-items: center;
@@ -116,7 +108,6 @@
   color: var(--destructive-color);
 }
 
-/* الأزرار */
 .action-buttons {
   display: flex;
   gap: var(--spacing-sm);
@@ -126,7 +117,6 @@
   flex: 1;
 }
 
-/* الإحصائيات */
 .stats-card {
   background: var(--background-color);
 }
@@ -157,7 +147,6 @@
   color: var(--muted-text-color);
 }
 
-/* ريسبونسف */
 @media (max-width: 768px) {
   .stats-grid {
     grid-template-columns: 1fr;
@@ -169,4 +158,24 @@
 }
 .logout-btn {
   min-width: 140px;
+}
+.error-text {
+  color: red;
+  font-size: 0.85rem;
+}
+
+.input-error {
+  border: 1px solid red;
+}
+.success-message {
+  position: fixed;
+  bottom: 20px; /* تحت */
+  left: 50%;
+  transform: translateX(-50%);
+  background: #4caf50;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
