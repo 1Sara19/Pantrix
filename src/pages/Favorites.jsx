@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Heart, ArrowLeft, ChefHat, Clock3 } from "lucide-react";
+import { Heart, ArrowLeft, ChefHat, Clock3, ChevronDown } from "lucide-react";
 import "../styles/favorites.css";
 
 function Favorites() {
@@ -41,12 +41,12 @@ function Favorites() {
     },
     {
       id: 2,
-      title: "Creamy Pasta",
+      title: "Creamy Tomato Pasta",
       image:
         "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?auto=format&fit=crop&w=1200&q=80",
       cookTime: "25 minutes",
       servings: "3 servings",
-      tags: ["Comfort Food", "Quick"],
+      tags: ["Vegetarian", "Comfort Food"],
       difficulty: "Easy",
       matchScore: 92,
       ingredients: [
@@ -61,56 +61,6 @@ function Favorites() {
         "Melt butter and sauté garlic.",
         "Add cream and parmesan cheese.",
         "Mix in the pasta and serve warm.",
-      ],
-      missingIngredients: [],
-    },
-    {
-      id: 3,
-      title: "Chicken Salad",
-      image:
-        "https://images.unsplash.com/photo-1546793665-c74683f339c1?auto=format&fit=crop&w=1200&q=80",
-      cookTime: "15 minutes",
-      servings: "2 servings",
-      tags: ["Healthy", "Light"],
-      difficulty: "Medium",
-      matchScore: 90,
-      ingredients: [
-        "Chicken breast",
-        "Lettuce",
-        "Cherry tomatoes",
-        "Cucumber",
-        "Salad dressing",
-      ],
-      instructions: [
-        "Cook and slice the chicken.",
-        "Wash and chop the vegetables.",
-        "Combine everything in a bowl.",
-        "Add dressing and toss before serving.",
-      ],
-      missingIngredients: [],
-    },
-    {
-      id: 4,
-      title: "Vegetable Soup",
-      image:
-        "https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=1200&q=80",
-      cookTime: "30 minutes",
-      servings: "4 servings",
-      tags: ["Warm", "Healthy"],
-      difficulty: "Easy",
-      matchScore: 88,
-      ingredients: [
-        "Carrots",
-        "Potatoes",
-        "Onions",
-        "Celery",
-        "Vegetable broth",
-      ],
-      instructions: [
-        "Chop all vegetables.",
-        "Bring broth to a boil.",
-        "Add vegetables and simmer until soft.",
-        "Serve hot.",
       ],
       missingIngredients: [],
     },
@@ -149,111 +99,124 @@ function Favorites() {
   };
 
   return (
-    <div className="container favorites-page">
-      <button
-        type="button"
-        className="favorites-back-btn"
-        onClick={() => navigate("/")}
-      >
-        <ArrowLeft size={20} />
-        <span>Back to Home</span>
-      </button>
-
-      <div className="favorites-header">
-        <div className="favorites-title-wrap">
-          <div className="favorites-icon-box">
-            <Heart size={28} className="favorites-main-icon" />
-          </div>
-
-          <div>
-            <h1>My Favorite Recipes</h1>
-            <p className="favorites-subtitle">
-              {favoriteRecipes.length}{" "}
-              {favoriteRecipes.length === 1 ? "recipe" : "recipes"} saved
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {favoriteRecipes.length > 0 ? (
-        <div className="favorites-grid">
-          {favoriteRecipes.map((recipe) => (
-            <article className="favorite-recipe-card" key={recipe.id}>
-              <div className="favorite-image-wrap">
-                <img
-                  src={recipe.image}
-                  alt={recipe.title}
-                  className="favorite-image"
-                />
-
-                <button
-                  type="button"
-                  className="favorite-heart-btn"
-                  onClick={() => handleRemoveFavorite(recipe.id)}
-                  aria-label="Remove from favorites"
-                >
-                  <Heart size={18} fill="currentColor" />
-                </button>
-              </div>
-
-              <div className="favorite-card-body">
-                <h3>{recipe.title}</h3>
-
-                <div className="favorite-meta-line">
-                  <span className="favorite-meta-item">
-                    <Clock3 size={16} />
-                    {recipe.cookTime}
-                  </span>
-                  <span className="favorite-meta-dot">•</span>
-                  <span>{recipe.servings}</span>
-                </div>
-
-                <div className="favorite-tags">
-                  {recipe.tags?.map((tag, index) => (
-                    <span
-                      key={index}
-                      className={`favorite-tag ${
-                        tag.toLowerCase() === "healthy" ? "green" : ""
-                      }`}
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-
-                <button
-                  type="button"
-                  className="favorite-view-btn"
-                  onClick={() => handleOpenRecipe(recipe)}
-                >
-                  View Recipe
-                </button>
-              </div>
-            </article>
-          ))}
-        </div>
-      ) : (
-        <div className="favorites-empty-state">
-          <div className="favorites-empty-icon">
-            <Heart size={38} />
-          </div>
-
-          <h2>No favorites yet</h2>
-          <p>
-            Start exploring recipes and click the heart icon to save your
-            favorites here.
-          </p>
-
+    <div className="favorites-page-wrapper">
+      <section className="favorites-content-section">
+        <div className="container favorites-page">
           <button
             type="button"
-            className="favorites-discover-btn"
+            className="btn btn-ghost favorites-back-btn"
             onClick={() => navigate("/")}
           >
-            <ChefHat size={18} />
-            <span>Discover Recipes</span>
+            <ArrowLeft size={20} />
+            <span>Back to Home</span>
           </button>
+
+          <div className="favorites-header">
+            <div className="favorites-title-wrap">
+              <div className="favorites-icon-box">
+                <Heart size={28} className="favorites-main-icon" />
+              </div>
+
+              <div>
+                <h1>My Favorite Recipes</h1>
+                <p className="favorites-subtitle">
+                  {favoriteRecipes.length}{" "}
+                  {favoriteRecipes.length === 1 ? "recipe" : "recipes"} saved
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {favoriteRecipes.length > 0 ? (
+            <div className="favorites-grid">
+              {favoriteRecipes.map((recipe) => (
+                <article className="card favorite-recipe-card" key={recipe.id}>
+                  <div className="favorite-image-wrap">
+                    <img
+                      src={recipe.image}
+                      alt={recipe.title}
+                      className="favorite-image"
+                    />
+
+                    <button
+                      type="button"
+                      className="favorite-heart-btn"
+                      onClick={() => handleRemoveFavorite(recipe.id)}
+                      aria-label="Remove from favorites"
+                    >
+                      <Heart size={18} fill="currentColor" />
+                    </button>
+                  </div>
+
+                  <div className="favorite-card-body">
+                    <h3>{recipe.title}</h3>
+
+                    <div className="favorite-meta-line">
+                      <span className="favorite-meta-item">
+                        <Clock3 size={16} />
+                        {recipe.cookTime}
+                      </span>
+                      <span className="favorite-meta-dot">•</span>
+                      <span>{recipe.servings}</span>
+                    </div>
+
+                    <div className="favorite-tags">
+                      {recipe.tags?.map((tag, index) => (
+                        <span
+                          key={index}
+                          className={`favorite-tag ${
+                            tag.toLowerCase() === "healthy" ||
+                            tag.toLowerCase() === "vegetarian"
+                              ? "green"
+                              : ""
+                          }`}
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+
+                    <button
+                      type="button"
+                      className="btn btn-secondary favorite-view-btn"
+                      onClick={() => handleOpenRecipe(recipe)}
+                    >
+                      View Recipe
+                      <ChevronDown size={18} />
+                    </button>
+                  </div>
+                </article>
+              ))}
+            </div>
+          ) : (
+            <div className="card favorites-empty-state">
+              <div className="favorites-empty-icon">
+                <Heart size={38} />
+              </div>
+
+              <h2>No favorites yet</h2>
+              <p>
+                Start exploring recipes and click the heart icon to save your
+                favorites here.
+              </p>
+
+              <button
+                type="button"
+                className="btn btn-primary favorites-discover-btn"
+                onClick={() => navigate("/")}
+              >
+                <ChefHat size={18} />
+                <span>Discover Recipes</span>
+              </button>
+            </div>
+          )}
         </div>
-      )}
+      </section>
+
+      <footer className="favorites-footer">
+        <p>© 2026 Pantrix - Helping you cook smart and reduce food waste</p>
+        <small>Demo prototype - All data is simulated</small>
+      </footer>
 
       {selectedRecipe && (
         <div
@@ -291,7 +254,10 @@ function Favorites() {
                   <span
                     key={index}
                     className={`favorite-tag ${
-                      tag.toLowerCase() === "healthy" ? "green" : ""
+                      tag.toLowerCase() === "healthy" ||
+                      tag.toLowerCase() === "vegetarian"
+                        ? "green"
+                        : ""
                     }`}
                   >
                     {tag}
@@ -348,7 +314,7 @@ function Favorites() {
 
             <div className="recipe-modal-actions">
               <button
-                className="favorite-liked-btn"
+                className="btn btn-destructive favorite-liked-btn"
                 onClick={() => handleRemoveFavorite(selectedRecipe.id)}
               >
                 Liked ❤️

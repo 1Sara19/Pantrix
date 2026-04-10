@@ -14,11 +14,13 @@ import ManageFilters from "./pages/ManageFilters";
 import ManageComments from "./pages/ManageComments";
 import ReviewReports from "./pages/ReviewReports";
 import RecipeLimits from "./pages/RecipeLimits";
+import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
   return (
     <>
       <Navbar />
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/favorites" element={<Favorites />} />
