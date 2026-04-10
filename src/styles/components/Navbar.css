@@ -59,7 +59,8 @@
   align-items: center;
   gap: 18px;
   text-decoration: none;
-  justify-self: center;
+  justify-self: start;
+  margin-left: 4px;
 }
 
 .navbar-logo-img {
