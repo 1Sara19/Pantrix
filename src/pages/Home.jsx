@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Funnel } from "lucide-react";
+import { Funnel, ChefHat } from "lucide-react";
 import SearchBar from "../components/SearchBar";
 import FilterPanel from "../components/FilterPanel";
 import RecipeList from "../components/RecipeList";
@@ -17,6 +17,24 @@ export default function Home() {
   return (
     <div className="home-page">
       <div className="home-container">
+
+        {/* HERO SECTION */}
+        <div className="home-hero">
+          <div className="hero-badge">
+            <ChefHat size={18} />
+            <span>Smart Recipe Matching</span>
+          </div>
+
+          <h1 className="hero-title">
+            What can you cook today?
+          </h1>
+
+          <p className="hero-subtitle">
+            Enter the ingredients you have, and we'll find the perfect recipes
+            for you – reducing waste and saving time!
+          </p>
+        </div>
+
         <SearchBar
           ingredients={ingredients}
           setIngredients={setIngredients}
@@ -26,6 +44,7 @@ export default function Home() {
           type="button"
           className="filter-open-btn"
           onClick={() => setShowFilterModal(true)}
+          style={{marginTop: "16px"}}
         >
           <Funnel size={20} />
           <span>Filters</span>
