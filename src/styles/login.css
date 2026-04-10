@@ -201,3 +201,13 @@
         flex-direction: column;
     }
 }
+.login-input-icon-svg {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    color: #a89680;
+    pointer-events: none;
+}

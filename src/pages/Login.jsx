@@ -104,8 +104,7 @@ function Login() {
                             <div className="login-form-group">
                                 <label htmlFor="email">Email</label>
                                 <div className="login-input-wrap">
-                                    <span className="login-input-icon">@</span>
-                                    <input
+                                    <Mail className="signup-input-icon-svg" />                                    <input
                                         id="email"
                                         type="email"
                                         className="input login-input"
@@ -120,8 +119,7 @@ function Login() {
                             <div className="login-form-group">
                                 <label htmlFor="password">Password</label>
                                 <div className="login-input-wrap">
-                                    <span className="login-input-icon">🔒</span>
-                                    <input
+                                    <Lock className="signup-input-icon-svg" />                                    <input
                                         id="password"
                                         type="password"
                                         className="input login-input"

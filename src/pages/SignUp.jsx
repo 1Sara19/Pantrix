@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/signup.css";
 import pantrixLogo from "../assets/images/Pantrix.png";
+import { User, Mail, Lock } from "lucide-react";
 
 function SignUp() {
     const navigate = useNavigate();
@@ -96,8 +97,7 @@ function SignUp() {
                             <div className="signup-form-group">
                                 <label htmlFor="name">Full Name</label>
                                 <div className="signup-input-wrap">
-                                    <span className="signup-input-icon">👤</span>
-                                    <input
+                                    <User className="signup-input-icon-svg" />                                    <input
                                         id="name"
                                         type="text"
                                         className="input signup-input"
@@ -112,8 +112,7 @@ function SignUp() {
                             <div className="signup-form-group">
                                 <label htmlFor="email">Email</label>
                                 <div className="signup-input-wrap">
-                                    <span className="signup-input-icon">@</span>
-                                    <input
+                                    <Mail className="signup-input-icon-svg" />                                    <input
                                         id="email"
                                         type="email"
                                         className="input signup-input"
@@ -128,8 +127,7 @@ function SignUp() {
                             <div className="signup-form-group">
                                 <label htmlFor="password">Password</label>
                                 <div className="signup-input-wrap">
-                                    <span className="signup-input-icon">🔒</span>
-                                    <input
+                                    <Lock className="signup-input-icon-svg" />                                    <input
                                         id="password"
                                         type="password"
                                         className="input signup-input"
@@ -188,8 +186,7 @@ function SignUp() {
                             <div className="signup-form-group">
                                 <label htmlFor="confirmPassword">Confirm Password</label>
                                 <div className="signup-input-wrap">
-                                    <span className="signup-input-icon">🔒</span>
-                                    <input
+                                    <Lock className="signup-input-icon-svg" />                                    <input
                                         id="confirmPassword"
                                         type="password"
                                         className="input signup-input"
