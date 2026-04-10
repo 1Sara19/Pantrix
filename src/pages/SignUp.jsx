@@ -40,6 +40,12 @@ function SignUp() {
             showToast("Please fill in all fields");
             return;
         }
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!emailRegex.test(email)) {
+            showToast("Email must include '@' and '.' like example@email.com");
+            return;
+        }
 
         if (password !== confirmPassword) {
             showToast("Passwords don't match");
@@ -86,7 +92,7 @@ function SignUp() {
                     </div>
 
                     <div className="card-content">
-                        <form onSubmit={handleSubmit} className="signup-form">
+                        <form onSubmit={handleSubmit} className="signup-form" noValidate>
                             <div className="signup-form-group">
                                 <label htmlFor="name">Full Name</label>
                                 <div className="signup-input-wrap">
