@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { User, Mail, Shield, Save, ArrowLeft, Edit2, X } from "lucide-react";
 import { toast } from "sonner";
 import "../styles/pages/profile.css";
-
 function Profile() {
   const navigate = useNavigate();
 

@@ -26,8 +26,7 @@ export default function RecipeList({ ingredients = [], filters }) {
             );
 
             const missingIngredients = recipe.ingredients.filter(
-              (item) =>
-                !normalizedUserIngredients.includes(item.toLowerCase())
+              (item) => !normalizedUserIngredients.includes(item.toLowerCase())
             );
 
             return {
@@ -39,17 +38,26 @@ export default function RecipeList({ ingredients = [], filters }) {
           .filter((recipe) => {
             if (recipe.matchScore === 0) return false;
 
+            // Cook time filter
             if (filters.cookTime && recipe.cookTime > Number(filters.cookTime)) {
               return false;
             }
 
-            if (
-              filters.dietary.length > 0 &&
-              !filters.dietary.every((d) => recipe.dietary.includes(d))
-            ) {
-              return false;
+            // Diet filter
+            if (filters.dietary.length > 0) {
+              const recipeLabels = [
+                ...(recipe.dietary || []),
+                ...(recipe.tags || []),
+              ].map((item) => item.toLowerCase());
+
+              const hasAllSelectedDietFilters = filters.dietary.every((selected) =>
+                recipeLabels.includes(selected.toLowerCase())
+              );
+
+              if (!hasAllSelectedDietFilters) return false;
             }
 
+            // Exclude filter
             if (filters.exclude) {
               const excludedItems = filters.exclude
                 .toLowerCase()
@@ -57,9 +65,9 @@ export default function RecipeList({ ingredients = [], filters }) {
                 .map((item) => item.trim())
                 .filter(Boolean);
 
-              const hasExcludedIngredient = recipe.ingredients.some((i) =>
+              const hasExcludedIngredient = recipe.ingredients.some((ingredient) =>
                 excludedItems.some((excluded) =>
-                  i.toLowerCase().includes(excluded)
+                  ingredient.toLowerCase().includes(excluded)
                 )
               );
 
@@ -75,10 +83,13 @@ export default function RecipeList({ ingredients = [], filters }) {
       <div className="recipe-list-header">
         <h2 className="recipe-list-title">
           {normalizedUserIngredients.length === 0
-            ? "Popular Recipes"
+            ? "Recipe Results"
             : "Recipe Results"}
         </h2>
-        <p className="recipe-list-count">{filteredRecipes.length} recipes found</p>
+
+        <p className="recipe-list-count">
+          {filteredRecipes.length} recipes found
+        </p>
       </div>
 
       {filteredRecipes.length > 0 ? (
@@ -92,6 +103,7 @@ export default function RecipeList({ ingredients = [], filters }) {
           <div className="no-recipes-icon">
             <ChefHat className="no-recipes-chef-icon" />
           </div>
+
           <h3>No recipes found</h3>
           <p>
             {normalizedUserIngredients.length === 0
