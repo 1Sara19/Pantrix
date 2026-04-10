@@ -41,6 +41,15 @@ function SignUp() {
             showToast("Please fill in all fields");
             return;
         }
+        const existingEmails = [
+            "admin@example.com",
+            "demo@example.com"
+        ];
+
+        if (existingEmails.includes(email.toLowerCase())) {
+            showToast("Email already exists");
+            return;
+        }
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         if (!emailRegex.test(email)) {
