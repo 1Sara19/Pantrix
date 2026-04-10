@@ -1,125 +1,95 @@
-/* FilterPanel styles */
 .filter-panel {
-  background-color: #FFFFFF;
-  border-radius: 0.75rem;
-  padding: 1.5rem;
-  box-shadow: 0 1px 2px rgba(139, 111, 71, 0.08);
-  position: sticky;
-  top: 100px;
+  background: transparent;
+}
+
+.filter-panel-header {
+  margin-bottom: 22px;
 }
 
 .filter-panel-title {
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: #4A3F35;
-  margin: 0 0 1.5rem 0;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid rgba(107, 87, 68, 0.15);
+  margin: 0;
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: #4a3f35;
+}
+
+.filter-panel-subtitle {
+  margin: 8px 0 0;
+  font-size: 1rem;
+  color: #8b7355;
 }
 
 .filter-section {
-  margin-bottom: 1.5rem;
+  margin-bottom: 28px;
 }
 
-.filter-label {
-  display: block;
-  font-size: 1rem;
-  font-weight: 500;
-  color: #4A3F35;
-  margin-bottom: 0.5rem;
-}
-
-.filter-select {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  border: 2px solid rgba(107, 87, 68, 0.15);
-  border-radius: 0.5rem;
-  background-color: #F5EDE3;
-  color: #4A3F35;
-  font-size: 1rem;
-  outline: none;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238B6F47' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 1rem center;
-  padding-right: 3rem;
-}
-
-.filter-select:focus {
-  border-color: #8B6F47;
-  background-color: #FFFFFF;
-  box-shadow: 0 0 0 3px rgba(139, 111, 71, 0.1);
-}
-
-.filter-checkboxes {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.checkbox-label {
+.filter-section-heading {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.875rem;
-  color: #4A3F35;
-  cursor: pointer;
-}
-
-.checkbox-input {
-  width: 1.25rem;
-  height: 1.25rem;
-  border: 2px solid rgba(107, 87, 68, 0.15);
-  border-radius: 0.25rem;
-  cursor: pointer;
-  accent-color: #8B6F47;
-}
-
-.filter-input {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  border: 2px solid rgba(107, 87, 68, 0.15);
-  border-radius: 0.5rem;
-  background-color: #F5EDE3;
-  color: #4A3F35;
+  gap: 8px;
+  margin-bottom: 12px;
   font-size: 1rem;
-  outline: none;
-  transition: all 0.2s ease;
+  font-weight: 700;
+  color: #4a3f35;
 }
 
-.filter-input::placeholder {
-  color: #8B7355;
-  opacity: 0.7;
-}
-
-.filter-input:focus {
-  border-color: #8B6F47;
-  background-color: #FFFFFF;
-  box-shadow: 0 0 0 3px rgba(139, 111, 71, 0.1);
-}
-
-.filter-hint {
-  font-size: 0.75rem;
-  color: #8B7355;
-  margin: 0.5rem 0 0 0;
-}
-
-.filter-clear-button {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  background-color: transparent;
-  color: #8B6F47;
-  border: 2px solid #8B6F47;
-  border-radius: 0.5rem;
+.filter-section-title {
+  display: block;
+  margin-bottom: 12px;
   font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  font-weight: 700;
+  color: #4a3f35;
 }
 
-.filter-clear-button:hover {
-  background-color: rgba(139, 111, 71, 0.08);
-  transform: translateY(-1px);
+.filter-section-note {
+  margin: -2px 0 12px;
+  font-size: 0.92rem;
+  color: #9a866d;
+}
+
+.cook-time-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cook-time-button {
+  width: 100%;
+  text-align: left;
+  border: 1px solid #dccab3;
+  background: #fff;
+  color: #4a3f35;
+  padding: 15px 16px;
+  border-radius: 14px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.cook-time-button.active {
+  background: #ead6ca;
+  border-color: #be906c;
+  color: #6c4d38;
+}
+
+.filter-checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.filter-checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #4a3f35;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.filter-checkbox-item input {
+  width: 18px;
+  height: 18px;
+  accent-color: #9a7c4f;
+  cursor: pointer;
 }

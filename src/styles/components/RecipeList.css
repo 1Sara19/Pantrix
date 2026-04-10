@@ -42,16 +42,23 @@
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
 }
 
-.no-recipes-icon {
+ .no-recipes-icon {
   width: 72px;
   height: 72px;
   margin: 0 auto 18px;
   border-radius: 50%;
-  background: #f3efe9;
+  background: #f1efef;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 28px;
+}
+
+.no-recipes-chef-icon {
+  width: 34px;
+  height: 34px;
+  color: #9ca3af;
+  stroke-width: 2;
 }
 
 .no-recipes-box h3 {

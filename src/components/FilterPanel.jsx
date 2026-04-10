@@ -1,8 +1,35 @@
+import { Clock3 } from "lucide-react";
 import "../styles/components/FilterPanel.css";
 
+const cookTimeOptions = [
+  { label: "10 minutes", value: "10" },
+  { label: "30 minutes", value: "30" },
+  { label: "1 hour", value: "60" },
+  { label: "Open time", value: "" },
+];
+
+const dietOptions = [
+  "Vegetarian",
+  "High Protein",
+  "Healthy",
+  "Light Meal",
+  "Comfort Food",
+];
+
+const allergyOptions = [
+  "Dairy",
+  "Eggs",
+  "Peanuts",
+  "Tree Nuts",
+  "Gluten / Wheat",
+  "Soy",
+  "Fish",
+  "Seafood",
+];
+
 export default function FilterPanel({ filters, setFilters }) {
-  const handleCookTimeChange = (e) => {
-    setFilters({ ...filters, cookTime: e.target.value });
+  const handleCookTimeChange = (value) => {
+    setFilters({ ...filters, cookTime: value });
   };
 
   const handleDietaryChange = (value) => {
@@ -21,45 +48,70 @@ export default function FilterPanel({ filters, setFilters }) {
     }
   };
 
-  const handleExcludeChange = (e) => {
-    setFilters({ ...filters, exclude: e.target.value });
+  const handleExcludeToggle = (value) => {
+    const currentExcluded = filters.exclude
+      ? filters.exclude.split(",").map((item) => item.trim()).filter(Boolean)
+      : [];
+
+    const exists = currentExcluded.includes(value);
+
+    const updatedExcluded = exists
+      ? currentExcluded.filter((item) => item !== value)
+      : [...currentExcluded, value];
+
+    setFilters({
+      ...filters,
+      exclude: updatedExcluded.join(", "),
+    });
   };
 
-  const clearFilters = () => {
-    setFilters({
-      cookTime: "",
-      dietary: [],
-      exclude: "",
-    });
+  const isExcludedChecked = (value) => {
+    const currentExcluded = filters.exclude
+      ? filters.exclude.split(",").map((item) => item.trim()).filter(Boolean)
+      : [];
+
+    return currentExcluded.includes(value);
   };
 
   return (
     <div className="filter-panel">
-      <h3 className="filter-panel-title">Filters</h3>
-
-      <div className="filter-section">
-        <label className="filter-label">Cooking Time</label>
-        <select
-          className="filter-select"
-          value={filters.cookTime}
-          onChange={handleCookTimeChange}
-        >
-          <option value="">Any time</option>
-          <option value="15">Under 15 min</option>
-          <option value="30">Under 30 min</option>
-          <option value="60">Under 1 hour</option>
-          <option value="120">Under 2 hours</option>
-        </select>
+      <div className="filter-panel-header">
+        <h2 className="filter-panel-title">Filter Recipes</h2>
+        <p className="filter-panel-subtitle">
+          Refine your recipe search with filters
+        </p>
       </div>
 
       <div className="filter-section">
-        <label className="filter-label">Dietary Preferences</label>
-        <div className="filter-checkboxes">
-          {["Vegetarian", "Vegan", "Gluten-Free", "Dairy-Free"].map((item) => (
-            <label className="checkbox-label" key={item}>
+        <div className="filter-section-heading">
+          <Clock3 size={16} />
+          <span>Cook in X Minutes</span>
+        </div>
+
+        <div className="cook-time-options">
+          {cookTimeOptions.map((option) => (
+            <button
+              key={option.label}
+              type="button"
+              className={`cook-time-button ${
+                filters.cookTime === option.value ? "active" : ""
+              }`}
+              onClick={() => handleCookTimeChange(option.value)}
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="filter-section">
+        <label className="filter-section-title">Diet Mode</label>
+
+        <div className="filter-checkbox-group">
+          {dietOptions.map((item) => (
+            <label className="filter-checkbox-item" key={item}>
               <input
                 type="checkbox"
-                className="checkbox-input"
                 checked={filters.dietary.includes(item)}
                 onChange={() => handleDietaryChange(item)}
               />
@@ -70,20 +122,27 @@ export default function FilterPanel({ filters, setFilters }) {
       </div>
 
       <div className="filter-section">
-        <label className="filter-label">Exclude Ingredients</label>
-        <input
-          type="text"
-          className="filter-input"
-          placeholder="e.g., nuts, shellfish..."
-          value={filters.exclude}
-          onChange={handleExcludeChange}
-        />
-        <p className="filter-hint">Add allergies or ingredients to avoid</p>
-      </div>
+        <label className="filter-section-title">
+          Exclude Ingredients / Allergies
+        </label>
 
-      <button className="filter-clear-button" onClick={clearFilters}>
-        Clear All Filters
-      </button>
+        <p className="filter-section-note">
+          Saved preferences are automatically applied
+        </p>
+
+        <div className="filter-checkbox-group">
+          {allergyOptions.map((item) => (
+            <label className="filter-checkbox-item" key={item}>
+              <input
+                type="checkbox"
+                checked={isExcludedChecked(item)}
+                onChange={() => handleExcludeToggle(item)}
+              />
+              <span>{item}</span>
+            </label>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
