@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/login.css";
 import pantrixLogo from "../assets/images/Pantrix.png";
+import { loginUser } from "../data/auth";
 
 function Login() {
     const navigate = useNavigate();
@@ -28,14 +29,19 @@ function Login() {
         setIsLoading(true);
 
         setTimeout(() => {
-            showToast(role === "admin" ? "Welcome Admin!" : "Welcome back!");
-            setIsLoading(false);
+            try {
+                const user = loginUser(email, password, role);
+                showToast(user.role === "admin" ? "Welcome Admin!" : "Welcome back!");
+                setIsLoading(false);
 
-            // يرجع للهوم بيج
-            if (role === "admin") {
-                navigate("/admin");
-            }else {
-                navigate("/");
+                if (user.role === "admin") {
+                    navigate("/admin");
+                } else {
+                    navigate("/");
+                }
+            } catch (error) {
+                showToast(error.message);
+                setIsLoading(false);
             }
         }, 800);
     };
