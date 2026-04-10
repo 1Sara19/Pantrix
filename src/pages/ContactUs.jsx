@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Mail, ArrowLeft, Send } from "lucide-react";
+import { toast } from "sonner";
 import "../styles/contact.css";
 
 function ContactUs() {
@@ -26,14 +27,14 @@ function ContactUs() {
     e.preventDefault();
 
     if (!subject || !message.trim()) {
-      alert("Please fill in all fields");
+      toast.error("Please fill in all fields");
       return;
     }
 
     setIsSubmitting(true);
 
     setTimeout(() => {
-      alert("Message sent successfully!");
+      toast.success("Message sent successfully!");
       setSubject("");
       setMessage("");
       setIsSubmitting(false);
