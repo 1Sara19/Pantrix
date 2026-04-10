@@ -32,7 +32,11 @@ function Login() {
             setIsLoading(false);
 
             // يرجع للهوم بيج
-            navigate("/");
+            if (role === "admin") {
+                navigate("/admin");
+            }else {
+                navigate("/");
+            }
         }, 800);
     };
 

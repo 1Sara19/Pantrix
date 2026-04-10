@@ -42,7 +42,7 @@ function SignUp() {
             showToast("Account created successfully!");
             setIsLoading(false);
 
-            navigate("/");
+            navigate("/login");
         }, 800);
     };
 
