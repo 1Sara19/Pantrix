@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Mail, ArrowLeft, Send } from "lucide-react";
-import "../styles/pages/ContactUs.css";
+import { Mail, ArrowLeft, Send, ChevronDown } from "lucide-react";
+import { toast } from "sonner";
+import "../styles/contact.css";
 
 function ContactUs() {
   const navigate = useNavigate();
 
   const [user] = useState({
-    email: "sarah@example.com",
+    email: "s@gmail.com",
   });
 
   const [subject, setSubject] = useState("");
@@ -26,14 +27,14 @@ function ContactUs() {
     e.preventDefault();
 
     if (!subject || !message.trim()) {
-      alert("Please fill in all fields");
+      toast.error("Please fill in all fields");
       return;
     }
 
     setIsSubmitting(true);
 
     setTimeout(() => {
-      alert("Message sent successfully!");
+      toast.success("Message sent successfully!");
       setSubject("");
       setMessage("");
       setIsSubmitting(false);
@@ -41,99 +42,109 @@ function ContactUs() {
   };
 
   return (
-    <div className="container container-sm contact-page">
-      <button
-        className="btn btn-ghost back-btn"
-        onClick={() => navigate("/")}
-      >
-        <ArrowLeft size={18} />
-        Back to Home
-      </button>
+    <div className="contact-page-wrapper">
+      <section className="contact-content-section">
+        <div className="container contact-page">
+          <button
+            className="btn btn-ghost back-btn"
+            onClick={() => navigate("/")}
+            type="button"
+          >
+            <ArrowLeft size={18} />
+            Back to Home
+          </button>
 
-      <div className="contact-header">
-        <div className="contact-title-wrap">
-          <div className="contact-icon-box">
-            <Mail size={24} />
+          <div className="contact-header">
+            <div className="contact-title-wrap">
+              <div className="contact-icon-box">
+                <Mail size={28} />
+              </div>
+
+              <div>
+                <h1>Contact Us</h1>
+                <p className="contact-subtitle">
+                  Send us feedback or report an issue
+                </p>
+              </div>
+            </div>
           </div>
 
-          <div>
-            <h1>Contact Us</h1>
-            <p className="text-muted">
-              Send us feedback or report an issue
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div className="card contact-card">
-        <div className="card-header">
-          <h2 className="card-title">Get in Touch</h2>
-          <p className="card-description">
-            We'd love to hear from you! Whether you have feedback or found a bug.
-          </p>
-        </div>
-
-        <div className="card-content">
-          <form onSubmit={handleSubmit} className="contact-form">
-            <div className="form-group">
-              <label>Your Email</label>
-              <input
-                type="email"
-                value={user.email}
-                readOnly
-                className="input contact-readonly"
-              />
-              <small>We'll respond to this email</small>
+          <div className="card contact-card">
+            <div className="contact-card-header">
+              <h2>Get in Touch</h2>
+              <p>
+                We'd love to hear from you! Whether you have feedback, found a
+                bug, or just want to say hello.
+              </p>
             </div>
 
-            <div className="form-group">
-              <label>Subject</label>
-              <select
-                className="input select"
-                value={subject}
-                onChange={(e) => setSubject(e.target.value)}
+            <form onSubmit={handleSubmit} className="contact-form">
+              <div className="form-group">
+                <label>Your Email</label>
+                <input
+                  type="email"
+                  value={user.email}
+                  readOnly
+                  className="input contact-input contact-readonly"
+                />
+                <small>We'll respond to this email address</small>
+              </div>
+
+              <div className="form-group select-wrap">
+                <label>Subject</label>
+                <select
+                  className="input select contact-input contact-select"
+                  value={subject}
+                  onChange={(e) => setSubject(e.target.value)}
+                >
+                  <option value="">Select a subject</option>
+                  <option value="feedback">Feedback</option>
+                  <option value="problem">Report a problem</option>
+                  <option value="feature">Feature request</option>
+                  <option value="other">Other</option>
+                </select>
+                <ChevronDown size={18} className="select-icon" />
+              </div>
+
+              <div className="form-group">
+                <label>Message</label>
+                <textarea
+                  className="input textarea contact-textarea"
+                  placeholder="Tell us what's on your mind..."
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  rows={6}
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="btn btn-primary contact-submit-btn"
               >
-                <option value="">Select a subject</option>
-                <option value="feedback">Feedback</option>
-                <option value="problem">Report a problem</option>
-                <option value="feature">Feature request</option>
-                <option value="other">Other</option>
-              </select>
+                <Send size={18} />
+                {isSubmitting ? "Sending..." : "Send Message"}
+              </button>
+            </form>
+          </div>
+
+          <div className="contact-demo-card">
+            <div className="card contact-demo-card">
+              <h3>Demo Application</h3>
+              <p>
+                This is a demonstration app. In a real application, your message
+                would be sent to our support team. For now, messages are
+                simulated locally.
+              </p>
             </div>
-
-            <div className="form-group">
-              <label>Message</label>
-              <textarea
-                className="input textarea"
-                placeholder="Tell us what's on your mind..."
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                rows={6}
-              />
-            </div>
-
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="btn btn-primary w-full"
-            >
-              <Send size={16} />
-              {isSubmitting ? "Sending..." : "Send Message"}
-            </button>
-          </form>
-        </div>
-      </div>
-
-      <div className="card contact-info">
-        <div className="card-content">
-          <div className="contact-info-content">
-            <h3>Demo Application</h3>
-            <p className="text-muted">
-              This is a demo app. Messages are simulated locally.
-            </p>
           </div>
         </div>
-      </div>
+      </section>
+
+      <footer className="contact-footer">
+        <p>© 2026 Pantrix - Helping you cook smart and reduce food waste</p>
+        <small>Demo prototype - All data is simulated</small>
+      </footer>
     </div>
   );
 }
