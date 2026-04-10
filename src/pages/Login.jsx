@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/pages/Login.css";
+import "../styles/pages/login.css";
 import { Mail, Lock } from "lucide-react";
-import "../styles/login.css";
+import "../styles/pages/login.css";
 import pantrixLogo from "../assets/images/Pantrix.png";
-import { loginUser } from "../data/auth";
+import { loginUser } from "../data/auth.js";
 
 function Login() {
     const navigate = useNavigate();

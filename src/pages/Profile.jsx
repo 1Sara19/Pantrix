@@ -1,11 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { User, Mail, Shield, Save, ArrowLeft, Edit2, X } from "lucide-react";
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { User, Mail, Shield, Save, ArrowLeft, Edit2, X } from "lucide-react";
 import { toast } from "sonner";
-import "../styles/profile.css";
+import "../styles/pages/profile.css";
 function Profile() {
   const navigate = useNavigate();
 
