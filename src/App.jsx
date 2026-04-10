@@ -85,11 +85,13 @@ function App() {
 
 export default App;
 
- */import { BrowserRouter, Routes, Route } from "react-router";
+ */
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useState } from "react";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import RestrictedModal from "./components/RestrictedModal";
+import AdminDashboard from "./pages/AdminDashboard";
 
 function HomeTest() {
     const [open, setOpen] = useState(false);
@@ -118,6 +120,7 @@ function App() {
                 <Route path="/" element={<HomeTest />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<SignUp />} />
+                <Route path="/admin" element={<AdminDashboard />} />
             </Routes>
         </BrowserRouter>
     );
