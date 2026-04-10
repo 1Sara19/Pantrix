@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router";
-import "../styles/RestrictedModal.css";
+import "../styles/components/RestrictedModal.css";
 
 export default function RestrictedModal({ isOpen, onClose }) {
     const navigate = useNavigate();

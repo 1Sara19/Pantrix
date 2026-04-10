@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/signup.css";
+import "../styles/pages/SignUp.css";
 import pantrixLogo from "../assets/images/Pantrix.png";
 import { User, Mail, Lock } from "lucide-react";
 
@@ -73,6 +73,11 @@ function SignUp() {
         setIsLoading(true);
 
         setTimeout(() => {
+            localStorage.setItem("isLoggedIn", "true");
+            localStorage.setItem("userRole", "user");
+            localStorage.setItem("userEmail", email);
+            localStorage.setItem("userId", email.toLowerCase().trim());
+            localStorage.setItem("userName", name);
             showToast("Account created successfully!");
             setIsLoading(false);
             navigate("/login");

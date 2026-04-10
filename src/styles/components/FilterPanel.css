@@ -1,0 +1,95 @@
+.filter-panel {
+  background: transparent;
+}
+
+.filter-panel-header {
+  margin-bottom: 22px;
+}
+
+.filter-panel-title {
+  margin: 0;
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: #4a3f35;
+}
+
+.filter-panel-subtitle {
+  margin: 8px 0 0;
+  font-size: 1rem;
+  color: #8b7355;
+}
+
+.filter-section {
+  margin-bottom: 28px;
+}
+
+.filter-section-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #4a3f35;
+}
+
+.filter-section-title {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #4a3f35;
+}
+
+.filter-section-note {
+  margin: -2px 0 12px;
+  font-size: 0.92rem;
+  color: #9a866d;
+}
+
+.cook-time-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cook-time-button {
+  width: 100%;
+  text-align: left;
+  border: 1px solid #dccab3;
+  background: #fff;
+  color: #4a3f35;
+  padding: 15px 16px;
+  border-radius: 14px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.cook-time-button.active {
+  background: #ead6ca;
+  border-color: #be906c;
+  color: #6c4d38;
+}
+
+.filter-checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.filter-checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #4a3f35;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.filter-checkbox-item input {
+  width: 18px;
+  height: 18px;
+  accent-color: #9a7c4f;
+  cursor: pointer;
+}

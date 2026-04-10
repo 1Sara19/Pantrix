@@ -1,141 +1,51 @@
-/*
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-
+import { Routes, Route, useLocation } from "react-router-dom";
+import Navbar from "./components/Navbar";
 import ScrollToTop from "./components/ScrollToTop";
 
+import Home from "./pages/Home";
+import Favorites from "./pages/Favorites";
+import Profile from "./pages/Profile";
+import MealPlan from "./pages/MealPlan";
+import ContactUs from "./pages/ContactUs";
+import Login from "./pages/Login";
+import SignUp from "./pages/SignUp";
 import AdminDashboard from "./pages/AdminDashboard";
 import ManageUsers from "./pages/ManageUsers";
-import ManageComments from "./pages/ManageComments";
-import RecipeLimits from "./pages/RecipeLimits";
-import ReviewReports from "./pages/ReviewReports";
 import ManageFilters from "./pages/ManageFilters";
+import ManageComments from "./pages/ManageComments";
+import ReviewReports from "./pages/ReviewReports";
+import RecipeLimits from "./pages/RecipeLimits";
 
 function App() {
+  const location = useLocation();
+  const hideNavbar = ["/login", "/signup"].includes(location.pathname);
+
   return (
-    <BrowserRouter>
+    <>
       <ScrollToTop />
 
+      {!hideNavbar && <Navbar />}
+
       <Routes>
-        <Route path="/" element={<AdminDashboard />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/favorites" element={<Favorites />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/meal-planning" element={<MealPlan />} />
+        <Route path="/contact" element={<ContactUs />} />
+
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
+
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/admin/users" element={<ManageUsers />} />
+        <Route path="/admin/filters" element={<ManageFilters />} />
         <Route path="/admin/comments" element={<ManageComments />} />
         <Route path="/admin/limits" element={<RecipeLimits />} />
         <Route path="/admin/reports" element={<ReviewReports />} />
-        <Route path="/admin/filters" element={<ManageFilters />} />
+        <Route path="/admin/recipe-limits" element={<RecipeLimits />} />
       </Routes>
-    </BrowserRouter>
+    </>
   );
 }
 
 export default App;
-*/
-/*
-import Login from "./pages/Login";
-
-function App() {
-    return <Login />;
-}
-
-export default App;
-*/
-
-/*
-import SignUp from "./pages/SignUp";
-
-function App() {
-    return <SignUp />;
-}
-
-export default App;*/
-
-
-
-/*
-import { Button } from "./components/ui/Button";
-import { Input } from "./components/ui/Input";
-import { Label } from "./components/ui/Label";
-import {
-    Card,
-    CardHeader,
-    CardTitle,
-    CardDescription,
-    CardContent,
-} from "./components/ui/Card";
-
-function App() {
-    return (
-        <div className="container mt-lg">
-            <Card>
-                <CardHeader>
-                    <CardTitle>Test UI</CardTitle>
-                    <CardDescription>Check if all components work</CardDescription>
-                </CardHeader>
-
-                <CardContent>
-                    <Label htmlFor="email">Email</Label>
-                    <Input id="email" type="email" placeholder="you@example.com" />
-                    <br />
-                    <Button variant="default">Test Button</Button>
-                </CardContent>
-            </Card>
-        </div>
-    );
-}
-
-export default App;
-
- */
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useState } from "react";
-import Login from "./pages/Login";
-import SignUp from "./pages/SignUp";
-import RestrictedModal from "./components/RestrictedModal";
-import AdminDashboard from "./pages/AdminDashboard";
-import Footer from "./components/Footer.jsx";
-
-function HomeTest() {
-    const [open, setOpen] = useState(false);
-
-    return (
-        <div style={{ padding: "40px" }}>
-            <h1>Pantrix Home</h1>
-            <p>Test page</p>
-
-            <button className="btn btn-primary" onClick={() => setOpen(true)}>
-                Open Restricted Modal
-            </button>
-
-            <RestrictedModal
-                isOpen={open}
-                onClose={() => setOpen(false)}
-            />
-        </div>
-    );
-}
-
-function AppContent() {
-    return (
-        <>
-            <Routes>
-                <Route path="/" element={<HomeTest />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<SignUp />} />
-                <Route path="/admin" element={<AdminDashboard />} />
-            </Routes>
-
-            <Footer />
-        </>
-    );
-}
-
-function App() {
-    return (
-        <BrowserRouter>
-            <AppContent />
-        </BrowserRouter>
-    );
-}
-
-export default App;
-

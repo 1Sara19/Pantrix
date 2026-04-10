@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "../styles/pages/Login.css";
 import { Mail, Lock } from "lucide-react";
 import "../styles/login.css";
 import pantrixLogo from "../assets/images/Pantrix.png";
@@ -43,12 +44,24 @@ function Login() {
         setIsLoading(true);
 
         setTimeout(() => {
+            // showToast(role === "admin" ? "Welcome Admin!" : "Welcome back!");
+            // setIsLoading(false);
+            localStorage.setItem("isLoggedIn", "true");
+            localStorage.setItem("userRole", role);
+            localStorage.setItem("userEmail", email);
+            localStorage.setItem("userId", email.toLowerCase().trim());
+
+
+            showToast(role === "admin" ? "Welcome Admin!" : "Welcome back!");
+            setIsLoading(false);
             try {
                 const user = loginUser(email, password, role);
 
                 showToast(user.role === "admin" ? "Welcome Admin!" : "Welcome back!");
                 setIsLoading(false);
 
+
+            navigate("/");
                 if (user.role === "admin") {
                     navigate("/admin");
                 } else {
