@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import {
   Calendar,
   ArrowLeft,
@@ -139,6 +140,7 @@ function MealPlan() {
     newPlan[addMealDialog.day][addMealDialog.mealType] = { recipeId };
     saveMealPlan(newPlan);
     setAddMealDialog(null);
+    toast.success("Recipe added to meal plan.");
   };
 
   const handleRemoveRecipe = (day, mealType) => {
@@ -147,11 +149,12 @@ function MealPlan() {
     if (newPlan[day]) {
       newPlan[day][mealType] = { recipeId: null };
       saveMealPlan(newPlan);
+      toast.success("Meal removed from plan.");
     }
   };
-
   const handleClearWeek = () => {
     saveMealPlan(createEmptyPlan());
+    toast.success("Week plan cleared");
   };
 
   const getRecipe = (recipeId) => {
