@@ -92,6 +92,7 @@ import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import RestrictedModal from "./components/RestrictedModal";
 import AdminDashboard from "./pages/AdminDashboard";
+import Footer from "./components/Footer.jsx";
 
 function HomeTest() {
     const [open, setOpen] = useState(false);
@@ -113,17 +114,28 @@ function HomeTest() {
     );
 }
 
-function App() {
+function AppContent() {
     return (
-        <BrowserRouter>
+        <>
             <Routes>
                 <Route path="/" element={<HomeTest />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/admin" element={<AdminDashboard />} />
             </Routes>
+
+            <Footer />
+        </>
+    );
+}
+
+function App() {
+    return (
+        <BrowserRouter>
+            <AppContent />
         </BrowserRouter>
     );
 }
 
 export default App;
+
