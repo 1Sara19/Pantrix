@@ -166,3 +166,38 @@
         height: 82px;
     }
 }
+.password-rules {
+    margin-top: 10px;
+    padding: 12px;
+    background-color: #f8f3ed;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+}
+
+.password-rules-title {
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-color);
+    margin-bottom: 8px;
+}
+
+.password-rule {
+    font-size: 0.9rem;
+    color: #9b3d3d;
+    margin-bottom: 6px;
+    transition: color 0.2s ease;
+}
+
+.password-rule.valid {
+    color: #2e7d32;
+}
+.signup-input-icon-svg {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    color: #a89680;
+    pointer-events: none;
+}

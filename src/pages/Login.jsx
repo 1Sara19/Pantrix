@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/pages/Login.css";
+import "../styles/pages/login.css";
+import { Mail, Lock } from "lucide-react";
+import "../styles/pages/login.css";
 import pantrixLogo from "../assets/images/Pantrix.png";
+import { loginUser } from "../data/auth.js";
 
 function Login() {
     const navigate = useNavigate();
@@ -24,6 +27,19 @@ function Login() {
             showToast("Please fill in all fields");
             return;
         }
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!emailRegex.test(email)) {
+            showToast("Email must include '@' and '.' like example@email.com");
+            return;
+        }
+
+        const validEmails = ["admin@example.com", "demo@example.com"];
+
+        if (!validEmails.includes(email.toLowerCase())) {
+            showToast("Email not found Please sign in");
+            return;
+        }
 
         setIsLoading(true);
 
@@ -38,9 +54,23 @@ function Login() {
 
             showToast(role === "admin" ? "Welcome Admin!" : "Welcome back!");
             setIsLoading(false);
+            try {
+                const user = loginUser(email, password, role);
+
+                showToast(user.role === "admin" ? "Welcome Admin!" : "Welcome back!");
+                setIsLoading(false);
 
 
             navigate("/");
+                if (user.role === "admin") {
+                    navigate("/admin");
+                } else {
+                    navigate("/");
+                }
+            } catch (error) {
+                showToast(error.message);
+                setIsLoading(false);
+            }
         }, 800);
     };
 
@@ -65,12 +95,14 @@ function Login() {
                     <div className="card-header">
                         <h2 className="login-card-title">Welcome Back</h2>
                         <p className="card-description login-card-description">
-                            Log in to access your saved recipes and preferences
+                            {role === "admin"
+                                ? "Admin access only"
+                                : "Log in to access your saved recipes and preferences"}
                         </p>
                     </div>
 
                     <div className="card-content">
-                        <form onSubmit={handleSubmit} className="login-form">
+                        <form onSubmit={handleSubmit} className="login-form" noValidate>
                             <div className="login-form-group">
                                 <label>Select Role</label>
 
@@ -102,7 +134,7 @@ function Login() {
                             <div className="login-form-group">
                                 <label htmlFor="email">Email</label>
                                 <div className="login-input-wrap">
-                                    <span className="login-input-icon">@</span>
+                                    <Mail className="login-input-icon-svg" />
                                     <input
                                         id="email"
                                         type="email"
@@ -118,7 +150,7 @@ function Login() {
                             <div className="login-form-group">
                                 <label htmlFor="password">Password</label>
                                 <div className="login-input-wrap">
-                                    <span className="login-input-icon">🔒</span>
+                                    <Lock className="login-input-icon-svg" />
                                     <input
                                         id="password"
                                         type="password"
@@ -133,7 +165,8 @@ function Login() {
 
                             <button
                                 type="submit"
-                                className="btn btn-primary login-submit-btn" disabled={isLoading}
+                                className="btn btn-primary login-submit-btn"
+                                disabled={isLoading}
                             >
                                 {isLoading ? "Logging in..." : "Log In"}
                             </button>

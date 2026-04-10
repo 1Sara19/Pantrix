@@ -40,6 +40,7 @@ function App() {
         <Route path="/admin/users" element={<ManageUsers />} />
         <Route path="/admin/filters" element={<ManageFilters />} />
         <Route path="/admin/comments" element={<ManageComments />} />
+        <Route path="/admin/limits" element={<RecipeLimits />} />
         <Route path="/admin/reports" element={<ReviewReports />} />
         <Route path="/admin/recipe-limits" element={<RecipeLimits />} />
       </Routes>
