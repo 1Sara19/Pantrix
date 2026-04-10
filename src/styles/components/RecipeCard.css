@@ -1,4 +1,5 @@
 .recipe-card {
+  height: 100%;
   background: #fff;
   border-radius: 16px;
   overflow: hidden;
@@ -30,8 +31,45 @@
   font-weight: 600;
 }
 
+/* ❤️ Heart button */
+
+.recipe-heart-btn {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  width: 3rem;
+  height: 3rem;
+  border: none;
+  border-radius: 999px;
+  background: white;           
+  color: black;                
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.16);
+  transition: transform 0.15s ease;
+}
+
+.recipe-heart-btn:hover {
+  transform: scale(1.05);
+}
+
+
+
+.recipe-heart-btn.liked {
+  background: #ff1f1f;          
+  color: white;                 
+}
+
+/* Card Content */
+
 .recipe-card-content {
   padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
 }
 
 .recipe-card-title {
@@ -48,11 +86,38 @@
   font-size: 14px;
 }
 
+.recipe-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Dietary Tags */
+
+.recipe-dietary-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.recipe-dietary-tag {
+  background: #f5ede3;
+  color: #6b5744;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  border: 1px solid #e6d8c8;
+}
+
+/* Footer */
+
 .recipe-card-footer {
   display: flex;
   gap: 10px;
   padding: 16px;
   padding-top: 0;
+  margin-top: auto;
 }
 
 .recipe-card-button {
@@ -73,6 +138,8 @@
   width: 48px;
   background: #f5ede3;
 }
+
+/* Modal */
 
 .recipe-modal-overlay {
   position: fixed;
@@ -143,29 +210,14 @@
   line-height: 1.8;
 }
 
-.recipe-toast {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: #8b6f47;
-  color: white;
-  padding: 12px 18px;
-  border-radius: 10px;
-  z-index: 9999;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
-}
-
-.liked {
-  background: #c85a54 !important;
-  color: white !important;
-}
-
 .recipe-modal-actions {
   display: flex;
   gap: 10px;
   margin-top: 20px;
   margin-bottom: 20px;
 }
+
+/* Reviews */
 
 .review-list {
   display: flex;
@@ -215,4 +267,25 @@
   color: #c85a54;
   font-weight: 600;
   margin-left: 6px;
+}
+
+/* Toast */
+
+.recipe-toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #8b6f47;
+  color: white;
+  padding: 12px 18px;
+  border-radius: 10px;
+  z-index: 9999;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+}
+
+/* liked button */
+
+.liked {
+  background: #ff1f1f !important;
+  color: white !important;
 }

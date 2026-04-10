@@ -1,157 +1,175 @@
 import RecipeCard from "./RecipeCard";
 import "../styles/components/RecipeList.css";
 
-export default function RecipeList({ ingredients, filters }) {
+export default function RecipeList({ ingredients = [], filters }) {
+
   const recipes = [
     {
       id: 1,
       title: "Creamy Garlic Chicken Pasta",
       cookTime: 25,
       difficulty: "Easy",
-      image: "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=400&h=300&fit=crop",
-      dietary: ["Dairy-Free"],
-      ingredients: ["chicken", "garlic", "pasta", "cream"],
+      servings: "2 servings",
+      dietary: [],
+      ingredients: ["pasta", "chicken", "garlic", "cream", "parmesan"],
       instructions: [
-        "Boil the pasta",
+        "Boil pasta until al dente",
         "Cook chicken with garlic",
-        "Add cream",
-        "Mix and serve"
-      ]
+        "Add cream and parmesan",
+        "Mix pasta with sauce"
+      ],
+      image:
+        "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=400&h=300&fit=crop"
     },
+
     {
       id: 2,
       title: "Mediterranean Tomato Salad",
       cookTime: 10,
       difficulty: "Easy",
-      image: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=400&h=300&fit=crop",
+      servings: "2 servings",
       dietary: ["Vegetarian", "Gluten-Free"],
-      ingredients: ["tomato", "cucumber", "olive oil", "feta"],
+      ingredients: ["tomato", "olive oil", "feta", "cucumber", "mint"],
       instructions: [
-        "Chop vegetables",
-        "Add olive oil",
-        "Mix everything",
-        "Serve fresh"
-      ]
+        "Chop tomatoes and cucumber",
+        "Add feta cheese",
+        "Drizzle olive oil",
+        "Mix and serve"
+      ],
+      image:
+        "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=400&h=300&fit=crop"
     },
+
     {
       id: 3,
       title: "Classic Margherita Pizza",
       cookTime: 45,
       difficulty: "Medium",
-      image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=400&h=300&fit=crop",
+      servings: "4 servings",
       dietary: ["Vegetarian"],
-      ingredients: ["dough", "tomato", "mozzarella", "basil"],
+      ingredients: ["pizza dough", "tomato", "mozzarella", "basil"],
       instructions: [
-        "Prepare dough",
-        "Add toppings",
-        "Bake pizza",
-        "Serve hot"
-      ]
+        "Roll pizza dough",
+        "Spread tomato sauce",
+        "Add mozzarella",
+        "Bake in oven"
+      ],
+      image:
+        "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=400&h=300&fit=crop"
     },
+
     {
       id: 4,
-      title: "Herb-Roasted Chicken Thighs",
-      cookTime: 40,
-      difficulty: "Medium",
-      image: "https://images.unsplash.com/photo-1598103442097-8b74394b95c6?w=400&h=300&fit=crop",
-      dietary: [],
-      ingredients: ["chicken", "rosemary", "thyme", "garlic"],
-      instructions: [
-        "Season chicken",
-        "Add herbs",
-        "Roast in oven",
-        "Serve hot"
-      ]
-    },
-    {
-      id: 5,
-      title: "Garlic Butter Shrimp Scampi",
+      title: "Garlic Butter Shrimp",
       cookTime: 20,
       difficulty: "Easy",
-      image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=400&h=300&fit=crop",
-      dietary: [],
+      servings: "2 servings",
+      dietary: ["Gluten-Free"],
       ingredients: ["shrimp", "garlic", "butter", "lemon"],
       instructions: [
-        "Cook garlic in butter",
-        "Add shrimp",
-        "Add lemon",
-        "Serve"
-      ]
+        "Cook shrimp in butter",
+        "Add garlic",
+        "Squeeze lemon",
+        "Serve hot"
+      ],
+      image:
+        "https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=400&h=300&fit=crop"
+    },
+
+    {
+      id: 5,
+      title: "Homemade Tomato Soup",
+      cookTime: 35,
+      difficulty: "Easy",
+      servings: "3 servings",
+      dietary: ["Vegan", "Gluten-Free"],
+      ingredients: ["tomato", "onion", "garlic", "olive oil"],
+      instructions: [
+        "Cook onion and garlic",
+        "Add tomatoes",
+        "Blend soup",
+        "Serve warm"
+      ],
+      image:
+        "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=400&h=300&fit=crop"
     }
   ];
 
+  /* ---------------- MATCH SCORE ---------------- */
+
+  const calculateMatchScore = (recipeIngredients) => {
+    if (ingredients.length === 0) return 0;
+
+    const matched = recipeIngredients.filter((item) =>
+      ingredients.includes(item)
+    ).length;
+
+    return Math.round((matched / recipeIngredients.length) * 100);
+  };
+
+  /* ---------------- FILTERS ---------------- */
+
   const filteredRecipes = recipes
     .map((recipe) => {
-      const matchedIngredients = recipe.ingredients.filter((ingredient) =>
-        ingredients.includes(ingredient.toLowerCase())
-      );
+      const matchScore = calculateMatchScore(recipe.ingredients);
 
       const missingIngredients = recipe.ingredients.filter(
-        (ingredient) => !ingredients.includes(ingredient.toLowerCase())
+        (item) => !ingredients.includes(item)
       );
-
-      const matchScore =
-        ingredients.length === 0
-          ? 0
-          : Math.round((matchedIngredients.length / recipe.ingredients.length) * 100);
 
       return {
         ...recipe,
         matchScore,
-        matchedIngredients,
-        missingIngredients,
+        missingIngredients
       };
     })
+
     .filter((recipe) => {
-      const matchesIngredients =
-        ingredients.length === 0 || recipe.matchedIngredients.length > 0;
+      if (filters.cookTime && recipe.cookTime > filters.cookTime) return false;
 
-      const matchesCookTime =
-        !filters.cookTime || recipe.cookTime <= Number(filters.cookTime);
+      if (
+        filters.dietary.length > 0 &&
+        !filters.dietary.every((d) => recipe.dietary.includes(d))
+      ) {
+        return false;
+      }
 
-      const matchesDietary =
-        filters.dietary.length === 0 ||
-        filters.dietary.every((item) => recipe.dietary.includes(item));
+      if (filters.exclude) {
+        const exclude = filters.exclude.toLowerCase();
 
-      const excludedItems = filters.exclude
-        .toLowerCase()
-        .split(",")
-        .map((item) => item.trim())
-        .filter(Boolean);
+        if (
+          recipe.ingredients.some((i) =>
+            i.toLowerCase().includes(exclude)
+          )
+        ) {
+          return false;
+        }
+      }
 
-      const matchesExclude =
-        excludedItems.length === 0 ||
-        !recipe.ingredients.some((ingredient) =>
-          excludedItems.includes(ingredient.toLowerCase())
-        );
-
-      return matchesIngredients && matchesCookTime && matchesDietary && matchesExclude;
+      return true;
     })
+
     .sort((a, b) => b.matchScore - a.matchScore);
 
   return (
     <div className="recipe-list-container">
+
       <div className="recipe-list-header">
         <h2 className="recipe-list-title">Recipe Results</h2>
-        <p className="recipe-list-count">{filteredRecipes.length} recipes found</p>
+        <p className="recipe-list-count">
+          {filteredRecipes.length} recipes found
+        </p>
       </div>
 
       <div className="recipe-list-grid">
         {filteredRecipes.map((recipe) => (
           <RecipeCard
             key={recipe.id}
-            id={recipe.id}
-            title={recipe.title}
-            matchScore={recipe.matchScore}
-            cookTime={`${recipe.cookTime} min`}
-            difficulty={recipe.difficulty}
-            image={recipe.image}
-            ingredients={recipe.ingredients}
-            instructions={recipe.instructions}
-            missingIngredients={recipe.missingIngredients}
+            {...recipe}
           />
         ))}
       </div>
+
     </div>
   );
 }

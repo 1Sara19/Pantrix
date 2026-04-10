@@ -28,8 +28,14 @@ function Login() {
         setIsLoading(true);
 
         setTimeout(() => {
+            // showToast(role === "admin" ? "Welcome Admin!" : "Welcome back!");
+            // setIsLoading(false);
+            localStorage.setItem("isLoggedIn", "true");
+            localStorage.setItem("userRole", role);
+            localStorage.setItem("userEmail", email);
+
             showToast(role === "admin" ? "Welcome Admin!" : "Welcome back!");
-            setIsLoading(false);
+        
 
             // يرجع للهوم بيج
             navigate("/");
