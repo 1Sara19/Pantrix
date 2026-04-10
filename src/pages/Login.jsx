@@ -33,11 +33,13 @@ function Login() {
             localStorage.setItem("isLoggedIn", "true");
             localStorage.setItem("userRole", role);
             localStorage.setItem("userEmail", email);
+            localStorage.setItem("userId", email.toLowerCase().trim());
+
 
             showToast(role === "admin" ? "Welcome Admin!" : "Welcome back!");
-        
+            setIsLoading(false);
 
-            // يرجع للهوم بيج
+
             navigate("/");
         }, 800);
     };

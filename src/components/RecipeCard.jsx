@@ -25,19 +25,25 @@ export default function RecipeCard({
   const [reviews, setReviews] = useState([]);
   const [toast, setToast] = useState("");
 
-  const likeKey = `liked_recipe_${id}`;
+  const userId = localStorage.getItem("userId");
+  const favoritesKey = userId ? `favorites_${userId}` : null;
   const reviewKey = `recipe_reviews_${id}`;
   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
 
   useEffect(() => {
-    const savedLike = localStorage.getItem(likeKey);
-    setLiked(savedLike === "true");
+    if (favoritesKey) {
+      const savedFavorites =
+        JSON.parse(localStorage.getItem(favoritesKey)) || [];
+      setLiked(savedFavorites.includes(id));
+    } else {
+      setLiked(false);
+    }
 
     const savedReviews = localStorage.getItem(reviewKey);
     if (savedReviews) {
       setReviews(JSON.parse(savedReviews));
     }
-  }, [likeKey, reviewKey]);
+  }, [favoritesKey, id, reviewKey]);
 
   const showToast = (message) => {
     setToast(message);
@@ -45,15 +51,25 @@ export default function RecipeCard({
   };
 
   const handleLike = () => {
-    if (!isLoggedIn) {
+    if (!isLoggedIn || !favoritesKey) {
       setShowRestrictedModal(true);
       return;
     }
 
-    const next = !liked;
-    setLiked(next);
-    localStorage.setItem(likeKey, String(next));
-    showToast(next ? "Recipe saved successfully!" : "Recipe removed from favorites");
+    let favorites = JSON.parse(localStorage.getItem(favoritesKey)) || [];
+
+    if (favorites.includes(id)) {
+      favorites = favorites.filter((favId) => favId !== id);
+      setLiked(false);
+      showToast("Recipe removed from favorites");
+    } else {
+      favorites.push(id);
+      setLiked(true);
+      showToast("Recipe saved successfully!");
+    }
+
+    localStorage.setItem(favoritesKey, JSON.stringify(favorites));
+    window.dispatchEvent(new Event("favoritesUpdated"));
   };
 
   const handleOpenReview = () => {
@@ -95,16 +111,16 @@ export default function RecipeCard({
 
   const handleShare = async () => {
     const recipeText = `
-  ${title}
+${title}
 
-  Cook Time: ${cookTime} minutes
-  Servings: ${servings}
+Cook Time: ${cookTime} minutes
+Servings: ${servings}
 
-  Ingredients:
-  ${ingredients.map((item) => `- ${item}`).join("\n")}
+Ingredients:
+${ingredients.map((item) => `- ${item}`).join("\n")}
 
-  Check it out on Pantrix:
-  ${window.location.origin}
+Check it out on Pantrix:
+${window.location.origin}
     `.trim();
 
     try {
@@ -133,7 +149,6 @@ export default function RecipeCard({
     <>
       {toast && <div className="recipe-toast">{toast}</div>}
 
-      {/* Outside Card */}
       <div className="recipe-card">
         <div className="recipe-card-image-wrapper">
           <img src={image} alt={title} className="recipe-card-image" />
@@ -199,7 +214,6 @@ export default function RecipeCard({
         </div>
       </div>
 
-      {/* Main Recipe Modal */}
       {showRecipe && (
         <div
           className="recipe-modal-overlay"
@@ -356,7 +370,6 @@ export default function RecipeCard({
         </div>
       )}
 
-      {/* Review Modal */}
       {showReviewBox && (
         <div
           className="recipe-modal-overlay"

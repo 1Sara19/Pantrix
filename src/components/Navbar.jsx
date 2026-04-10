@@ -29,9 +29,11 @@ export default function Navbar() {
     localStorage.removeItem("isLoggedIn");
     localStorage.removeItem("userRole");
     localStorage.removeItem("userEmail");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("userName");
     setIsLoggedIn(false);
     closeMenu();
-    navigate("/");
+    navigate("/login");
   };
 
   return (

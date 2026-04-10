@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Mail, ArrowLeft, Send, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
-import "../styles/contact.css";
+import "../styles/pages/contact.css";
 
 function ContactUs() {
   const navigate = useNavigate();
