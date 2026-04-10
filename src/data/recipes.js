@@ -83,7 +83,72 @@ const recipes = [
       "Add lemon",
       "Serve"
     ]
+  },
+  {
+    id: 6,
+    title: "Homemade Tomato Soup",
+    cookTime: 35,
+    difficulty: "Easy",
+    servings: "3 servings",
+    dietary: ["Vegan", "Gluten-Free"],
+    tags: ["Healthy", "Warm"],
+    ingredients: ["tomato", "onion", "garlic", "olive oil"],
+    instructions: [
+      "Cook onion and garlic",
+      "Add tomatoes",
+      "Blend soup",
+      "Serve warm"
+    ],
+    image:
+      "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=400&h=300&fit=crop"
+  },{
+    id: 7,
+    title: "Vegetable Soup",
+    image:
+      "https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=1200&q=80",
+    cookTime: 30,
+    servings: "4 servings",
+    difficulty: "Easy",
+    tags: ["Warm", "Healthy"],
+    dietary: ["Vegan"],
+    ingredients: [
+      "carrot",
+      "potato",
+      "onion",
+      "celery",
+      "vegetable broth"
+    ],
+    instructions: [
+      "Chop all vegetables.",
+      "Bring broth to a boil.",
+      "Add vegetables and simmer until soft.",
+      "Serve hot."
+    ]
+  },{
+    id: 8,
+    title: "Chicken Salad",
+    image:
+      "https://images.unsplash.com/photo-1546793665-c74683f339c1?auto=format&fit=crop&w=1200&q=80",
+    cookTime: 15,
+    servings: "2 servings",
+    difficulty: "Medium",
+    tags: ["Healthy", "Light"],
+    dietary: ["Gluten-Free"],
+    ingredients: [
+      "chicken",
+      "lettuce",
+      "tomato",
+      "cucumber",
+      "salad dressing"
+    ],
+    instructions: [
+      "Cook and slice the chicken.",
+      "Wash and chop the vegetables.",
+      "Combine everything in a bowl.",
+      "Add dressing and toss before serving."
+    ]
   }
+
 ];
 
 export default recipes;

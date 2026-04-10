@@ -15,13 +15,13 @@
 .recipe-list-title {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #4A3F35;
+  color: #4a3f35;
   margin: 0;
 }
 
 .recipe-list-count {
   font-size: 1rem;
-  color: #8B7355;
+  color: #8b7355;
   margin: 0;
 }
 
@@ -30,6 +30,41 @@
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.5rem;
   align-items: stretch;
+}
+
+/* Empty state */
+.no-recipes-box {
+  background: #ffffff;
+  border: 1px solid #e6d8c8;
+  border-radius: 20px;
+  padding: 48px 24px;
+  text-align: center;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+
+.no-recipes-icon {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 18px;
+  border-radius: 50%;
+  background: #f3efe9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+}
+
+.no-recipes-box h3 {
+  margin: 0 0 10px;
+  font-size: 1.8rem;
+  color: #1f2230;
+}
+
+.no-recipes-box p {
+  margin: 0;
+  color: #6b6f7b;
+  font-size: 1.1rem;
+  line-height: 1.7;
 }
 
 @media (max-width: 768px) {
@@ -41,5 +76,17 @@
 
   .recipe-list-grid {
     grid-template-columns: 1fr;
+  }
+
+  .no-recipes-box {
+    padding: 36px 18px;
+  }
+
+  .no-recipes-box h3 {
+    font-size: 1.5rem;
+  }
+
+  .no-recipes-box p {
+    font-size: 1rem;
   }
 }
