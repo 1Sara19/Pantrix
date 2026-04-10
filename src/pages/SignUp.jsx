@@ -34,6 +34,9 @@ function SignUp() {
         passwordChecks.hasNumber &&
         passwordChecks.hasSpecialChar;
 
+    const showPasswordRules =
+        password.length > 0 && !isPasswordValid;
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -146,50 +149,51 @@ function SignUp() {
                                         disabled={isLoading}
                                     />
                                 </div>
+                                {showPasswordRules && (
+                                    <div className="password-rules">
+                                        <p className="password-rules-title">Password must include:</p>
 
-                                <div className="password-rules">
-                                    <p className="password-rules-title">Password must include:</p>
+                                        <div
+                                            className={`password-rule ${
+                                                passwordChecks.hasMinLength ? "valid" : ""
+                                            }`}
+                                        >
+                                            {passwordChecks.hasMinLength ? "✅" : "❌"} At least 6 characters
+                                        </div>
 
-                                    <div
-                                        className={`password-rule ${
-                                            passwordChecks.hasMinLength ? "valid" : ""
-                                        }`}
-                                    >
-                                        {passwordChecks.hasMinLength ? "✅" : "❌"} At least 6 characters
+                                        <div
+                                            className={`password-rule ${
+                                                passwordChecks.hasUppercase ? "valid" : ""
+                                            }`}
+                                        >
+                                            {passwordChecks.hasUppercase ? "✅" : "❌"} At least one uppercase letter
+                                        </div>
+
+                                        <div
+                                            className={`password-rule ${
+                                                passwordChecks.hasLowercase ? "valid" : ""
+                                            }`}
+                                        >
+                                            {passwordChecks.hasLowercase ? "✅" : "❌"} At least one lowercase letter
+                                        </div>
+
+                                        <div
+                                            className={`password-rule ${
+                                                passwordChecks.hasNumber ? "valid" : ""
+                                            }`}
+                                        >
+                                            {passwordChecks.hasNumber ? "✅" : "❌"} At least one number
+                                        </div>
+
+                                        <div
+                                            className={`password-rule ${
+                                                passwordChecks.hasSpecialChar ? "valid" : ""
+                                            }`}
+                                        >
+                                            {passwordChecks.hasSpecialChar ? "✅" : "❌"} At least one special character (@$!%*#&)
+                                        </div>
                                     </div>
-
-                                    <div
-                                        className={`password-rule ${
-                                            passwordChecks.hasUppercase ? "valid" : ""
-                                        }`}
-                                    >
-                                        {passwordChecks.hasUppercase ? "✅" : "❌"} At least one uppercase letter
-                                    </div>
-
-                                    <div
-                                        className={`password-rule ${
-                                            passwordChecks.hasLowercase ? "valid" : ""
-                                        }`}
-                                    >
-                                        {passwordChecks.hasLowercase ? "✅" : "❌"} At least one lowercase letter
-                                    </div>
-
-                                    <div
-                                        className={`password-rule ${
-                                            passwordChecks.hasNumber ? "valid" : ""
-                                        }`}
-                                    >
-                                        {passwordChecks.hasNumber ? "✅" : "❌"} At least one number
-                                    </div>
-
-                                    <div
-                                        className={`password-rule ${
-                                            passwordChecks.hasSpecialChar ? "valid" : ""
-                                        }`}
-                                    >
-                                        {passwordChecks.hasSpecialChar ? "✅" : "❌"} At least one special character (@$!%*#&)
-                                    </div>
-                                </div>
+                                )}
                             </div>
 
                             <div className="signup-form-group">
