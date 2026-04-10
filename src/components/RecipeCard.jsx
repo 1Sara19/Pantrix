@@ -94,11 +94,32 @@ export default function RecipeCard({
   };
 
   const handleShare = async () => {
+    const recipeText = `
+  ${title}
+
+  Cook Time: ${cookTime} minutes
+  Servings: ${servings}
+
+  Ingredients:
+  ${ingredients.map((item) => `- ${item}`).join("\n")}
+
+  Check it out on Pantrix:
+  ${window.location.origin}
+    `.trim();
+
     try {
-      await navigator.clipboard.writeText(window.location.href);
-      showToast("Share opened");
-    } catch {
-      showToast("Share opened");
+      if (navigator.share) {
+        await navigator.share({
+          title: title,
+          text: recipeText,
+        });
+        showToast("Recipe shared successfully!");
+      } else {
+        await navigator.clipboard.writeText(recipeText);
+        showToast("Recipe copied to clipboard!");
+      }
+    } catch (error) {
+      showToast("Sharing cancelled");
     }
   };
 
