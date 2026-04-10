@@ -82,7 +82,9 @@ function Login() {
                     <div className="card-header">
                         <h2 className="login-card-title">Welcome Back</h2>
                         <p className="card-description login-card-description">
-                            Log in to access your saved recipes and preferences
+                            {role === "admin"
+                                ? "Admin access only"
+                                : "Log in to access your saved recipes and preferences"}
                         </p>
                     </div>
 
@@ -170,7 +172,7 @@ function Login() {
                             </p>
 
                             <p className="login-demo-text">
-                                Demo: Use the provided demo accounts to log in
+                                Demo: Use any email and password to log in
                             </p>
                         </div>
                     </div>
