@@ -10,7 +10,17 @@ createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
       <App />
-      <Toaster position="bottom-right" />
+      <Toaster
+      position="bottom-right"
+      toastOptions={{
+        style: {
+          background: "#8B6F47",
+          color: "#FFFFFF",
+          border: "none",
+          borderRadius: "14px",
+        },
+      }}
+    />
     </BrowserRouter>
   </StrictMode>
 );
