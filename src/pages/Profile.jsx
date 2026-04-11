@@ -15,6 +15,7 @@ function Profile() {
 
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [showLogoutButton, setShowLogoutButton] = useState(false);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -284,22 +285,23 @@ function Profile() {
               </div>
             </div>
 
-            <div className="card profile-card">
-              <div className="card-header">
-                <h2>Account Actions</h2>
-                <p>Manage your session</p>
-              </div>
-
-              <div className="card-content">
-                <button
+            {showLogoutButton && (
+              <div className="card profile-card">
+                <div className="card-header">
+                  <h2>Account Actions</h2>
+                  <p>Manage your session</p>
+                </div>
+                <div className="card-content">
+                  <button
                   type="button"
                   className="btn btn-secondary logout-btn"
                   onClick={handleLogout}
-                >
-                  Log Out
-                </button>
+                  >
+                    Log Out
+                  </button>
+                </div>
               </div>
-            </div>
+            )}
 
             <div className="card profile-card stats-card">
               <div className="card-header">
