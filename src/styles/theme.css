@@ -543,7 +543,20 @@ small,
   --input-background: #332B25;
   --hover-overlay: rgba(255, 248, 240, 0.06);
 }
+.welcome-toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
 
+  background: var(--primary-color);
+  color: var(--text-color);
+
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+
+  z-index: 1000;
+}
 
 .app-layout {
   min-height: 100vh;
