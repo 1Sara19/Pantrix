@@ -83,22 +83,6 @@ function RecipeLimits() {
               >
                 ← Back to Dashboard
               </Link>
-
-              <div className="recipe-limits-brand">
-                <img
-                  src={pantrixLogo}
-                  alt="Pantrix logo"
-                  className="recipe-limits-brand__logo"
-                />
-                <div>
-                  <h1 className="recipe-limits-brand__title">
-                    Search Results Maximum Limit
-                  </h1>
-                  <p className="recipe-limits-brand__subtitle">
-                    Set the maximum number of recipes displayed per search.
-                  </p>
-                </div>
-              </div>
             </div>
           </div>
         </div>

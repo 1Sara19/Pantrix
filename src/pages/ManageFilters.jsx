@@ -151,18 +151,6 @@ function ManageFilters() {
           >
             ← Back to Dashboard
           </Link>
-
-          <div className="manage-filters-brand">
-            <img
-              src={pantrixLogo}
-              className="manage-filters-logo"
-              alt="Pantrix logo"
-            />
-            <div>
-              <h1>Manage Filters</h1>
-              <p>Edit cooking times, food types, and dietary options</p>
-            </div>
-          </div>
         </div>
       </header>
 
