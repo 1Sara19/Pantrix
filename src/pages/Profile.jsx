@@ -339,10 +339,7 @@ function Profile() {
         </div>
       </section>
 
-      <footer className="footer-box">
-        <p>© 2026 Pantrix - Helping you cook smart and reduce food waste</p>
-        <small>Demo prototype - All data is simulated</small>
-      </footer>
+
     </div>
   );
 }
