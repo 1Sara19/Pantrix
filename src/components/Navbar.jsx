@@ -170,10 +170,14 @@ export default function Navbar() {
                 <span>Meal Planning</span>
               </button>
 
-              <NavLink to="/contact" onClick={closeMenu}>
+              <button
+                type="button"
+                className="side-menu-link-btn"
+                onClick={() => handleProtectedNavigation("/contact")}
+              >
                 <Mail size={24} strokeWidth={2.2} />
                 <span>Contact Us</span>
-              </NavLink>
+              </button>
             </nav>
 
             {isLoggedIn && (
