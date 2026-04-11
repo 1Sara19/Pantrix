@@ -60,6 +60,10 @@ src/
 │   └── images/
 │       └── Pantrix.png
 │
+├──data/
+│   ├── auth.js
+│   └── recipes.js
+│
 ├── components/
 │   ├── FilterPanel.jsx
 │   ├── Navbar.jsx
@@ -91,7 +95,8 @@ src/
 │   │   ├── RecipeCard.css
 │   │   ├── RecipeList.css
 │   │   ├── RestrictedModal.css
-│   │   └── SearchBar.css
+│   │   ├── SearchBar.css
+|   |   └──Footer.css
 │   │
 │   ├── pages/
 │   │   ├── AdminDashboard.css
@@ -119,6 +124,7 @@ public/
 │
 index.html
 package.json
+package-lock.json
 vite.config.js
 README.md
 
@@ -165,7 +171,7 @@ System shows "Login Required"
 * Apply filters (time, type, dietary)
 * Save favorite recipes
 * Set dietary preferences and allergies
-* Create weekly meal plans
+* Create weekly meal plan
 * Share recipes
 
 Example 1:  
