@@ -97,22 +97,6 @@ function ManageComments() {
               <Link to="/admin" className="btn btn-ghost manage-comments-back">
                 ← Back to Dashboard
               </Link>
-
-              <div className="manage-comments-brand">
-                <img
-                  src={pantrixLogo}
-                  alt="Pantrix logo"
-                  className="manage-comments-brand__logo"
-                />
-                <div>
-                  <h1 className="manage-comments-brand__title">
-                    Manage Comments
-                  </h1>
-                  <p className="manage-comments-brand__subtitle">
-                    View and moderate recipe reviews
-                  </p>
-                </div>
-              </div>
             </div>
           </div>
         </div>

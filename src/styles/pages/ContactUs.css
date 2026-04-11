@@ -108,7 +108,6 @@
   color: var(--muted-text-color);
 }
 
-/* استخدميها مع class="input ..." */
 .contact-input {
   height: 54px;
 }
