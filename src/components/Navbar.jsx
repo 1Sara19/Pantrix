@@ -54,6 +54,8 @@ export default function Navbar() {
     closeMenu();
   };
 
+  const logoDestination = isAdmin ? "/AdminDashboard" : "/";
+
   return (
     <>
       <header className="navbar">
@@ -73,7 +75,7 @@ export default function Navbar() {
             <div className="navbar-toggle-placeholder"></div>
           )}
 
-          <Link to="/" className="navbar-logo" onClick={closeMenu}>
+          <Link to={logoDestination} className="navbar-logo" onClick={closeMenu}>
             <img src={logo} alt="Pantrix Logo" className="navbar-logo-img" />
             <div className="navbar-logo-text-wrap">
               <span className="navbar-logo-text">Pantrix</span>
