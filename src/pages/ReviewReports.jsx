@@ -91,20 +91,6 @@ function ReviewReports() {
               <Link to="/admin" className="btn btn-ghost review-reports-back">
                 ← Back to Dashboard
               </Link>
-
-              <div className="review-reports-brand">
-                <img
-                  src={pantrixLogo}
-                  alt="Pantrix logo"
-                  className="review-reports-brand__logo"
-                />
-                <div>
-                  <h1 className="review-reports-brand__title">User Reports</h1>
-                  <p className="review-reports-brand__subtitle">
-                    Review messages from Contact Us form
-                  </p>
-                </div>
-              </div>
             </div>
           </div>
         </div>
