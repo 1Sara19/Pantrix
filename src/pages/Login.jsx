@@ -47,9 +47,9 @@ function Login() {
                 const user = loginUser(email, password, role);
 
                 localStorage.setItem("isLoggedIn", "true");
-                localStorage.setItem("userRole", role);
-                localStorage.setItem("userEmail", email);
-                localStorage.setItem("userId", email.toLowerCase().trim());
+                localStorage.setItem("userRole", user.role);
+                localStorage.setItem("userEmail", user.email);
+                localStorage.setItem("userId", user.email.toLowerCase().trim());
                 localStorage.setItem(
                     "welcomeMessage",
                     user.role === "admin" ? "Welcome Admin!" : "Welcome back!"
