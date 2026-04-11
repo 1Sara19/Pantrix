@@ -8,13 +8,18 @@ import logo from "../assets/images/pantrix.png";
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [showRestrictedModal, setShowRestrictedModal] = useState(false);
 
   const navigate = useNavigate();
 
   useEffect(() => {
     const checkLogin = () => {
-      setIsLoggedIn(localStorage.getItem("isLoggedIn") === "true");
+      const logged = localStorage.getItem("isLoggedIn") === "true";
+      const role = localStorage.getItem("userRole");
+
+      setIsLoggedIn(logged);
+      setIsAdmin(role === "admin");
     };
 
     checkLogin();
@@ -31,7 +36,9 @@ export default function Navbar() {
     localStorage.removeItem("userEmail");
     localStorage.removeItem("userId");
     localStorage.removeItem("userName");
+
     setIsLoggedIn(false);
+    setIsAdmin(false);
     closeMenu();
     navigate("/login");
   };
@@ -51,16 +58,20 @@ export default function Navbar() {
     <>
       <header className="navbar">
         <div className="navbar-container">
-          <button
-            className={`navbar-toggle ${menuOpen ? "open" : ""}`}
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Toggle menu"
-            type="button"
-          >
-            <span></span>
-            <span></span>
-            <span></span>
-          </button>
+          {!isAdmin ? (
+            <button
+              className={`navbar-toggle ${menuOpen ? "open" : ""}`}
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-label="Toggle menu"
+              type="button"
+            >
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
+          ) : (
+            <div className="navbar-toggle-placeholder"></div>
+          )}
 
           <Link to="/" className="navbar-logo" onClick={closeMenu}>
             <img src={logo} alt="Pantrix Logo" className="navbar-logo-img" />
@@ -103,71 +114,83 @@ export default function Navbar() {
         </div>
       </header>
 
-      <div
-        className={`side-menu-overlay ${menuOpen ? "show" : ""}`}
-        onClick={closeMenu}
-      ></div>
+      {!isAdmin && (
+        <>
+          <div
+            className={`side-menu-overlay ${menuOpen ? "show" : ""}`}
+            onClick={closeMenu}
+          ></div>
 
-      <aside className={`side-menu ${menuOpen ? "open" : ""}`}>
-        <div className="side-menu-header">
-          <div className="side-menu-brand">
-            <img src={logo} alt="Pantrix Logo" className="side-menu-logo" />
-            <span>Pantrix Menu</span>
-          </div>
+          <aside className={`side-menu ${menuOpen ? "open" : ""}`}>
+            <div className="side-menu-header">
+              <div className="side-menu-brand">
+                <img src={logo} alt="Pantrix Logo" className="side-menu-logo" />
+                <span>Pantrix Menu</span>
+              </div>
 
-          <button className="side-menu-close" onClick={closeMenu} type="button">
-            ×
-          </button>
-        </div>
+              <button
+                className="side-menu-close"
+                onClick={closeMenu}
+                type="button"
+              >
+                ×
+              </button>
+            </div>
 
-        <nav className="side-menu-links">
-          <NavLink to="/" onClick={closeMenu}>
-            <Home size={24} strokeWidth={2.2} />
-            <span>Home</span>
-          </NavLink>
+            <nav className="side-menu-links">
+              <NavLink to="/" onClick={closeMenu}>
+                <Home size={24} strokeWidth={2.2} />
+                <span>Home</span>
+              </NavLink>
 
-          <button
-            type="button"
-            className="side-menu-link-btn"
-            onClick={() => handleProtectedNavigation("/favorites")}
-          >
-            <Heart size={24} strokeWidth={2.2} />
-            <span>Favorites</span>
-          </button>
+              <button
+                type="button"
+                className="side-menu-link-btn"
+                onClick={() => handleProtectedNavigation("/favorites")}
+              >
+                <Heart size={24} strokeWidth={2.2} />
+                <span>Favorites</span>
+              </button>
 
-          <button
-            type="button"
-            className="side-menu-link-btn"
-            onClick={() => handleProtectedNavigation("/profile")}
-          >
-            <User size={24} strokeWidth={2.2} />
-            <span>Your Profile</span>
-          </button>
+              <button
+                type="button"
+                className="side-menu-link-btn"
+                onClick={() => handleProtectedNavigation("/profile")}
+              >
+                <User size={24} strokeWidth={2.2} />
+                <span>Your Profile</span>
+              </button>
 
-          <button
-            type="button"
-            className="side-menu-link-btn"
-            onClick={() => handleProtectedNavigation("/meal-planning")}
-          >
-            <Calendar size={24} strokeWidth={2.2} />
-            <span>Meal Planning</span>
-          </button>
+              <button
+                type="button"
+                className="side-menu-link-btn"
+                onClick={() => handleProtectedNavigation("/meal-planning")}
+              >
+                <Calendar size={24} strokeWidth={2.2} />
+                <span>Meal Planning</span>
+              </button>
 
-          <NavLink to="/contact" onClick={closeMenu}>
-            <Mail size={24} strokeWidth={2.2} />
-            <span>Contact Us</span>
-          </NavLink>
-        </nav>
+              <NavLink to="/contact" onClick={closeMenu}>
+                <Mail size={24} strokeWidth={2.2} />
+                <span>Contact Us</span>
+              </NavLink>
+            </nav>
 
-        {isLoggedIn && (
-          <div className="side-menu-footer">
-            <button type="button" className="side-menu-logout" onClick={handleLogout}>
-              <LogOut size={20} />
-              <span>Log Out</span>
-            </button>
-          </div>
-        )}
-      </aside>
+            {isLoggedIn && (
+              <div className="side-menu-footer">
+                <button
+                  type="button"
+                  className="side-menu-logout"
+                  onClick={handleLogout}
+                >
+                  <LogOut size={20} />
+                  <span>Log Out</span>
+                </button>
+              </div>
+            )}
+          </aside>
+        </>
+      )}
 
       <RestrictedModal
         isOpen={showRestrictedModal}
