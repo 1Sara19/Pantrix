@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Mail, ArrowLeft, Send, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
-import "../styles/pages/contact.css";
+import "../styles/pages/ContactUs.css";
 
 function ContactUs() {
   const navigate = useNavigate();
@@ -141,10 +141,7 @@ function ContactUs() {
         </div>
       </section>
 
-      <footer className="contact-footer">
-        <p>© 2026 Pantrix - Helping you cook smart and reduce food waste</p>
-        <small>Demo prototype - All data is simulated</small>
-      </footer>
+
     </div>
   );
 }

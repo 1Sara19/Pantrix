@@ -1,5 +1,6 @@
 import { Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
 
 import Home from "./pages/Home";
@@ -19,13 +20,13 @@ import RecipeLimits from "./pages/RecipeLimits";
 function App() {
   const location = useLocation();
   const hideNavbar = ["/login", "/signup"].includes(location.pathname);
-
+  const hideFooter = ["/login", "/signup"].includes(location.pathname);
   return (
-    <>
+    <div className="app-layout">
       <ScrollToTop />
 
       {!hideNavbar && <Navbar />}
-
+      <main className="main-content">
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/favorites" element={<Favorites />} />
@@ -40,10 +41,14 @@ function App() {
         <Route path="/admin/users" element={<ManageUsers />} />
         <Route path="/admin/filters" element={<ManageFilters />} />
         <Route path="/admin/comments" element={<ManageComments />} />
+        <Route path="/admin/limits" element={<RecipeLimits />} />
         <Route path="/admin/reports" element={<ReviewReports />} />
         <Route path="/admin/recipe-limits" element={<RecipeLimits />} />
       </Routes>
-    </>
+      </main>
+
+      {!hideFooter && <Footer />}
+    </div>
   );
 }
 
