@@ -38,11 +38,38 @@ function createEmptyPlan() {
   return emptyPlan;
 }
 
+function getWeekStartDate(offset = 0) {
+  const today = new Date();
+  const currentDay = today.getDay();
+
+  // JavaScript:
+  // Sunday = 0
+  // Monday = 1
+  // ...
+  // Saturday = 6
+  const daysSinceSaturday = (currentDay - 6 + 7) % 7;
+
+  const startDate = new Date(today);
+  startDate.setHours(0, 0, 0, 0);
+  startDate.setDate(today.getDate() - daysSinceSaturday + offset * 7);
+
+  return startDate;
+}
+
+function getWeekStorageKey(offset = 0, userId = null) {
+  const startDate = getWeekStartDate(offset);
+  const formattedDate = startDate.toISOString().split("T")[0];
+
+  return userId
+    ? `mealPlan_${userId}_${formattedDate}`
+    : `mealPlan_${formattedDate}`;
+}
+
 function MealPlan() {
   const navigate = useNavigate();
 
   const [weekOffset, setWeekOffset] = useState(0);
-  const [weekPlan, setWeekPlan] = useState({});
+  const [weekPlan, setWeekPlan] = useState(createEmptyPlan());
   const [addMealDialog, setAddMealDialog] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -50,27 +77,24 @@ function MealPlan() {
   const favoritesKey = userId ? `favorites_${userId}` : null;
 
   useEffect(() => {
-    const saved = localStorage.getItem("mealPlan");
+    const storageKey = getWeekStorageKey(weekOffset, userId);
+    const saved = localStorage.getItem(storageKey);
 
     if (saved) {
       setWeekPlan(JSON.parse(saved));
     } else {
       setWeekPlan(createEmptyPlan());
     }
-  }, []);
+  }, [weekOffset, userId]);
 
   const saveMealPlan = (plan) => {
+    const storageKey = getWeekStorageKey(weekOffset, userId);
     setWeekPlan(plan);
-    localStorage.setItem("mealPlan", JSON.stringify(plan));
+    localStorage.setItem(storageKey, JSON.stringify(plan));
   };
 
   const getWeekRange = () => {
-    const today = new Date();
-    const currentDay = today.getDay();
-    const daysToSaturday = currentDay === 6 ? 0 : (6 - currentDay + 7) % 7;
-
-    const startDate = new Date(today);
-    startDate.setDate(today.getDate() - daysToSaturday + weekOffset * 7);
+    const startDate = getWeekStartDate(weekOffset);
 
     const endDate = new Date(startDate);
     endDate.setDate(startDate.getDate() + 6);
@@ -91,34 +115,35 @@ function MealPlan() {
   const handleSelectRecipe = (recipeId) => {
     if (!addMealDialog) return;
 
-    const newPlan = { ...weekPlan };
+    const newPlan = {
+      ...weekPlan,
+      [addMealDialog.day]: {
+        ...weekPlan[addMealDialog.day],
+        [addMealDialog.mealType]: { recipeId },
+      },
+    };
 
-    if (!newPlan[addMealDialog.day]) {
-      newPlan[addMealDialog.day] = {
-        breakfast: { recipeId: null },
-        lunch: { recipeId: null },
-        dinner: { recipeId: null },
-      };
-    }
-
-    newPlan[addMealDialog.day][addMealDialog.mealType] = { recipeId };
     saveMealPlan(newPlan);
     setAddMealDialog(null);
     toast.success("Recipe added to meal plan.");
   };
 
   const handleRemoveRecipe = (day, mealType) => {
-    const newPlan = { ...weekPlan };
+    const newPlan = {
+      ...weekPlan,
+      [day]: {
+        ...weekPlan[day],
+        [mealType]: { recipeId: null },
+      },
+    };
 
-    if (newPlan[day]) {
-      newPlan[day][mealType] = { recipeId: null };
-      saveMealPlan(newPlan);
-      toast.success("Meal removed from plan.");
-    }
+    saveMealPlan(newPlan);
+    toast.success("Meal removed from plan.");
   };
 
   const handleClearWeek = () => {
-    saveMealPlan(createEmptyPlan());
+    const emptyWeek = createEmptyPlan();
+    saveMealPlan(emptyWeek);
     toast.success("Week plan cleared");
   };
 
@@ -171,7 +196,7 @@ function MealPlan() {
               <button
                 type="button"
                 className="week-nav-btn"
-                onClick={() => setWeekOffset(weekOffset - 1)}
+                onClick={() => setWeekOffset((prev) => prev - 1)}
               >
                 <ChevronLeft size={18} />
                 Previous
@@ -187,7 +212,7 @@ function MealPlan() {
               <button
                 type="button"
                 className="week-nav-btn"
-                onClick={() => setWeekOffset(weekOffset + 1)}
+                onClick={() => setWeekOffset((prev) => prev + 1)}
               >
                 Next
                 <ChevronRight size={18} />
@@ -204,7 +229,9 @@ function MealPlan() {
 
                 <div className="meal-slots-grid">
                   {MEAL_TYPES.map((mealType) => {
-                    const recipe = getRecipe(weekPlan[day]?.[mealType]?.recipeId || null);
+                    const recipe = getRecipe(
+                      weekPlan[day]?.[mealType]?.recipeId || null
+                    );
 
                     return (
                       <div key={mealType} className="meal-slot-card">
