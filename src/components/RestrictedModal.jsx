@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import "../styles/components/RestrictedModal.css";
 
 export default function RestrictedModal({ isOpen, onClose }) {
@@ -10,26 +10,22 @@ export default function RestrictedModal({ isOpen, onClose }) {
     return (
         <div className="modal-overlay" onClick={onClose}>
             <div
-                className="modal-content"
+                className="modal-card"
                 onClick={(e) => e.stopPropagation()}
             >
-                <div className="modal-header">
-                    <div className="modal-icon">🔒</div>
-                    <h3 className="modal-title">Authentication Required</h3>
-                </div>
+                <button className="modal-close" onClick={onClose}>
+                    ×
+                </button>
 
-                <div className="modal-body">
-                    <p className="modal-text">
-                        Please sign in or create an account to access this feature.
-                    </p>
-                    <p className="modal-subtext">
-                        Save your favorite recipes, plan meals, and get personalized recommendations!
-                    </p>
-                </div>
+                <h3 className="modal-title">Login Required</h3>
 
-                <div className="modal-footer">
+                <p className="modal-subtitle">
+                    Please log in or create an account
+                </p>
+
+                <div className="modal-actions">
                     <button
-                        className="btn btn-primary modal-button"
+                        className="modal-btn modal-btn-primary"
                         onClick={() => {
                             onClose();
                             navigate("/login");
@@ -39,7 +35,7 @@ export default function RestrictedModal({ isOpen, onClose }) {
                     </button>
 
                     <button
-                        className="btn btn-secondary modal-button"
+                        className="modal-btn modal-btn-secondary"
                         onClick={() => {
                             onClose();
                             navigate("/signup");
@@ -49,16 +45,12 @@ export default function RestrictedModal({ isOpen, onClose }) {
                     </button>
 
                     <button
-                        className="btn btn-ghost modal-button"
+                        className="modal-btn modal-btn-cancel"
                         onClick={onClose}
                     >
-                        Maybe Later
+                        Cancel
                     </button>
                 </div>
-
-                <button className="modal-close" onClick={onClose}>
-                    ×
-                </button>
             </div>
         </div>
     );
