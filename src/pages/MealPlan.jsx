@@ -269,10 +269,7 @@ function MealPlan() {
         </div>
       </section>
 
-      <footer className="mealplan-footer">
-        <p>© 2026 Pantrix - Helping you cook smart and reduce food waste</p>
-        <small>Demo prototype - All data is simulated</small>
-      </footer>
+
 
       {addMealDialog && (
         <div className="modal-overlay" onClick={() => setAddMealDialog(null)}>
