@@ -168,10 +168,10 @@ README.md
 ##  Installation & Running
 
 1. Clone the repository:
- ```
+   ```
    git clone https://github.com/1Sara19/Pantrix.git
    cd Pantrix
-```
+   ```
 3. Install dependencies:
    ```
    npm install
