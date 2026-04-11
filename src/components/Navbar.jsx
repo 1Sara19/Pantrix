@@ -54,7 +54,8 @@ export default function Navbar() {
     closeMenu();
   };
 
-  const logoDestination = isAdmin ? "/AdminDashboard" : "/";
+  // هنا التعديل المهم
+  const logoDestination = isAdmin ? "/admin" : "/";
 
   return (
     <>
