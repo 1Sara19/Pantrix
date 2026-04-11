@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Home, Heart, User, Calendar, Mail, LogOut } from "lucide-react";
+import RestrictedModal from "./RestrictedModal";
 import "../styles/components/Navbar.css";
 import logo from "../assets/images/pantrix.png";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  // const [isLoggedIn, setIsLoggedIn] = useState(
-  //   localStorage.getItem("isLoggedIn") === "true"
-  // );
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showRestrictedModal, setShowRestrictedModal] = useState(false);
 
   const navigate = useNavigate();
 
@@ -37,11 +36,21 @@ export default function Navbar() {
     navigate("/login");
   };
 
+  const handleProtectedNavigation = (path) => {
+    if (!isLoggedIn) {
+      setShowRestrictedModal(true);
+      closeMenu();
+      return;
+    }
+
+    navigate(path);
+    closeMenu();
+  };
+
   return (
     <>
       <header className="navbar">
         <div className="navbar-container">
-          {/* Left: hamburger */}
           <button
             className={`navbar-toggle ${menuOpen ? "open" : ""}`}
             onClick={() => setMenuOpen(!menuOpen)}
@@ -53,7 +62,6 @@ export default function Navbar() {
             <span></span>
           </button>
 
-          {/* Center: logo */}
           <Link to="/" className="navbar-logo" onClick={closeMenu}>
             <img src={logo} alt="Pantrix Logo" className="navbar-logo-img" />
             <div className="navbar-logo-text-wrap">
@@ -62,7 +70,6 @@ export default function Navbar() {
             </div>
           </Link>
 
-          {/* Right: auth actions */}
           <div className="navbar-auth">
             {isLoggedIn ? (
               <button
@@ -96,13 +103,11 @@ export default function Navbar() {
         </div>
       </header>
 
-      {/* overlay */}
       <div
         className={`side-menu-overlay ${menuOpen ? "show" : ""}`}
         onClick={closeMenu}
       ></div>
 
-      {/* side menu */}
       <aside className={`side-menu ${menuOpen ? "open" : ""}`}>
         <div className="side-menu-header">
           <div className="side-menu-brand">
@@ -121,20 +126,32 @@ export default function Navbar() {
             <span>Home</span>
           </NavLink>
 
-          <NavLink to="/favorites" onClick={closeMenu}>
+          <button
+            type="button"
+            className="side-menu-link-btn"
+            onClick={() => handleProtectedNavigation("/favorites")}
+          >
             <Heart size={24} strokeWidth={2.2} />
             <span>Favorites</span>
-          </NavLink>
+          </button>
 
-          <NavLink to="/profile" onClick={closeMenu}>
+          <button
+            type="button"
+            className="side-menu-link-btn"
+            onClick={() => handleProtectedNavigation("/profile")}
+          >
             <User size={24} strokeWidth={2.2} />
             <span>Your Profile</span>
-          </NavLink>
+          </button>
 
-          <NavLink to="/meal-planning" onClick={closeMenu}>
+          <button
+            type="button"
+            className="side-menu-link-btn"
+            onClick={() => handleProtectedNavigation("/meal-planning")}
+          >
             <Calendar size={24} strokeWidth={2.2} />
             <span>Meal Planning</span>
-          </NavLink>
+          </button>
 
           <NavLink to="/contact" onClick={closeMenu}>
             <Mail size={24} strokeWidth={2.2} />
@@ -151,6 +168,11 @@ export default function Navbar() {
           </div>
         )}
       </aside>
+
+      <RestrictedModal
+        isOpen={showRestrictedModal}
+        onClose={() => setShowRestrictedModal(false)}
+      />
     </>
   );
 }

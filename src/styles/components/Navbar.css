@@ -53,7 +53,7 @@
   transform: translateY(-12px) rotate(-45deg);
 }
 
-/* Logo center */
+/* Logo */
 .navbar-logo {
   display: flex;
   align-items: center;
@@ -126,7 +126,7 @@
   justify-content: center;
 }
 
-/* overlay */
+/* Overlay */
 .side-menu-overlay {
   position: fixed;
   inset: 0;
@@ -142,7 +142,7 @@
   visibility: visible;
 }
 
-/* left side menu */
+/* Left side menu */
 .side-menu {
   position: fixed;
   top: 0;
@@ -202,6 +202,7 @@
   padding: 18px 12px;
 }
 
+/* Normal links */
 .side-menu-links a {
   display: flex;
   align-items: center;
@@ -236,6 +237,37 @@
   color: #fff;
 }
 
+/* Protected buttons */
+.side-menu-link-btn {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 16px 18px;
+  border: none;
+  background: transparent;
+  border-radius: 18px;
+  color: #6d5b48;
+  font-size: 1.05rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  text-align: left;
+}
+
+.side-menu-link-btn:hover {
+  background: #efe5d7;
+}
+
+.side-menu-link-btn svg {
+  flex-shrink: 0;
+}
+
+.side-menu-link-btn span {
+  line-height: 1;
+}
+
+/* Footer */
 .side-menu-footer {
   margin-top: auto;
   padding: 16px 14px 0;
@@ -345,5 +377,10 @@
   .navbar-logout-btn svg {
     width: 26px;
     height: 26px;
+  }
+
+  .side-menu-link-btn {
+    font-size: 1rem;
+    padding: 15px 16px;
   }
 }
