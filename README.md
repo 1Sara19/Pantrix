@@ -153,7 +153,6 @@ src/
 │
 ├── App.jsx
 ├── main.jsx
-├── index.css
 │
 public/
 │   └── favicon.png
