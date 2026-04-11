@@ -63,41 +63,6 @@ function AdminDashboard() {
     <div className="admin-page">
       {toast && <div className="toast">{toast}</div>}
 
-      <header className="admin-header">
-        <div className="container">
-          <div className="admin-header__content">
-            <div className="admin-brand">
-              <img
-                src={pantrixLogo}
-                alt="Pantrix logo"
-                className="admin-brand__logo"
-              />
-              <div>
-                <h1 className="admin-brand__title">Pantrix Admin</h1>
-                <p className="admin-brand__subtitle">Admin Dashboard</p>
-              </div>
-            </div>
-
-            <div className="admin-user">
-              <div className="admin-user__info">
-                <p className="admin-user__name">{user.name}</p>
-                <p className="admin-user__email">{user.email}</p>
-              </div>
-
-              {/* Logout Icon */}
-              <button
-                className="btn btn-ghost btn-icon admin-logout-btn"
-                onClick={handleLogout}
-                aria-label="Logout"
-                title="Logout"
-              >
-                <i className="fa-solid fa-right-from-bracket"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
-
       <main className="container admin-main">
         <section className="admin-welcome">
           <h2>Welcome, {firstName}</h2>

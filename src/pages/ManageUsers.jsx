@@ -141,20 +141,6 @@ function ManageUsers() {
               <Link to="/admin" className="btn btn-ghost manage-users-back">
                 ← Back to Dashboard
               </Link>
-
-              <div className="manage-users-brand">
-                <img
-                  src={pantrixLogo}
-                  alt="Pantrix logo"
-                  className="manage-users-brand__logo"
-                />
-                <div>
-                  <h1 className="manage-users-brand__title">Manage Users</h1>
-                  <p className="manage-users-brand__subtitle">
-                    View, edit, and delete user accounts
-                  </p>
-                </div>
-              </div>
             </div>
           </div>
         </div>

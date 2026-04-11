@@ -141,10 +141,7 @@ function ContactUs() {
         </div>
       </section>
 
-      <footer className="contact-footer">
-        <p>© 2026 Pantrix - Helping you cook smart and reduce food waste</p>
-        <small>Demo prototype - All data is simulated</small>
-      </footer>
+
     </div>
   );
 }

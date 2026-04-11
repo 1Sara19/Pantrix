@@ -5,10 +5,9 @@
 
 .manage-users-header {
   position: sticky;
-  top: 0;
+  top: 4;
   z-index: 20;
-  background-color: var(--card-color);
-  border-bottom: 1px solid var(--border-color);
+  
 }
 
 .manage-users-header__content {

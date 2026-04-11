@@ -5,10 +5,8 @@
 
 .recipe-limits-header {
   position: sticky;
-  top: 0;
+  top: 4;
   z-index: 20;
-  background-color: var(--card-color);
-  border-bottom: 1px solid var(--border-color);
 }
 
 .recipe-limits-header__content {

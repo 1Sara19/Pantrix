@@ -543,3 +543,14 @@ small,
   --input-background: #332B25;
   --hover-overlay: rgba(255, 248, 240, 0.06);
 }
+
+
+.app-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+}
