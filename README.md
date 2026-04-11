@@ -51,7 +51,7 @@ Registered users can save favorite recipes, manage their dietary preferences and
 ### User
 
 * Email: ``` demo@example.com  ```
-* Password: ``` User123# ```
+* Password: ``` User#123 ```
 
 ---
 
