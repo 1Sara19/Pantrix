@@ -1,4 +1,5 @@
 import { Routes, Route, useLocation } from "react-router-dom";
+import { Toaster } from "sonner";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
@@ -24,6 +25,18 @@ function App() {
   return (
     <div className="app-layout">
       <ScrollToTop />
+
+      <Toaster
+        position="bottom-right"
+        toastOptions={{
+          style: {
+            background: "#8B6F47",
+            color: "#FFFFFF",
+            border: "1px solid #8B6F47",
+            borderRadius: "14px",
+          },
+        }}
+      />
 
       {!hideNavbar && <Navbar />}
       <main className="main-content">

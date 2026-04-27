@@ -45,20 +45,60 @@ Registered users can save favorite recipes, manage their dietary preferences and
 
 ### Admin
 
-* Email: * Password: Admin#123
+* Email: ``` admin@example.com  ```
+* Password: ``` Admin#123 ```
 
 ### User
 
-* Email: * Password: User123#
+* Email: ``` demo@example.com  ```
+* Password: ``` User#123 ```
 
 ---
 
+##  Currently Supported Ingredients
+
+At the current stage, Pantrix supports a predefined set of ingredients only, since the project is front-end only and does not yet include backend integration or AI-based recipe generation.
+
+The ingredient matching is currently based on the static recipe data available in the system. Therefore, users will get results only when their entered ingredients match the ingredients already defined in the existing recipe dataset.
+
+The currently supported ingredients are:
+
+* chicken
+* garlic
+* pasta
+* cream
+* tomato
+* cucumber
+* olive oil
+* feta
+* dough
+* mozzarella
+* basil
+* rosemary
+* thyme
+* shrimp
+* butter
+* lemon
+* onion
+* carrot
+* potato
+* celery
+* vegetable broth
+* lettuce
+* salad dressing
+
+---
+```
 ##  Project Structure
 src/
 │
 ├── assets/
 │   └── images/
 │       └── Pantrix.png
+│
+├──data/
+│   ├── auth.js
+│   └── recipes.js
 │
 ├── components/
 │   ├── FilterPanel.jsx
@@ -91,7 +131,8 @@ src/
 │   │   ├── RecipeCard.css
 │   │   ├── RecipeList.css
 │   │   ├── RestrictedModal.css
-│   │   └── SearchBar.css
+│   │   ├── SearchBar.css
+|   |   └──Footer.css
 │   │
 │   ├── pages/
 │   │   ├── AdminDashboard.css
@@ -112,30 +153,33 @@ src/
 │
 ├── App.jsx
 ├── main.jsx
-├── index.css
 │
 public/
 │   └── favicon.png
 │
 index.html
 package.json
+package-lock.json
 vite.config.js
 README.md
-
+```
 ---
 
 ##  Installation & Running
 
 1. Clone the repository:
+   ```
    git clone https://github.com/1Sara19/Pantrix.git
    cd Pantrix
-
-2. Install dependencies:
+   ```
+3. Install dependencies:
+   ```
    npm install
-
-3. Start the development server:
+   ```
+4. Start the development server:
+   ```
    npm run dev
-
+   ```
 ---
 
 ##  Usage Instructions & Examples
@@ -165,7 +209,7 @@ System shows "Login Required"
 * Apply filters (time, type, dietary)
 * Save favorite recipes
 * Set dietary preferences and allergies
-* Create weekly meal plans
+* Create weekly meal plan
 * Share recipes
 
 Example 1:  
@@ -266,5 +310,6 @@ You can view the design here:
 * The project is front-end only (no backend integration yet)
 * Data is handled using localStorage
 * No API keys or environment variables are required to run this project
+* The current version supports only predefined ingredients from the static recipe dataset, since no backend integration or AI-based recipe generation is implemented yet
 
 ---
