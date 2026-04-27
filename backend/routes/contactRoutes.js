@@ -7,14 +7,17 @@ import {
   deleteContactReport,
 } from "../controllers/contactController.js";
 
+import { protect } from "../middleware/authMiddleware.js";
+import { admin } from "../middleware/adminMiddleware.js";
+
 const router = express.Router();
 
 router.post("/", submitContactReport);
 
-router.get("/", getContactReports);
+router.get("/", protect, admin, getContactReports);
 
-router.patch("/:id/resolve", resolveContactReport);
+router.patch("/:id/resolve", protect, admin, resolveContactReport);
 
-router.delete("/:id", deleteContactReport);
+router.delete("/:id", protect, admin, deleteContactReport);
 
 export default router;
