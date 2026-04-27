@@ -3,14 +3,13 @@ import { useNavigate } from "react-router-dom";
 import "../styles/pages/login.css";
 import { Mail, Lock } from "lucide-react";
 import pantrixLogo from "../assets/images/Pantrix.png";
-import { loginUser } from "../data/auth.js";
+import { login } from "../services/authService.js";
 
 function Login() {
     const navigate = useNavigate();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [role, setRole] = useState("user");
     const [isLoading, setIsLoading] = useState(false);
     const [toast, setToast] = useState("");
 
@@ -19,13 +18,14 @@ function Login() {
         setTimeout(() => setToast(""), 2000);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (!email || !password) {
             showToast("Please fill in all fields");
             return;
         }
+
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         if (!emailRegex.test(email)) {
@@ -33,42 +33,29 @@ function Login() {
             return;
         }
 
-        const validEmails = ["admin@example.com", "demo@example.com"];
+        try {
+            setIsLoading(true);
 
-        if (!validEmails.includes(email.toLowerCase())) {
-            showToast("Email not found. Please sign in");
-            return;
-        }
+            const user = await login(email, password);
 
-        setIsLoading(true);
+            localStorage.setItem("isLoggedIn", "true");
+            localStorage.setItem(
+                "welcomeMessage",
+                user.role === "admin" ? "Welcome Admin!" : "Welcome back!"
+            );
 
-        setTimeout(() => {
-            try {
-                const user = loginUser(email, password, role);
+            showToast(user.role === "admin" ? "Welcome Admin!" : "Welcome back!");
 
-                localStorage.setItem("isLoggedIn", "true");
-                localStorage.setItem("userRole", user.role);
-                localStorage.setItem("userEmail", user.email);
-                localStorage.setItem("userId", user.email.toLowerCase().trim());
-                localStorage.setItem(
-                    "welcomeMessage",
-                    user.role === "admin" ? "Welcome Admin!" : "Welcome back!"
-                );
-
-
-                showToast(user.role === "admin" ? "Welcome Admin!" : "Welcome back!");
-                setIsLoading(false);
-
-                if (user.role === "admin") {
-                    navigate("/admin");
-                } else {
-                    navigate("/");
-                }
-            } catch (error) {
-                showToast(error.message);
-                setIsLoading(false);
+            if (user.role === "admin") {
+                navigate("/admin");
+            } else {
+                navigate("/");
             }
-        }, 800);
+        } catch (error) {
+            showToast(error.message);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -77,11 +64,7 @@ function Login() {
 
             <div className="login-wrapper">
                 <div className="login-logo-block">
-                    <img
-                        src={pantrixLogo}
-                        alt="Pantrix logo"
-                        className="login-logo"
-                    />
+                    <img src={pantrixLogo} alt="Pantrix logo" className="login-logo" />
                     <div className="login-logo-text">
                         <h1>Pantrix</h1>
                         <p>Cook Smart, Waste Less</p>
@@ -92,42 +75,12 @@ function Login() {
                     <div className="card-header">
                         <h2 className="login-card-title">Welcome Back</h2>
                         <p className="card-description login-card-description">
-                            {role === "admin"
-                                ? "Admin access only"
-                                : "Log in to access your saved recipes and preferences"}
+                            Log in to access your saved recipes and preferences
                         </p>
                     </div>
 
                     <div className="card-content">
                         <form onSubmit={handleSubmit} className="login-form" noValidate>
-                            <div className="login-form-group">
-                                <label>Select Role</label>
-
-                                <div className="login-role-switch">
-                                    <button
-                                        type="button"
-                                        onClick={() => setRole("user")}
-                                        className={`login-role-btn ${
-                                            role === "user" ? "login-role-btn--active" : ""
-                                        }`}
-                                        disabled={isLoading}
-                                    >
-                                        Regular User
-                                    </button>
-
-                                    <button
-                                        type="button"
-                                        onClick={() => setRole("admin")}
-                                        className={`login-role-btn ${
-                                            role === "admin" ? "login-role-btn--active" : ""
-                                        }`}
-                                        disabled={isLoading}
-                                    >
-                                        Admin
-                                    </button>
-                                </div>
-                            </div>
-
                             <div className="login-form-group">
                                 <label htmlFor="email">Email</label>
                                 <div className="login-input-wrap">
@@ -179,10 +132,6 @@ function Login() {
                                 >
                                     Sign up
                                 </button>
-                            </p>
-
-                            <p className="login-demo-text">
-                                Demo: Use any email and password to log in
                             </p>
                         </div>
                     </div>
