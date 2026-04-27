@@ -1,12 +1,22 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/pages/AdminDashboard.css";
-import pantrixLogo from "../assets/images/Pantrix.png";
-import { useNavigate } from "react-router-dom";
+import { useEffect} from "react";
 
 function AdminDashboard() {
   const [toast, setToast] = useState("");
-  const navigate = useNavigate();
+  useEffect(() => {
+    const savedMessage = localStorage.getItem("welcomeMessage");
+
+    if (savedMessage) {
+      setToast(savedMessage);
+      localStorage.removeItem("welcomeMessage");
+
+      setTimeout(() => {
+        setToast("");
+      }, 2000);
+    }
+  }, []);
   
   const user = {
     name: "Sarah",
@@ -50,15 +60,6 @@ function AdminDashboard() {
     },
   ];
 
-  const showToast = (message) => {
-    setToast(message);
-    setTimeout(() => setToast(""), 2000);
-  };
-
-  const handleLogout = () => {
-    showToast("/Login");
-  };
-
   return (
     <div className="admin-page">
       {toast && <div className="toast">{toast}</div>}
@@ -98,6 +99,7 @@ function AdminDashboard() {
         </section>
       </main>
     </div>
+
   );
 }
 

@@ -6,7 +6,6 @@ import "../styles/components/RecipeCard.css";
 export default function RecipeCard({
   id,
   title,
-  matchScore = 0,
   cookTime,
   servings,
   tags = [],

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import "../styles/pages/ManageComments.css";
-import pantrixLogo from "../assets/images/Pantrix.png";
 import { Link } from "react-router-dom";
 
 function ManageComments() {
