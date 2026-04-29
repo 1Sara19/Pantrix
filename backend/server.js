@@ -16,6 +16,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
+app.use("/api/recipes", recipeRoutes);
 
 app.get("/", (req, res) => {
   res.send("Pantrix backend is running");
@@ -23,7 +24,6 @@ app.get("/", (req, res) => {
 
 app.use(notFound);
 app.use(errorHandler);
-app.use("/api/recipes", recipeRoutes);
 
 const PORT = process.env.PORT || 5000;
 
