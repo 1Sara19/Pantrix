@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
+import recipeRoutes from "./routes/recipeRoutes.js";
 
 dotenv.config();
 
@@ -22,6 +23,7 @@ app.get("/", (req, res) => {
 
 app.use(notFound);
 app.use(errorHandler);
+app.use("/api/recipes", recipeRoutes);
 
 const PORT = process.env.PORT || 5000;
 
