@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Heart, Clock3, Share2, X, Star, ChevronDown } from "lucide-react";
+import { Heart, Clock3, Share2, X, Star, ChevronDown, Users } from "lucide-react";
 import RestrictedModal from "./RestrictedModal";
 import {
   getFavorites,
@@ -7,10 +7,8 @@ import {
   removeFavorite,
 } from "../services/favoriteService";
 import { getReviewsByRecipe, addReview } from "../services/reviewService";
+import fallbackFoodImage from "../assets/images/fallbackImg.png";
 import "../styles/components/RecipeCard.css";
-
-const fallbackFoodImage =
-  "https://images.pexels.com/photos/70497/pexels-photo-70497.jpeg";
 
 export default function RecipeCard({
   id,
@@ -34,7 +32,8 @@ export default function RecipeCard({
   const [reviews, setReviews] = useState([]);
   const [toast, setToast] = useState("");
 
-  const isLoggedIn = !!localStorage.getItem("token");
+  const token = localStorage.getItem("token");
+  const isLoggedIn = !!token;
 
   useEffect(() => {
     const loadFavoriteStatus = async () => {
@@ -221,9 +220,8 @@ ${window.location.origin}
               <span>{cookTime} minutes</span>
             </div>
 
-            <span className="recipe-meta-dot">•</span>
-
             <div className="recipe-meta-item">
+              <Users size={15} />
               <span>{servings}</span>
             </div>
           </div>
@@ -287,8 +285,10 @@ ${window.location.origin}
                       <Clock3 size={16} />
                       {cookTime} min
                     </span>
-                    <span>•</span>
-                    <span>{servings}</span>
+                    <span className="recipe-meta-with-icon">
+                      <Users size={16} />
+                      {servings}
+                    </span>
                   </div>
                 </div>
 
