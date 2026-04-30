@@ -3,8 +3,11 @@ import cors from "cors";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 
-dotenv.config();
+import favoriteRoutes from "./routes/favoriteRoutes.js";
+import reviewRoutes from "./routes/reviewRoutes.js";
+import mealPlanRoutes from "./routes/mealPlanRoutes.js";
 
+dotenv.config();
 connectDB();
 
 const app = express();
@@ -12,9 +15,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.send("Pantrix backend is running");
-});
+app.use("/api/favorites", favoriteRoutes);
+app.use("/api/reviews", reviewRoutes);
+app.use("/api/meal-plans", mealPlanRoutes);
 
 const PORT = process.env.PORT || 5000;
 
