@@ -23,7 +23,6 @@ export default function RecipeList({
         <div className="loading-recipes-box">
           <div className="loading-spinner"></div>
           <h3>Finding the best recipes...</h3>
-          <p>Searching database first, then AI if needed.</p>
         </div>
       ) : recipes.length > 0 ? (
         <>
