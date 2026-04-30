@@ -1,5 +1,5 @@
 import Recipe from "../models/Recipe.js";
-
+import { getIngredientSuggestions } from "../utils/ingredientsService.js";
 
 // GET all recipes
 export const getRecipes = async (req, res) => {
@@ -74,4 +74,22 @@ export const deleteRecipe = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
+};
+
+
+
+export const ingredientSuggestions = async (req, res) => {
+
+  const { query } = req.query;
+
+  if (!query) {
+
+    return res.json([]);
+
+  }
+
+  const suggestions = await getIngredientSuggestions(query);
+
+  res.json(suggestions);
+
 };
