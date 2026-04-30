@@ -14,6 +14,8 @@ export default function RecipeCard({
   ingredients = [],
   instructions = [],
   missingIngredients = [],
+  matchedIngredients = [],
+  matchScore = 0,
 }) {
   const [showRecipe, setShowRecipe] = useState(false);
   const [liked, setLiked] = useState(false);
@@ -125,7 +127,7 @@ ${window.location.origin}
     try {
       if (navigator.share) {
         await navigator.share({
-          title: title,
+          title,
           text: recipeText,
         });
         showToast("Recipe shared successfully!");
@@ -142,7 +144,15 @@ ${window.location.origin}
     (value, index, arr) => value && arr.indexOf(value) === index
   );
 
-  const matchedCount = ingredients.length - missingIngredients.length;
+  const matchedCount = matchedIngredients.length;
+
+  const isIngredientMatched = (ingredient) => {
+    return matchedIngredients.some(
+      (matched) =>
+        ingredient.toLowerCase().includes(matched.toLowerCase()) ||
+        matched.toLowerCase().includes(ingredient.toLowerCase())
+    );
+  };
 
   return (
     <>
@@ -150,7 +160,11 @@ ${window.location.origin}
 
       <div className="recipe-card">
         <div className="recipe-card-image-wrapper">
-          <img src={image} alt={title} className="recipe-card-image" />
+          <img
+            src={image || "https://source.unsplash.com/400x300/?food"}
+            alt={title}
+            className="recipe-card-image"
+          />
 
           <button
             type="button"
@@ -184,6 +198,7 @@ ${window.location.origin}
 
           <p className="recipe-match-text">
             {matchedCount} of {ingredients.length} ingredients matched
+            {matchScore ? ` • ${matchScore}% match` : ""}
           </p>
 
           {recipeTags.length > 0 && (
@@ -255,7 +270,11 @@ ${window.location.origin}
                 </button>
               </div>
 
-              <img src={image} alt={title} className="recipe-modal-image" />
+              <img
+                src={image || "https://source.unsplash.com/400x300/?food"}
+                alt={title}
+                className="recipe-modal-image"
+              />
 
               {recipeTags.length > 0 && (
                 <div className="recipe-modal-section">
@@ -279,19 +298,21 @@ ${window.location.origin}
                 <h3>Ingredients</h3>
                 <ul className="recipe-ingredients-list">
                   {ingredients.map((item, index) => {
-                    const isMissing = missingIngredients.includes(item);
+                    const available = isIngredientMatched(item);
 
                     return (
                       <li
                         key={index}
                         className={`recipe-ingredient-item ${
-                          isMissing ? "missing" : "available"
+                          available ? "available" : "missing"
                         }`}
                       >
                         <span className="ingredient-dot"></span>
                         <span className="ingredient-name">{item}</span>
-                        {isMissing && (
-                          <span className="missing-ingredient">(need to buy)</span>
+                        {!available && (
+                          <span className="missing-ingredient">
+                            (need to buy)
+                          </span>
                         )}
                       </li>
                     );

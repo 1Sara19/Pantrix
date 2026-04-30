@@ -6,12 +6,13 @@ import {
   updateRecipe,
   deleteRecipe,
   ingredientSuggestions,
+  suggestAIRecipe,
 } from "../controllers/recipeController.js";
 
 const router = express.Router();
 
 router.get("/ingredients/suggestions", ingredientSuggestions);
-
+router.post("/suggest", suggestAIRecipe);
 router.route("/")
   .get(getRecipes)
   .post(createRecipe);

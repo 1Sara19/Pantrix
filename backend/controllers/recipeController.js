@@ -1,5 +1,6 @@
 import Recipe from "../models/Recipe.js";
 import { getIngredientSuggestions } from "../utils/ingredientsService.js";
+import { generateAIRecipes } from "../utils/aiRecipeService.js";
 
 // GET all recipes
 export const getRecipes = async (req, res) => {
@@ -10,7 +11,6 @@ export const getRecipes = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
 
 // GET recipe by ID
 export const getRecipeById = async (req, res) => {
@@ -27,7 +27,6 @@ export const getRecipeById = async (req, res) => {
   }
 };
 
-
 // POST add new recipe
 export const createRecipe = async (req, res) => {
   try {
@@ -39,7 +38,6 @@ export const createRecipe = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
-
 
 // PUT update recipe
 export const updateRecipe = async (req, res) => {
@@ -60,7 +58,6 @@ export const updateRecipe = async (req, res) => {
   }
 };
 
-
 // DELETE recipe
 export const deleteRecipe = async (req, res) => {
   try {
@@ -76,20 +73,87 @@ export const deleteRecipe = async (req, res) => {
   }
 };
 
-
-
+// Ingredient autocomplete
 export const ingredientSuggestions = async (req, res) => {
-
   const { query } = req.query;
 
   if (!query) {
-
     return res.json([]);
-
   }
 
   const suggestions = await getIngredientSuggestions(query);
-
   res.json(suggestions);
+};
 
+// Database first, AI fallback
+export const suggestAIRecipe = async (req, res) => {
+  try {
+    const { ingredients, filters } = req.body;
+
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 6;
+
+    if (!ingredients || ingredients.length === 0) {
+      return res.status(400).json({ message: "Ingredients are required" });
+    }
+
+    const normalize = (text) =>
+      text.toLowerCase().replace(/[^a-z\s]/g, "").trim();
+
+    const inputIngredients = ingredients.map(normalize);
+
+    const calculateScore = (recipe) => {
+      const recipeIngredients = recipe.ingredients.map(normalize);
+
+      const matchedIngredients = recipeIngredients.filter((recipeItem) =>
+        inputIngredients.some((input) => recipeItem.includes(input))
+      );
+
+      const matchScore = Math.round(
+        (matchedIngredients.length / recipeIngredients.length) * 100
+      );
+
+      return {
+        ...recipe._doc,
+        matchScore,
+        matchedIngredients,
+      };
+    };
+
+    const allRecipes = await Recipe.find();
+
+    const matchedRecipes = allRecipes
+      .map(calculateScore)
+      .filter((recipe) => recipe.matchScore > 0)
+      .sort((a, b) => b.matchScore - a.matchScore);
+
+    const start = (page - 1) * limit;
+    const paginatedRecipes = matchedRecipes.slice(start, start + limit);
+
+    if (paginatedRecipes.length > 0) {
+      return res.json({
+        source: "database",
+        recipes: paginatedRecipes,
+        hasMore: matchedRecipes.length > start + limit,
+      });
+    }
+
+    const aiRecipes = await generateAIRecipes(ingredients, filters);
+    const savedRecipes = await Recipe.insertMany(aiRecipes);
+
+    const recipesWithScore = savedRecipes
+      .map(calculateScore)
+      .sort((a, b) => b.matchScore - a.matchScore);
+
+    return res.status(201).json({
+      source: "ai",
+      recipes: recipesWithScore.slice(0, limit),
+      hasMore: true,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "AI recipe generation failed",
+      error: error.message,
+    });
+  }
 };
