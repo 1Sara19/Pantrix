@@ -2,6 +2,8 @@ import Recipe from "../models/Recipe.js";
 import { getIngredientSuggestions } from "../utils/ingredientsService.js";
 import { generateAIRecipes } from "../utils/aiRecipeService.js";
 import { getRecipeImage } from "../utils/recipeImageService.js";
+import normalizeIngredients from "../utils/normalizeIngredients.js";
+import calculateMatchScore from "../utils/matchScore.js";
 
 // GET all recipes
 export const getRecipes = async (req, res) => {
@@ -171,5 +173,92 @@ export const suggestAIRecipe = async (req, res) => {
       message: "AI recipe generation failed",
       error: error.message,
     });
+  }
+};
+
+export const searchRecipes = async (req, res) => {
+  try {
+    const { ingredients = [], filters = {} } = req.body;
+
+    if (ingredients.length === 0) {
+      return res.json({
+        source: "database",
+        recipes: [],
+        hasMore: false,
+      });
+    }
+
+    const inputIngredients = normalizeIngredients(ingredients);
+    const allRecipes = await Recipe.find();
+
+    let results = allRecipes.map((recipe) => {
+      const recipeIngredients = normalizeIngredients(recipe.ingredients);
+
+      const { matchScore, matchedIngredients } = calculateMatchScore(
+        inputIngredients,
+        recipeIngredients
+      );
+
+      return {
+        ...recipe._doc,
+        matchScore,
+        matchedIngredients,
+      };
+    });
+
+    results = results.filter((recipe) => recipe.matchScore > 0);
+
+    if (filters.cookTime) {
+      results = results.filter(
+        (recipe) => recipe.cookTime <= Number(filters.cookTime)
+      );
+    }
+
+    if (filters.dietary?.length > 0) {
+      results = results.filter((recipe) => {
+        const labels = [...(recipe.dietary || []), ...(recipe.tags || [])].map(
+          (item) => item.toLowerCase()
+        );
+
+        return filters.dietary.every((diet) =>
+          labels.includes(diet.toLowerCase())
+        );
+      });
+    }
+
+    if (filters.exclude) {
+      const excludedItems = filters.exclude
+        .toLowerCase()
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean);
+
+      results = results.filter((recipe) => {
+        const recipeIngredients = recipe.ingredients.map((item) =>
+          item.toLowerCase()
+        );
+
+        const allergyTags = (recipe.allergyTags || []).map((item) =>
+          item.toLowerCase()
+        );
+
+        return !excludedItems.some(
+          (excluded) =>
+            recipeIngredients.some((ingredient) =>
+              ingredient.includes(excluded)
+            ) || allergyTags.some((tag) => tag.includes(excluded))
+        );
+      });
+    }
+
+    results.sort((a, b) => b.matchScore - a.matchScore);
+
+    return res.json({
+      source: "database",
+      recipes: results,
+      hasMore: false,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };

@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { Heart, Clock3, Share2, X, Star, ChevronDown } from "lucide-react";
 import RestrictedModal from "./RestrictedModal";
 import "../styles/components/RecipeCard.css";
-
+const fallbackFoodImage =
+  "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg";
 export default function RecipeCard({
   id,
   title,
@@ -161,15 +162,11 @@ ${window.location.origin}
       <div className="recipe-card">
         <div className="recipe-card-image-wrapper">
           <img
-            src={
-              image && image.startsWith("http")
-                ? image
-                : `https://placehold.co/400x300/F6F2EC/4A3F35?text=${title}`
-            }           
+            src={image && image.startsWith("http") ? image : fallbackFoodImage}       
             alt={title}
             className="recipe-card-image"
             onError={(e) => {
-              e.currentTarget.src = `https://placehold.co/400x300/F6F2EC/4A3F35?text=${title}`;
+              e.currentTarget.src = fallbackFoodImage;
             }}
           />
 
@@ -278,15 +275,11 @@ ${window.location.origin}
               </div>
 
               <img
-                src={
-                  image && image.trim() !== ""
-                    ? image
-                    : `https://placehold.co/400x300/F6F2EC/4A3F35?text=${encodeURIComponent(title)}`
-                }
+                src={image && image.startsWith("http") ? image : fallbackFoodImage}
                 alt={title}
                 className="recipe-modal-image"
                 onError={(e) => {
-                  e.currentTarget.src = `https://placehold.co/400x300/F6F2EC/4A3F35?text=${encodeURIComponent(title)}`;
+                  e.currentTarget.src = fallbackFoodImage;
                 }}
               />
 

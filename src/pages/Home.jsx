@@ -5,6 +5,7 @@ import FilterPanel from "../components/FilterPanel";
 import RecipeList from "../components/RecipeList";
 import "../styles/pages/Home.css";
 import { toast } from "sonner";
+import { suggestRecipes } from "../services/recipeService";
 
 export default function Home() {
   const [ingredients, setIngredients] = useState([]);
@@ -50,28 +51,7 @@ export default function Home() {
       setPage(1);
 
       try {
-        const res = await fetch(
-          "http://localhost:5001/api/recipes/suggest?page=1&limit=6",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              ingredients,
-              filters,
-            }),
-          }
-        );
-
-        const data = await res.json();
-
-        if (!res.ok) {
-          toast.error(data.message || "Failed to get recipes");
-          setRecipes([]);
-          setHasMore(false);
-          return;
-        }
+        const data = await suggestRecipes(ingredients, filters, 1, 6);
 
         setRecipes(data.recipes || []);
         setHasMore(data.hasMore ?? true);
@@ -99,26 +79,7 @@ export default function Home() {
     setLoadingMore(true);
 
     try {
-      const res = await fetch(
-        `http://localhost:5001/api/recipes/suggest?page=${nextPage}&limit=6`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            ingredients,
-            filters,
-          }),
-        }
-      );
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        toast.error(data.message || "Failed to load more recipes");
-        return;
-      }
+      const data = await suggestRecipes(ingredients, filters, nextPage, 6);
 
       setRecipes((prev) => [...prev, ...(data.recipes || [])]);
       setHasMore(data.hasMore ?? true);
