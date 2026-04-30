@@ -25,6 +25,16 @@ export default function SearchBar({ ingredients, setIngredients }) {
     }
   };
 
+  const addIngredientValue = (value) => {
+    const cleanedValue = value.toLowerCase().trim();
+
+    if (!cleanedValue || ingredients.includes(cleanedValue)) return;
+
+    setIngredients([...ingredients, cleanedValue]);
+    setInput("");
+    setSuggestions([]);
+  };
+
   const addIngredient = () => {
     const cleanedInput = input
       .toLowerCase()
@@ -57,7 +67,14 @@ export default function SearchBar({ ingredients, setIngredients }) {
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      addIngredient();
+      const match = suggestions.find(
+          (item) => item.name.toLowerCase() === input.toLowerCase().trim()
+        );
+        if (match) {
+          addIngredientValue(match.name);
+        } else {
+          setInput("");
+        }
     }
   };
 
@@ -78,24 +95,30 @@ export default function SearchBar({ ingredients, setIngredients }) {
           }}
           onKeyDown={handleKeyDown}
         />
-      </div>
 
-      {suggestions.length > 0 && (
-        <div className="suggestions-dropdown">
-          {suggestions.map((item) => (
-            <div
-              key={item.id || item.name}
-              className="suggestion-item"
-              onClick={() => {
-                setInput(item.name);
-                setSuggestions([]);
-              }}
-            >
-              {item.name}
-            </div>
-          ))}
-        </div>
-      )}
+        {suggestions.length > 0 && (
+          <div className="suggestions-dropdown">
+            {suggestions.map((item) => (
+              <button
+                type="button"
+                key={item.id || item.name}
+                className="suggestion-item"
+                onClick={() => addIngredientValue(item.name)}
+              >
+                {item.image && (
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    className="suggestion-img"
+                  />
+                )}
+
+                <span>{item.name}</span>
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
 
       {ingredients.length > 0 && (
         <div className="ingredients-section">
