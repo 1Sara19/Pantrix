@@ -5,6 +5,7 @@ import "../styles/components/SearchBar.css";
 export default function SearchBar({ ingredients, setIngredients }) {
   const [input, setInput] = useState("");
   const [suggestions, setSuggestions] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(false);
 
   const fetchSuggestions = async (value) => {
     if (!value.trim() || value.trim().length < 2) {      

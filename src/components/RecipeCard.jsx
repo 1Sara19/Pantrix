@@ -1,9 +1,17 @@
 import { useEffect, useState } from "react";
 import { Heart, Clock3, Share2, X, Star, ChevronDown } from "lucide-react";
 import RestrictedModal from "./RestrictedModal";
+import {
+  getFavorites,
+  addFavorite,
+  removeFavorite,
+} from "../services/favoriteService";
+import { getReviewsByRecipe, addReview } from "../services/reviewService";
 import "../styles/components/RecipeCard.css";
+
 const fallbackFoodImage =
-  "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg";
+  "https://images.pexels.com/photos/70497/pexels-photo-70497.jpeg";
+
 export default function RecipeCard({
   id,
   title,
@@ -14,7 +22,6 @@ export default function RecipeCard({
   image,
   ingredients = [],
   instructions = [],
-  missingIngredients = [],
   matchedIngredients = [],
   matchScore = 0,
 }) {
@@ -27,51 +34,70 @@ export default function RecipeCard({
   const [reviews, setReviews] = useState([]);
   const [toast, setToast] = useState("");
 
-  const userId = localStorage.getItem("userId");
-  const favoritesKey = userId ? `favorites_${userId}` : null;
-  const reviewKey = `recipe_reviews_${id}`;
-  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+  const isLoggedIn = !!localStorage.getItem("token");
 
   useEffect(() => {
-    if (favoritesKey) {
-      const savedFavorites =
-        JSON.parse(localStorage.getItem(favoritesKey)) || [];
-      setLiked(savedFavorites.includes(id));
-    } else {
-      setLiked(false);
-    }
+    const loadFavoriteStatus = async () => {
+      if (!isLoggedIn) {
+        setLiked(false);
+        return;
+      }
 
-    const savedReviews = localStorage.getItem(reviewKey);
-    if (savedReviews) {
-      setReviews(JSON.parse(savedReviews));
-    }
-  }, [favoritesKey, id, reviewKey]);
+      try {
+        const favorites = await getFavorites();
+        const isFavorite = favorites.some(
+          (recipe) => (recipe._id || recipe.id) === id
+        );
+        setLiked(isFavorite);
+      } catch (error) {
+        console.error(error);
+        setLiked(false);
+      }
+    };
+
+    loadFavoriteStatus();
+  }, [id, isLoggedIn]);
+
+  useEffect(() => {
+    const loadReviews = async () => {
+      try {
+        const data = await getReviewsByRecipe(id);
+        setReviews(data || []);
+      } catch (error) {
+        console.error("Failed to load reviews:", error);
+        setReviews([]);
+      }
+    };
+
+    if (id) loadReviews();
+  }, [id]);
 
   const showToast = (message) => {
     setToast(message);
     setTimeout(() => setToast(""), 2200);
   };
 
-  const handleLike = () => {
-    if (!isLoggedIn || !favoritesKey) {
+  const handleLike = async () => {
+    if (!isLoggedIn) {
       setShowRestrictedModal(true);
       return;
     }
 
-    let favorites = JSON.parse(localStorage.getItem(favoritesKey)) || [];
+    try {
+      if (liked) {
+        await removeFavorite(id);
+        setLiked(false);
+        showToast("Removed from favorites");
+      } else {
+        await addFavorite(id);
+        setLiked(true);
+        showToast("Added to favorites");
+      }
 
-    if (favorites.includes(id)) {
-      favorites = favorites.filter((favId) => favId !== id);
-      setLiked(false);
-      showToast("Recipe removed from favorites");
-    } else {
-      favorites.push(id);
-      setLiked(true);
-      showToast("Recipe saved successfully!");
+      window.dispatchEvent(new Event("favoritesUpdated"));
+    } catch (err) {
+      showToast("Something went wrong");
     }
-
-    localStorage.setItem(favoritesKey, JSON.stringify(favorites));
-    window.dispatchEvent(new Event("favoritesUpdated"));
   };
 
   const handleOpenReview = () => {
@@ -83,7 +109,7 @@ export default function RecipeCard({
     setShowReviewBox(true);
   };
 
-  const handleSubmitReview = () => {
+  const handleSubmitReview = async () => {
     if (!isLoggedIn) {
       setShowRestrictedModal(true);
       return;
@@ -94,21 +120,23 @@ export default function RecipeCard({
       return;
     }
 
-    const newReview = {
-      id: Date.now(),
-      rating,
-      comment,
-      date: new Date().toLocaleDateString(),
-    };
+    try {
+      const newReview = await addReview({
+        recipeId: id,
+        rating,
+        comment,
+      });
 
-    const updatedReviews = [...reviews, newReview];
-    setReviews(updatedReviews);
-    localStorage.setItem(reviewKey, JSON.stringify(updatedReviews));
+      setReviews((prev) => [newReview, ...prev]);
 
-    setRating(0);
-    setComment("");
-    setShowReviewBox(false);
-    showToast("Review submitted successfully");
+      setRating(0);
+      setComment("");
+      setShowReviewBox(false);
+      showToast("Review submitted successfully");
+    } catch (error) {
+      console.error(error);
+      showToast("Failed to submit review");
+    }
   };
 
   const handleShare = async () => {
@@ -162,7 +190,7 @@ ${window.location.origin}
       <div className="recipe-card">
         <div className="recipe-card-image-wrapper">
           <img
-            src={image && image.startsWith("http") ? image : fallbackFoodImage}       
+            src={image && image.startsWith("http") ? image : fallbackFoodImage}
             alt={title}
             className="recipe-card-image"
             onError={(e) => {
@@ -353,13 +381,22 @@ ${window.location.origin}
                 {reviews.length > 0 ? (
                   <div className="review-list">
                     {reviews.map((review) => (
-                      <div className="review-item" key={review.id}>
+                      <div className="review-item" key={review._id || review.id}>
                         <p className="review-stars-display">
                           {"★".repeat(review.rating)}
                           {"☆".repeat(5 - review.rating)}
                         </p>
+
                         {review.comment && <p>{review.comment}</p>}
-                        <small>{review.date}</small>
+
+                        <small>
+                          {review.userId?.name
+                            ? `By ${review.userId.name}`
+                            : "Anonymous"}{" "}
+                          {review.createdAt
+                            ? `• ${new Date(review.createdAt).toLocaleDateString()}`
+                            : ""}
+                        </small>
                       </div>
                     ))}
                   </div>

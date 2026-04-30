@@ -30,9 +30,9 @@ export default function RecipeList({
           <div className="recipe-list-grid">
             {recipes.map((recipe) => (
               <RecipeCard
-                key={recipe._id || recipe.id}
+                key={recipe._id}
+                id={recipe._id}
                 {...recipe}
-                id={recipe._id || recipe.id}
               />
             ))}
           </div>
