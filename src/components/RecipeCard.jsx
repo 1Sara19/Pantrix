@@ -161,9 +161,16 @@ ${window.location.origin}
       <div className="recipe-card">
         <div className="recipe-card-image-wrapper">
           <img
-            src={image || "https://source.unsplash.com/400x300/?food"}
+            src={
+              image && image.startsWith("http")
+                ? image
+                : `https://placehold.co/400x300/F6F2EC/4A3F35?text=${title}`
+            }           
             alt={title}
             className="recipe-card-image"
+            onError={(e) => {
+              e.currentTarget.src = `https://placehold.co/400x300/F6F2EC/4A3F35?text=${title}`;
+            }}
           />
 
           <button
@@ -271,9 +278,16 @@ ${window.location.origin}
               </div>
 
               <img
-                src={image || "https://source.unsplash.com/400x300/?food"}
+                src={
+                  image && image.trim() !== ""
+                    ? image
+                    : `https://placehold.co/400x300/F6F2EC/4A3F35?text=${encodeURIComponent(title)}`
+                }
                 alt={title}
                 className="recipe-modal-image"
+                onError={(e) => {
+                  e.currentTarget.src = `https://placehold.co/400x300/F6F2EC/4A3F35?text=${encodeURIComponent(title)}`;
+                }}
               />
 
               {recipeTags.length > 0 && (

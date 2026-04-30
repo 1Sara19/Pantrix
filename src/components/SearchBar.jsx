@@ -7,7 +7,7 @@ export default function SearchBar({ ingredients, setIngredients }) {
   const [suggestions, setSuggestions] = useState([]);
 
   const fetchSuggestions = async (value) => {
-    if (!value.trim()) {
+    if (!value.trim() || value.trim().length < 2) {      
       setSuggestions([]);
       return;
     }
@@ -75,6 +75,8 @@ export default function SearchBar({ ingredients, setIngredients }) {
         } else {
           setInput("");
         }
+        setSuggestions([]);
+        setShowDropdown(false);
     }
   };
 

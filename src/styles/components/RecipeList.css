@@ -117,6 +117,11 @@
   background: #6f5a42;
 }
 
+.load-more-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
 @media (max-width: 768px) {
   .recipe-list-header {
     flex-direction: column;

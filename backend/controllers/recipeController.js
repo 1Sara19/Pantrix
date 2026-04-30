@@ -1,6 +1,7 @@
 import Recipe from "../models/Recipe.js";
 import { getIngredientSuggestions } from "../utils/ingredientsService.js";
 import { generateAIRecipes } from "../utils/aiRecipeService.js";
+import { getRecipeImage } from "../utils/recipeImageService.js";
 
 // GET all recipes
 export const getRecipes = async (req, res) => {
@@ -139,8 +140,23 @@ export const suggestAIRecipe = async (req, res) => {
     }
 
     const aiRecipes = await generateAIRecipes(ingredients, filters);
-    const savedRecipes = await Recipe.insertMany(aiRecipes);
 
+    const recipesWithImages = await Promise.all(
+      aiRecipes.map(async (recipe) => {
+        const img = recipe.image || (await getRecipeImage(recipe.title));
+        return {
+        ...recipe,
+        image: 
+          img && img.startsWith("http")
+            ? img
+            : `https://picsum.photos/seed/${encodeURIComponent(
+                recipe.title
+              )}/400/300`,
+        };
+      })
+    );
+
+    const savedRecipes = await Recipe.insertMany(recipesWithImages);
     const recipesWithScore = savedRecipes
       .map(calculateScore)
       .sort((a, b) => b.matchScore - a.matchScore);
