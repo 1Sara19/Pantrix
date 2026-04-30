@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "../styles/pages/SignUp.css";
 import pantrixLogo from "../assets/images/Pantrix.png";
 import { User, Mail, Lock } from "lucide-react";
+import { signup } from "../services/authService.js";
 
 function SignUp() {
     const navigate = useNavigate();
@@ -18,7 +19,6 @@ function SignUp() {
         setToast(message);
         setTimeout(() => setToast(""), 2200);
     };
-
     const passwordChecks = {
         hasMinLength: password.length >= 6,
         hasUppercase: /[A-Z]/.test(password),
@@ -34,25 +34,16 @@ function SignUp() {
         passwordChecks.hasNumber &&
         passwordChecks.hasSpecialChar;
 
-    const showPasswordRules =
-        password.length > 0 && !isPasswordValid;
+    const showPasswordRules = password.length > 0 && !isPasswordValid;
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (!name || !email || !password || !confirmPassword) {
             showToast("Please fill in all fields");
             return;
         }
-        const existingEmails = [
-            "admin@example.com",
-            "demo@example.com"
-        ];
 
-        if (existingEmails.includes(email.toLowerCase())) {
-            showToast("Email already exists");
-            return;
-        }
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         if (!emailRegex.test(email)) {
@@ -70,19 +61,24 @@ function SignUp() {
             return;
         }
 
-        setIsLoading(true);
+        try {
+            setIsLoading(true);
 
-        setTimeout(() => {
-            localStorage.setItem("isLoggedIn", "true");
-            localStorage.setItem("userRole", "user");
-            localStorage.setItem("userEmail", email);
-            localStorage.setItem("userId", email.toLowerCase().trim());
-            localStorage.setItem("userName", name);
+            await signup({
+                name,
+                email,
+                password,
+            });
+
             showToast("Account created successfully!");
-            setIsLoading(false);
             navigate("/login");
-        }, 800);
+        } catch (error) {
+            showToast(error.message);
+        } finally {
+            setIsLoading(false);
+        }
     };
+
 
     return (
         <div className="signup-page">
@@ -90,11 +86,7 @@ function SignUp() {
 
             <div className="signup-wrapper">
                 <div className="signup-logo-block">
-                    <img
-                        src={pantrixLogo}
-                        alt="Pantrix logo"
-                        className="signup-logo"
-                    />
+                    <img src={pantrixLogo} alt="Pantrix logo" className="signup-logo" />
                     <div className="signup-logo-text">
                         <h1>Pantrix</h1>
                         <p>Cook Smart, Waste Less</p>
@@ -114,7 +106,8 @@ function SignUp() {
                             <div className="signup-form-group">
                                 <label htmlFor="name">Full Name</label>
                                 <div className="signup-input-wrap">
-                                    <User className="signup-input-icon-svg" />                                    <input
+                                    <User className="signup-input-icon-svg" />
+                                    <input
                                         id="name"
                                         type="text"
                                         className="input signup-input"
@@ -129,7 +122,8 @@ function SignUp() {
                             <div className="signup-form-group">
                                 <label htmlFor="email">Email</label>
                                 <div className="signup-input-wrap">
-                                    <Mail className="signup-input-icon-svg" />                                    <input
+                                    <Mail className="signup-input-icon-svg" />
+                                    <input
                                         id="email"
                                         type="email"
                                         className="input signup-input"
@@ -141,10 +135,13 @@ function SignUp() {
                                 </div>
                             </div>
 
+
+
                             <div className="signup-form-group">
                                 <label htmlFor="password">Password</label>
                                 <div className="signup-input-wrap">
-                                    <Lock className="signup-input-icon-svg" />                                    <input
+                                    <Lock className="signup-input-icon-svg" />
+                                    <input
                                         id="password"
                                         type="password"
                                         className="input signup-input"
@@ -154,57 +151,38 @@ function SignUp() {
                                         disabled={isLoading}
                                     />
                                 </div>
+
                                 {showPasswordRules && (
                                     <div className="password-rules">
                                         <p className="password-rules-title">Password must include:</p>
 
-                                        <div
-                                            className={`password-rule ${
-                                                passwordChecks.hasMinLength ? "valid" : ""
-                                            }`}
-                                        >
+                                        <div className={`password-rule ${passwordChecks.hasMinLength ? "valid" : ""}`}>
                                             {passwordChecks.hasMinLength ? "✅" : "❌"} At least 6 characters
                                         </div>
 
-                                        <div
-                                            className={`password-rule ${
-                                                passwordChecks.hasUppercase ? "valid" : ""
-                                            }`}
-                                        >
+                                        <div className={`password-rule ${passwordChecks.hasUppercase ? "valid" : ""}`}>
                                             {passwordChecks.hasUppercase ? "✅" : "❌"} At least one uppercase letter
                                         </div>
 
-                                        <div
-                                            className={`password-rule ${
-                                                passwordChecks.hasLowercase ? "valid" : ""
-                                            }`}
-                                        >
+                                        <div className={`password-rule ${passwordChecks.hasLowercase ? "valid" : ""}`}>
                                             {passwordChecks.hasLowercase ? "✅" : "❌"} At least one lowercase letter
                                         </div>
 
-                                        <div
-                                            className={`password-rule ${
-                                                passwordChecks.hasNumber ? "valid" : ""
-                                            }`}
-                                        >
+                                        <div className={`password-rule ${passwordChecks.hasNumber ? "valid" : ""}`}>
                                             {passwordChecks.hasNumber ? "✅" : "❌"} At least one number
                                         </div>
 
-                                        <div
-                                            className={`password-rule ${
-                                                passwordChecks.hasSpecialChar ? "valid" : ""
-                                            }`}
-                                        >
+                                        <div className={`password-rule ${passwordChecks.hasSpecialChar ? "valid" : ""}`}>
                                             {passwordChecks.hasSpecialChar ? "✅" : "❌"} At least one special character (@$!%*#&)
                                         </div>
                                     </div>
                                 )}
                             </div>
-
                             <div className="signup-form-group">
                                 <label htmlFor="confirmPassword">Confirm Password</label>
                                 <div className="signup-input-wrap">
-                                    <Lock className="signup-input-icon-svg" />                                    <input
+                                    <Lock className="signup-input-icon-svg" />
+                                    <input
                                         id="confirmPassword"
                                         type="password"
                                         className="input signup-input"
@@ -235,10 +213,6 @@ function SignUp() {
                                 >
                                     Log in
                                 </button>
-                            </p>
-
-                            <p className="signup-demo-text">
-                                Demo: Use any credentials to create an account
                             </p>
                         </div>
                     </div>
