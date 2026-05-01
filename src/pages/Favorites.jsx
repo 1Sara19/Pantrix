@@ -2,45 +2,37 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Heart, ArrowLeft, ChefHat } from "lucide-react";
 import "../styles/pages/favorites.css";
-import recipes from "../data/recipes";
 import RecipeCard from "../components/RecipeCard";
+import { getFavorites } from "../services/favoriteService";
 
 function Favorites() {
   const navigate = useNavigate();
   const [favoriteRecipes, setFavoriteRecipes] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const userId = localStorage.getItem("userId");
-  const favoritesKey = userId ? `favorites_${userId}` : null;
-
-  const loadFavorites = () => {
-    if (!favoritesKey) {
+  const loadFavorites = async () => {
+    try {
+      setLoading(true);
+      const data = await getFavorites();
+      setFavoriteRecipes(data || []);
+    } catch (error) {
+      console.error("Failed to load favorites:", error);
       setFavoriteRecipes([]);
-      return;
+    } finally {
+      setLoading(false);
     }
-
-    const savedFavorites =
-      JSON.parse(localStorage.getItem(favoritesKey)) || [];
-
-    const likedRecipes = recipes.filter((recipe) =>
-      savedFavorites.includes(recipe.id)
-    );
-
-    setFavoriteRecipes(likedRecipes);
   };
 
   useEffect(() => {
     loadFavorites();
 
-    const handleFavoritesUpdate = () => {
-      loadFavorites();
-    };
-
+    const handleFavoritesUpdate = () => loadFavorites();
     window.addEventListener("favoritesUpdated", handleFavoritesUpdate);
 
     return () => {
       window.removeEventListener("favoritesUpdated", handleFavoritesUpdate);
     };
-  }, [favoritesKey]);
+  }, []);
 
   return (
     <div className="favorites-page-wrapper">
@@ -71,10 +63,16 @@ function Favorites() {
             </div>
           </div>
 
-          {favoriteRecipes.length > 0 ? (
+          {loading ? (
+            <p>Loading favorites...</p>
+          ) : favoriteRecipes.length > 0 ? (
             <div className="favorites-grid">
               {favoriteRecipes.map((recipe) => (
-                <RecipeCard key={recipe.id} {...recipe} />
+                <RecipeCard
+                  key={recipe._id || recipe.id}
+                  {...recipe}
+                  id={recipe._id || recipe.id}
+                />
               ))}
             </div>
           ) : (
@@ -101,8 +99,6 @@ function Favorites() {
           )}
         </div>
       </section>
-
-     
     </div>
   );
 }

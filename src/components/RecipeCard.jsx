@@ -1,6 +1,13 @@
 import { useEffect, useState } from "react";
-import { Heart, Clock3, Share2, X, Star, ChevronDown } from "lucide-react";
+import { Heart, Clock3, Share2, X, Star, ChevronDown, Users } from "lucide-react";
 import RestrictedModal from "./RestrictedModal";
+import {
+  getFavorites,
+  addFavorite,
+  removeFavorite,
+} from "../services/favoriteService";
+import { getReviewsByRecipe, addReview } from "../services/reviewService";
+import fallbackFoodImage from "../assets/images/fallbackImg.png";
 import "../styles/components/RecipeCard.css";
 
 export default function RecipeCard({
@@ -13,7 +20,8 @@ export default function RecipeCard({
   image,
   ingredients = [],
   instructions = [],
-  missingIngredients = [],
+  matchedIngredients = [],
+  matchScore = 0,
 }) {
   const [showRecipe, setShowRecipe] = useState(false);
   const [liked, setLiked] = useState(false);
@@ -24,51 +32,71 @@ export default function RecipeCard({
   const [reviews, setReviews] = useState([]);
   const [toast, setToast] = useState("");
 
-  const userId = localStorage.getItem("userId");
-  const favoritesKey = userId ? `favorites_${userId}` : null;
-  const reviewKey = `recipe_reviews_${id}`;
-  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+  const token = localStorage.getItem("token");
+  const isLoggedIn = !!token;
 
   useEffect(() => {
-    if (favoritesKey) {
-      const savedFavorites =
-        JSON.parse(localStorage.getItem(favoritesKey)) || [];
-      setLiked(savedFavorites.includes(id));
-    } else {
-      setLiked(false);
-    }
+    const loadFavoriteStatus = async () => {
+      if (!isLoggedIn) {
+        setLiked(false);
+        return;
+      }
 
-    const savedReviews = localStorage.getItem(reviewKey);
-    if (savedReviews) {
-      setReviews(JSON.parse(savedReviews));
-    }
-  }, [favoritesKey, id, reviewKey]);
+      try {
+        const favorites = await getFavorites();
+        const isFavorite = favorites.some(
+          (recipe) => (recipe._id || recipe.id) === id
+        );
+        setLiked(isFavorite);
+      } catch (error) {
+        console.error(error);
+        setLiked(false);
+      }
+    };
+
+    loadFavoriteStatus();
+  }, [id, isLoggedIn]);
+
+  useEffect(() => {
+    const loadReviews = async () => {
+      try {
+        const data = await getReviewsByRecipe(id);
+        setReviews(data || []);
+      } catch (error) {
+        console.error("Failed to load reviews:", error);
+        setReviews([]);
+      }
+    };
+
+    if (id) loadReviews();
+  }, [id]);
 
   const showToast = (message) => {
     setToast(message);
     setTimeout(() => setToast(""), 2200);
   };
 
-  const handleLike = () => {
-    if (!isLoggedIn || !favoritesKey) {
+  const handleLike = async () => {
+    if (!isLoggedIn) {
       setShowRestrictedModal(true);
       return;
     }
 
-    let favorites = JSON.parse(localStorage.getItem(favoritesKey)) || [];
+    try {
+      if (liked) {
+        await removeFavorite(id);
+        setLiked(false);
+        showToast("Removed from favorites");
+      } else {
+        await addFavorite(id);
+        setLiked(true);
+        showToast("Added to favorites");
+      }
 
-    if (favorites.includes(id)) {
-      favorites = favorites.filter((favId) => favId !== id);
-      setLiked(false);
-      showToast("Recipe removed from favorites");
-    } else {
-      favorites.push(id);
-      setLiked(true);
-      showToast("Recipe saved successfully!");
+      window.dispatchEvent(new Event("favoritesUpdated"));
+    } catch (err) {
+      showToast("Something went wrong");
     }
-
-    localStorage.setItem(favoritesKey, JSON.stringify(favorites));
-    window.dispatchEvent(new Event("favoritesUpdated"));
   };
 
   const handleOpenReview = () => {
@@ -80,7 +108,7 @@ export default function RecipeCard({
     setShowReviewBox(true);
   };
 
-  const handleSubmitReview = () => {
+  const handleSubmitReview = async () => {
     if (!isLoggedIn) {
       setShowRestrictedModal(true);
       return;
@@ -91,21 +119,23 @@ export default function RecipeCard({
       return;
     }
 
-    const newReview = {
-      id: Date.now(),
-      rating,
-      comment,
-      date: new Date().toLocaleDateString(),
-    };
+    try {
+      const newReview = await addReview({
+        recipeId: id,
+        rating,
+        comment,
+      });
 
-    const updatedReviews = [...reviews, newReview];
-    setReviews(updatedReviews);
-    localStorage.setItem(reviewKey, JSON.stringify(updatedReviews));
+      setReviews((prev) => [newReview, ...prev]);
 
-    setRating(0);
-    setComment("");
-    setShowReviewBox(false);
-    showToast("Review submitted successfully");
+      setRating(0);
+      setComment("");
+      setShowReviewBox(false);
+      showToast("Review submitted successfully");
+    } catch (error) {
+      console.error(error);
+      showToast("Failed to submit review");
+    }
   };
 
   const handleShare = async () => {
@@ -125,7 +155,7 @@ ${window.location.origin}
     try {
       if (navigator.share) {
         await navigator.share({
-          title: title,
+          title,
           text: recipeText,
         });
         showToast("Recipe shared successfully!");
@@ -142,7 +172,15 @@ ${window.location.origin}
     (value, index, arr) => value && arr.indexOf(value) === index
   );
 
-  const matchedCount = ingredients.length - missingIngredients.length;
+  const matchedCount = matchedIngredients.length;
+
+  const isIngredientMatched = (ingredient) => {
+    return matchedIngredients.some(
+      (matched) =>
+        ingredient.toLowerCase().includes(matched.toLowerCase()) ||
+        matched.toLowerCase().includes(ingredient.toLowerCase())
+    );
+  };
 
   return (
     <>
@@ -150,7 +188,14 @@ ${window.location.origin}
 
       <div className="recipe-card">
         <div className="recipe-card-image-wrapper">
-          <img src={image} alt={title} className="recipe-card-image" />
+          <img
+            src={image && image.startsWith("http") ? image : fallbackFoodImage}
+            alt={title}
+            className="recipe-card-image"
+            onError={(e) => {
+              e.currentTarget.src = fallbackFoodImage;
+            }}
+          />
 
           <button
             type="button"
@@ -175,15 +220,15 @@ ${window.location.origin}
               <span>{cookTime} minutes</span>
             </div>
 
-            <span className="recipe-meta-dot">•</span>
-
             <div className="recipe-meta-item">
+              <Users size={15} />
               <span>{servings}</span>
             </div>
           </div>
 
           <p className="recipe-match-text">
             {matchedCount} of {ingredients.length} ingredients matched
+            {matchScore ? ` • ${matchScore}% match` : ""}
           </p>
 
           {recipeTags.length > 0 && (
@@ -240,8 +285,10 @@ ${window.location.origin}
                       <Clock3 size={16} />
                       {cookTime} min
                     </span>
-                    <span>•</span>
-                    <span>{servings}</span>
+                    <span className="recipe-meta-with-icon">
+                      <Users size={16} />
+                      {servings}
+                    </span>
                   </div>
                 </div>
 
@@ -255,7 +302,14 @@ ${window.location.origin}
                 </button>
               </div>
 
-              <img src={image} alt={title} className="recipe-modal-image" />
+              <img
+                src={image && image.startsWith("http") ? image : fallbackFoodImage}
+                alt={title}
+                className="recipe-modal-image"
+                onError={(e) => {
+                  e.currentTarget.src = fallbackFoodImage;
+                }}
+              />
 
               {recipeTags.length > 0 && (
                 <div className="recipe-modal-section">
@@ -279,19 +333,21 @@ ${window.location.origin}
                 <h3>Ingredients</h3>
                 <ul className="recipe-ingredients-list">
                   {ingredients.map((item, index) => {
-                    const isMissing = missingIngredients.includes(item);
+                    const available = isIngredientMatched(item);
 
                     return (
                       <li
                         key={index}
                         className={`recipe-ingredient-item ${
-                          isMissing ? "missing" : "available"
+                          available ? "available" : "missing"
                         }`}
                       >
                         <span className="ingredient-dot"></span>
                         <span className="ingredient-name">{item}</span>
-                        {isMissing && (
-                          <span className="missing-ingredient">(need to buy)</span>
+                        {!available && (
+                          <span className="missing-ingredient">
+                            (need to buy)
+                          </span>
                         )}
                       </li>
                     );
@@ -325,13 +381,22 @@ ${window.location.origin}
                 {reviews.length > 0 ? (
                   <div className="review-list">
                     {reviews.map((review) => (
-                      <div className="review-item" key={review.id}>
+                      <div className="review-item" key={review._id || review.id}>
                         <p className="review-stars-display">
                           {"★".repeat(review.rating)}
                           {"☆".repeat(5 - review.rating)}
                         </p>
+
                         {review.comment && <p>{review.comment}</p>}
-                        <small>{review.date}</small>
+
+                        <small>
+                          {review.userId?.name
+                            ? `By ${review.userId.name}`
+                            : "Anonymous"}{" "}
+                          {review.createdAt
+                            ? `• ${new Date(review.createdAt).toLocaleDateString()}`
+                            : ""}
+                        </small>
                       </div>
                     ))}
                   </div>
