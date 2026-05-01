@@ -4,6 +4,7 @@ import { generateAIRecipes } from "../utils/aiRecipeService.js";
 import { getRecipeImage } from "../utils/recipeImageService.js";
 import normalizeIngredients from "../utils/normalizeIngredients.js";
 import calculateMatchScore from "../utils/matchScore.js";
+import AppSetting from "../models/AppSetting.js";
 
 // GET all recipes
 export const getRecipes = async (req, res) => {
@@ -94,8 +95,9 @@ export const suggestAIRecipe = async (req, res) => {
     const { ingredients, filters } = req.body;
 
     const page = Number(req.query.page) || 1;
-    const limit = Number(req.query.limit) || 6;
-
+    const setting = await AppSetting.findOne({ key: "recipeLimit" });
+    const limit = Number(setting?.value) || 6;
+    
     if (!ingredients || ingredients.length === 0) {
       return res.status(400).json({ message: "Ingredients are required" });
     }
