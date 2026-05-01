@@ -1,64 +1,69 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../styles/pages/ReviewReports.css";
 import { Link } from "react-router-dom";
+import {
+  getContactReports,
+  resolveContactReport,
+  deleteContactReport,
+} from "../services/contactService.js";
 
 function ReviewReports() {
-  const initialReports = [
-    {
-      id: "1",
-      subject: "Cannot save favorite recipes",
-      message:
-        "I am unable to save recipes to my favorites. When I click the heart button, nothing happens. Please help!",
-      userEmail: "john@example.com",
-      date: "Feb 27, 2026",
-      status: "pending",
-    },
-    {
-      id: "2",
-      subject: "Feature request: Shopping list",
-      message:
-        "It would be great if you could add a shopping list feature that automatically adds missing ingredients from recipes.",
-      userEmail: "sarah@example.com",
-      date: "Feb 26, 2026",
-      status: "pending",
-    },
-    {
-      id: "3",
-      subject: "Login issues",
-      message:
-        "I keep getting logged out every few hours. Is this normal? It's quite frustrating.",
-      userEmail: "mike@example.com",
-      date: "Feb 25, 2026",
-      status: "resolved",
-    },
-    {
-      id: "4",
-      subject: "Recipe suggestion",
-      message:
-        "Please add more vegan recipes! The current selection is limited.",
-      userEmail: "emma@example.com",
-      date: "Feb 24, 2026",
-      status: "pending",
-    },
-  ];
-
-  const [reports, setReports] = useState(initialReports);
+  const [reports, setReports] = useState([]);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [selectedReport, setSelectedReport] = useState(null);
   const [toast, setToast] = useState("");
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   const showToast = (message) => {
     setToast(message);
     setTimeout(() => setToast(""), 2200);
   };
 
-  const handleMarkResolved = (reportId) => {
-    setReports((prev) =>
-      prev.map((report) =>
-        report.id === reportId ? { ...report, status: "resolved" } : report
-      )
-    );
-    showToast("Report marked as resolved");
+  const formatDate = (dateValue) => {
+    if (!dateValue) return "No date";
+
+    return new Date(dateValue).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };
+
+  const loadReports = async () => {
+    try {
+      setIsLoading(true);
+      setError("");
+
+      const data = await getContactReports();
+      setReports(data.contactReports || data);
+    } catch (err) {
+      setError(err.message || "Failed to load reports.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadReports();
+  }, []);
+
+  const handleMarkResolved = async (reportId) => {
+    try {
+      const data = await resolveContactReport(reportId);
+
+      setReports((prev) =>
+        prev.map((report) =>
+          report._id === reportId
+          ? (data.contactReport || data)
+          : report
+        )
+      );
+
+      showToast("Report marked as resolved");
+    } catch (err) {
+      showToast(err.message || "Failed to resolve report.");
+    }
   };
 
   const handleDeleteClick = (report) => {
@@ -66,15 +71,23 @@ function ReviewReports() {
     setShowDeleteDialog(true);
   };
 
-  const handleConfirmDelete = () => {
-    if (selectedReport) {
-      setReports((prev) => prev.filter((r) => r.id !== selectedReport.id));
+  const handleConfirmDelete = async () => {
+    if (!selectedReport) return;
+
+    try {
+      await deleteContactReport(selectedReport._id);
+
+      setReports((prev) =>
+        prev.filter((report) => report._id !== selectedReport._id)
+      );
+
       setShowDeleteDialog(false);
       setSelectedReport(null);
       showToast("Report deleted successfully");
+    } catch (err) {
+      showToast(err.message || "Failed to delete report.");
     }
   };
-
 
   const pendingCount = reports.filter((r) => r.status === "pending").length;
   const resolvedCount = reports.filter((r) => r.status === "resolved").length;
@@ -105,7 +118,15 @@ function ReviewReports() {
           </div>
         </div>
 
-        {reports.length === 0 ? (
+        {isLoading ? (
+          <div className="card review-reports-empty">
+            <p className="text-muted">Loading reports...</p>
+          </div>
+        ) : error ? (
+          <div className="card review-reports-empty">
+            <p className="text-muted">{error}</p>
+          </div>
+        ) : reports.length === 0 ? (
           <div className="card review-reports-empty">
             <p className="text-muted">No reports available.</p>
           </div>
@@ -113,7 +134,7 @@ function ReviewReports() {
           <div className="review-reports-list">
             {reports.map((report) => (
               <div
-                key={report.id}
+                key={report._id}
                 className={`card review-reports-card ${
                   report.status === "resolved"
                     ? "review-reports-card--resolved"
@@ -137,9 +158,9 @@ function ReviewReports() {
                       </div>
 
                       <div className="review-reports-meta">
-                        <span>📧 {report.userEmail}</span>
+                        <span>📧 {report.email}</span>
                         <span className="review-reports-dot">•</span>
-                        <span>{report.date}</span>
+                        <span>{formatDate(report.createdAt)}</span>
                       </div>
                     </div>
                   </div>
@@ -152,7 +173,7 @@ function ReviewReports() {
                     {report.status === "pending" && (
                       <button
                         className="btn btn-primary review-reports-action-btn"
-                        onClick={() => handleMarkResolved(report.id)}
+                        onClick={() => handleMarkResolved(report._id)}
                       >
                         Mark as Resolved
                       </button>
@@ -197,7 +218,7 @@ function ReviewReports() {
                   {selectedReport.subject}
                 </p>
                 <p className="delete-report-modal__email text-muted">
-                  From: {selectedReport.userEmail}
+                  From: {selectedReport.email}
                 </p>
                 <p className="delete-report-modal__message">
                   {selectedReport.message}

@@ -1,72 +1,112 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../styles/pages/ManageComments.css";
 import { Link } from "react-router-dom";
+import {
+  getAllReviews,
+  hideReview,
+  showReview,
+  deleteReview,
+} from "../services/reviewService";
 
 function ManageComments() {
-  const initialComments = [
-    {
-      id: "1",
-      recipeId: "1",
-      recipeName: "Classic Chicken Stir-Fry",
-      recipeImage:
-        "https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=200",
-      userName: "John Doe",
-      rating: 5,
-      comment:
-        "Amazing recipe! My family loved it. Very easy to make and delicious.",
-      date: "Feb 25, 2026",
-      hidden: false,
-    },
-    {
-      id: "2",
-      recipeId: "2",
-      recipeName: "Creamy Tomato Pasta",
-      recipeImage:
-        "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=200",
-      userName: "Jane Smith",
-      rating: 4,
-      comment:
-        "Great pasta! Could use a bit more seasoning but overall excellent.",
-      date: "Feb 24, 2026",
-      hidden: false,
-    },
-  ];
-
-  const [comments, setComments] = useState(initialComments);
+  const [comments, setComments] = useState([]);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [selectedComment, setSelectedComment] = useState(null);
   const [toast, setToast] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   const showToast = (message) => {
     setToast(message);
     setTimeout(() => setToast(""), 2200);
   };
 
+  const normalizeReview = (review) => ({
+    id: review._id || review.id,
+    recipeName:
+      review.recipeId?.title ||
+      review.recipeId?.name ||
+      "Unknown Recipe",
+    recipeImage:
+      review.recipeId?.image ||
+      review.recipeId?.imageUrl ||
+      "",
+    userName:
+      review.userId?.name ||
+      review.userId?.email ||
+      "Unknown User",
+    userEmail: review.userId?.email || "",
+    rating: review.rating || 0,
+    comment: review.comment || "",
+    date: review.createdAt
+      ? new Date(review.createdAt).toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+        })
+      : "No date",
+    hidden: review.visible === false,
+  });
+
+  const loadReviews = async () => {
+    try {
+      setIsLoading(true);
+      const data = await getAllReviews();
+      setComments(data.map(normalizeReview));
+    } catch (error) {
+      showToast(error.message || "Failed to load comments.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadReviews();
+  }, []);
+
   const handleDeleteClick = (comment) => {
     setSelectedComment(comment);
     setShowDeleteDialog(true);
   };
 
-  const handleConfirmDelete = () => {
-    if (selectedComment) {
-      setComments((prev) => prev.filter((c) => c.id !== selectedComment.id));
+  const handleConfirmDelete = async () => {
+    if (!selectedComment) return;
+
+    try {
+      await deleteReview(selectedComment.id);
+
+      setComments((prev) =>
+        prev.filter((comment) => comment.id !== selectedComment.id)
+      );
+
       setShowDeleteDialog(false);
       setSelectedComment(null);
-      showToast("Comment deleted permanently.");
+      showToast("Comment deleted.");
+    } catch (error) {
+      showToast(error.message || "Failed to delete comment.");
     }
   };
 
-  const handleToggleHide = (comment) => {
-    setComments((prev) =>
-      prev.map((c) =>
-        c.id === comment.id ? { ...c, hidden: !c.hidden } : c
-      )
-    );
+  const handleToggleHide = async (comment) => {
+    try {
+      const data = comment.hidden
+        ? await showReview(comment.id)
+        : await hideReview(comment.id);
 
-    if (comment.hidden) {
-      showToast(`Comment by ${comment.userName} is now visible.`);
-    } else {
-      showToast(`Comment by ${comment.userName} is now hidden.`);
+      const updatedComment = normalizeReview(data);
+
+      setComments((prev) =>
+        prev.map((item) =>
+          item.id === comment.id ? updatedComment : item
+        )
+      );
+
+      if (comment.hidden) {
+        showToast(`Comment by ${comment.userName} is now visible.`);
+      } else {
+        showToast(`Comment by ${comment.userName} is now hidden.`);
+      }
+    } catch (error) {
+      showToast(error.message || "Failed to update comment visibility.");
     }
   };
 
@@ -116,73 +156,90 @@ function ManageComments() {
           </div>
         </div>
 
-        <div className="manage-comments-list">
-          {comments.map((comment) => (
-            <div
-              key={comment.id}
-              className={`card manage-comments-card ${
-                comment.hidden ? "manage-comments-card--hidden" : ""
-              }`}
-            >
-              <div className="manage-comments-card__row">
-                <div className="manage-comments-thumb-wrap">
-                  <img
-                    src={comment.recipeImage}
-                    alt={comment.recipeName}
-                    className={`manage-comments-thumb ${
-                      comment.hidden ? "manage-comments-thumb--hidden" : ""
-                    }`}
-                  />
-                  {comment.hidden && (
-                    <div className="manage-comments-thumb__overlay">🙈</div>
-                  )}
-                </div>
+        {isLoading ? (
+          <div className="card manage-comments-empty">
+            <p className="text-muted">Loading comments...</p>
+          </div>
+        ) : comments.length === 0 ? (
+          <div className="card manage-comments-empty">
+            <p className="text-muted">No comments available.</p>
+          </div>
+        ) : (
+          <div className="manage-comments-list">
+            {comments.map((comment) => (
+              <div
+                key={comment.id}
+                className={`card manage-comments-card ${
+                  comment.hidden ? "manage-comments-card--hidden" : ""
+                }`}
+              >
+                <div className="manage-comments-card__row">
+                  <div className="manage-comments-thumb-wrap">
+                    {comment.recipeImage ? (
+                      <img
+                        src={comment.recipeImage}
+                        alt={comment.recipeName}
+                        className={`manage-comments-thumb ${
+                          comment.hidden ? "manage-comments-thumb--hidden" : ""
+                        }`}
+                      />
+                    ) : (
+                      <div className="manage-comments-thumb manage-comments-thumb--placeholder">
+                        🍽️
+                      </div>
+                    )}
 
-                <div className="manage-comments-body">
-                  <div className="manage-comments-title-row">
-                    <h3>{comment.recipeName}</h3>
                     {comment.hidden && (
-                      <span className="badge badge-warning">Hidden</span>
+                      <div className="manage-comments-thumb__overlay">🙈</div>
                     )}
                   </div>
 
-                  <div className="manage-comments-meta">
-                    <span>
-                      by <strong>{comment.userName}</strong>
-                    </span>
-                    <span className="manage-comments-dot">•</span>
-                    <span>{comment.date}</span>
-                  </div>
+                  <div className="manage-comments-body">
+                    <div className="manage-comments-title-row">
+                      <h3>{comment.recipeName}</h3>
+                      {comment.hidden && (
+                        <span className="badge badge-warning">Hidden</span>
+                      )}
+                    </div>
 
-                  <div className="manage-comments-rating">
-                    {renderStars(comment.rating)}
-                    <span className="manage-comments-rating__text">
-                      {comment.rating} / 5
-                    </span>
-                  </div>
+                    <div className="manage-comments-meta">
+                      <span>
+                        by <strong>{comment.userName}</strong>
+                      </span>
+                      <span className="manage-comments-dot">•</span>
+                      <span>{comment.date}</span>
+                    </div>
 
-                  <p className="manage-comments-text">"{comment.comment}"</p>
+                    <div className="manage-comments-rating">
+                      {renderStars(comment.rating)}
+                      <span className="manage-comments-rating__text">
+                        {comment.rating} / 5
+                      </span>
+                    </div>
 
-                  <div className="manage-comments-actions">
-                    <button
-                      className="btn btn-secondary manage-comments-action-btn"
-                      onClick={() => handleToggleHide(comment)}
-                    >
-                      {comment.hidden ? "Show" : "Hide"}
-                    </button>
+                    <p className="manage-comments-text">"{comment.comment}"</p>
 
-                    <button
-                      className="btn btn-destructive manage-comments-action-btn"
-                      onClick={() => handleDeleteClick(comment)}
-                    >
-                      Delete
-                    </button>
+                    <div className="manage-comments-actions">
+                      <button
+                        className="btn btn-secondary manage-comments-action-btn"
+                        onClick={() => handleToggleHide(comment)}
+                      >
+                        {comment.hidden ? "Show" : "Hide"}
+                      </button>
+
+                      <button
+                        className="btn btn-destructive manage-comments-action-btn"
+                        onClick={() => handleDeleteClick(comment)}
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </main>
 
       {showDeleteDialog && (

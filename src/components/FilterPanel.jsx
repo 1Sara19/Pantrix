@@ -1,49 +1,72 @@
+import { useEffect, useState } from "react";
 import { Clock3 } from "lucide-react";
 import "../styles/components/FilterPanel.css";
+import { getActiveFilters } from "../services/filterService";
 
-const cookTimeOptions = [
+const defaultCookTimeOptions = [
   { label: "10 minutes", value: "10" },
   { label: "30 minutes", value: "30" },
   { label: "1 hour", value: "60" },
   { label: "Open time", value: "" },
 ];
 
-const dietOptions = [
-  "Vegetarian",
-  "High Protein",
-  "Healthy",
-  "Light Meal",
-  "Comfort Food",
-];
-
-const allergyOptions = [
-  "Dairy",
-  "Eggs",
-  "Peanuts",
-  "Tree Nuts",
-  "Gluten / Wheat",
-  "Soy",
-  "Fish",
-  "Seafood",
-];
-
 export default function FilterPanel({ filters, setFilters }) {
+  const [cookTimeOptions, setCookTimeOptions] = useState(defaultCookTimeOptions);
+  const [dietOptions, setDietOptions] = useState([]);
+  const [allergyOptions, setAllergyOptions] = useState([]);
+
+  useEffect(() => {
+    const loadFilters = async () => {
+      try {
+        const data = await getActiveFilters();
+
+        const cookTimes = (data.cookTime || []).map((item) => ({
+          label: item.name || item.value,
+          value: item.value || item.name,
+        }));
+
+        const dietary = (data.dietary || []).map(
+          (item) => item.name || item.value
+        );
+
+        const allergies = (data.allergy || []).map(
+          (item) => item.name || item.value
+        );
+
+        if (cookTimes.length > 0) {
+          setCookTimeOptions([
+            ...cookTimes,
+            { label: "Open time", value: "" },
+          ]);
+        }
+
+        setDietOptions(dietary);
+        setAllergyOptions(allergies);
+      } catch (error) {
+        console.error("Failed to load filters:", error);
+      }
+    };
+
+    loadFilters();
+  }, []);
+
   const handleCookTimeChange = (value) => {
     setFilters({ ...filters, cookTime: value });
   };
 
   const handleDietaryChange = (value) => {
-    const exists = filters.dietary.includes(value);
+    const currentDietary = filters.dietary || [];
+    const exists = currentDietary.includes(value);
 
     if (exists) {
       setFilters({
         ...filters,
-        dietary: filters.dietary.filter((item) => item !== value),
+        dietary: currentDietary.filter((item) => item !== value),
       });
     } else {
       setFilters({
         ...filters,
-        dietary: [...filters.dietary, value],
+        dietary: [...currentDietary, value],
       });
     }
   };
@@ -105,19 +128,23 @@ export default function FilterPanel({ filters, setFilters }) {
       </div>
 
       <div className="filter-section">
-        <label className="filter-section-title">Diet Mode</label>
+        <label className="filter-section-title">Food Type</label>
 
         <div className="filter-checkbox-group">
-          {dietOptions.map((item) => (
-            <label className="filter-checkbox-item" key={item}>
-              <input
-                type="checkbox"
-                checked={filters.dietary.includes(item)}
-                onChange={() => handleDietaryChange(item)}
-              />
-              <span>{item}</span>
-            </label>
-          ))}
+          {dietOptions.length === 0 ? (
+            <p className="filter-section-note">No food type filters available.</p>
+          ) : (
+            dietOptions.map((item) => (
+              <label className="filter-checkbox-item" key={item}>
+                <input
+                  type="checkbox"
+                  checked={(filters.dietary || []).includes(item)}
+                  onChange={() => handleDietaryChange(item)}
+                />
+                <span>{item}</span>
+              </label>
+            ))
+          )}
         </div>
       </div>
 
@@ -131,16 +158,20 @@ export default function FilterPanel({ filters, setFilters }) {
         </p>
 
         <div className="filter-checkbox-group">
-          {allergyOptions.map((item) => (
-            <label className="filter-checkbox-item" key={item}>
-              <input
-                type="checkbox"
-                checked={isExcludedChecked(item)}
-                onChange={() => handleExcludeToggle(item)}
-              />
-              <span>{item}</span>
-            </label>
-          ))}
+          {allergyOptions.length === 0 ? (
+            <p className="filter-section-note">No allergy filters available.</p>
+          ) : (
+            allergyOptions.map((item) => (
+              <label className="filter-checkbox-item" key={item}>
+                <input
+                  type="checkbox"
+                  checked={isExcludedChecked(item)}
+                  onChange={() => handleExcludeToggle(item)}
+                />
+                <span>{item}</span>
+              </label>
+            ))
+          )}
         </div>
       </div>
     </div>
