@@ -6,6 +6,7 @@ import RecipeList from "../components/RecipeList";
 import "../styles/pages/Home.css";
 import { toast } from "sonner";
 import { suggestRecipes } from "../services/recipeService";
+import { getRecipeLimit } from "../services/adminService";
 
 export default function Home() {
   const [ingredients, setIngredients] = useState([]);
@@ -19,6 +20,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(6);
   const [hasMore, setHasMore] = useState(false);
   const [showFilterModal, setShowFilterModal] = useState(false);
 
@@ -38,6 +40,19 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
+    const loadRecipeLimit = async () => {
+      try {
+        const data = await getRecipeLimit();
+        setLimit(data.maxRecipes || 6);
+      } catch (error) {
+        console.error("Failed to load recipe limit:", error);
+      }
+    };
+
+    loadRecipeLimit();
+  }, []);
+
+  useEffect(() => {
     if (ingredients.length === 0) {
       setRecipes([]);
       setLoading(false);
@@ -51,7 +66,7 @@ export default function Home() {
       setPage(1);
 
       try {
-        const data = await suggestRecipes(ingredients, filters, 1, 6);
+        const data = await suggestRecipes(ingredients, filters, 1, limit);
 
         setRecipes(data.recipes || []);
         setHasMore(data.hasMore ?? true);
@@ -70,7 +85,7 @@ export default function Home() {
     }, 700);
 
     return () => clearTimeout(delay);
-  }, [ingredients, filters]);
+  }, [ingredients, filters, limit]);
 
   const handleLoadMore = async () => {
     if (ingredients.length === 0 || loadingMore) return;
@@ -79,7 +94,7 @@ export default function Home() {
     setLoadingMore(true);
 
     try {
-      const data = await suggestRecipes(ingredients, filters, nextPage, 6);
+      const data = await suggestRecipes(ingredients, filters, nextPage, limit);
 
       setRecipes((prev) => [...prev, ...(data.recipes || [])]);
       setHasMore(data.hasMore ?? true);
