@@ -135,42 +135,91 @@ export const suggestAIRecipe = async (req, res) => {
     const start = (page - 1) * limit;
     const paginatedRecipes = matchedRecipes.slice(start, start + limit);
 
-    if (paginatedRecipes.length > 0) {
+    if (page > 1) {
       return res.json({
         source: "database",
-        recipes: paginatedRecipes,
-        hasMore: matchedRecipes.length > start + limit,
+        recipes: [],
+        hasMore: false,
       });
     }
 
-    const aiRecipes = await generateAIRecipes(ingredients, filters);
+    if (paginatedRecipes.length >= limit) {
+      return res.json({
+        source: "database",
+        recipes: paginatedRecipes,
+        hasMore: false,
+      });
+    }
 
-    const recipesWithImages = await Promise.all(
-      aiRecipes.map(async (recipe) => {
-        const img = recipe.image || (await getRecipeImage(recipe.title));
-        return {
-        ...recipe,
-        image: 
-          img && img.startsWith("http")
-            ? img
-            : `https://picsum.photos/seed/${encodeURIComponent(
-                recipe.title
-              )}/400/300`,
-        };
-      })
-    );
+    const remainingCount = limit - paginatedRecipes.length;
+    let aiResults = [];
 
-    const savedRecipes = await Recipe.insertMany(recipesWithImages);
-    const recipesWithScore = savedRecipes
-      .map(calculateScore)
-      .sort((a, b) => b.matchScore - a.matchScore);
+    try {
+      const existingTitles = new Set(
+        paginatedRecipes.map((recipe) => recipe.title.toLowerCase().trim())
+      );
 
-    return res.status(201).json({
-      source: "ai",
-      recipes: recipesWithScore.slice(0, limit),
-      hasMore: true,
+      let attempts = 0;
+
+      while (aiResults.length < remainingCount && attempts < 4) {
+        attempts += 1;
+
+        const neededNow = remainingCount - aiResults.length;
+        const aiRecipes = await generateAIRecipes(ingredients, filters, neededNow);
+
+        const uniqueAIRecipes = aiRecipes.filter((recipe) => {
+          const title = recipe.title?.toLowerCase().trim();
+
+          if (!title || existingTitles.has(title)) {
+            return false;
+          }
+
+          existingTitles.add(title);
+          return true;
+        });
+
+
+        const recipesWithImages = await Promise.all(
+          uniqueAIRecipes.slice(0, neededNow).map(async (recipe) => {
+            const img = recipe.image || (await getRecipeImage(recipe.title));
+
+            return {
+              ...recipe,
+              image:
+                img && img.startsWith("http")
+                  ? img
+                  : `https://picsum.photos/seed/${encodeURIComponent(
+                      recipe.title
+                    )}/400/300`,
+            };
+          })
+        );
+
+        if (recipesWithImages.length === 0) {
+          break;
+        }
+
+        const savedRecipes = await Recipe.insertMany(recipesWithImages);
+
+        const scoredRecipes = savedRecipes
+          .map(calculateScore)
+          .sort((a, b) => b.matchScore - a.matchScore);
+
+        aiResults = [...aiResults, ...scoredRecipes].slice(0, remainingCount);
+      }
+    } catch (aiError) {
+      console.error("AI FILL ERROR:", aiError.message);
+    }
+
+    const finalRecipes = [...paginatedRecipes, ...aiResults].slice(0, limit);
+
+    return res.json({
+      source: aiResults.length > 0 ? "database+ai" : "database",
+      recipes: finalRecipes,
+      hasMore: false,
     });
   } catch (error) {
+    console.error("SUGGEST RECIPE ERROR:", error);
     res.status(500).json({
       message: "AI recipe generation failed",
       error: error.message,

@@ -1,6 +1,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-export const generateAIRecipes = async (ingredients, filters = {}) => {
+export const generateAIRecipes = async (ingredients, filters = {},count = 6) => {
   const genAI = new GoogleGenerativeAI(process.env.AI_API_KEY);
 
   const model = genAI.getGenerativeModel({
@@ -8,7 +8,7 @@ export const generateAIRecipes = async (ingredients, filters = {}) => {
   });
 
   const prompt = `
-Create 6 different recipes using some or all of these ingredients: ${ingredients.join(", ")}.
+Create ${count} different recipes using some or all of these ingredients: ${ingredients.join(", ")}.
 
 Filters:
 cookTime: ${filters.cookTime || "any"}
