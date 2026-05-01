@@ -8,9 +8,49 @@ import { submitContactReport } from "../services/contactService";
 function ContactUs() {
   const navigate = useNavigate();
 
-  const [user] = useState({
-    email: "s@gmail.com",
-  });
+  const getCurrentUser = () => {
+    try {
+      const storedUser = localStorage.getItem("user");
+
+      if (storedUser) {
+        const parsedUser = JSON.parse(storedUser);
+
+        return {
+          id: parsedUser.id || parsedUser._id || parsedUser.userId,
+          name: parsedUser.name || "User",
+          email: parsedUser.email || parsedUser.userEmail || localStorage.getItem("userEmail") || "",
+          role: parsedUser.role || localStorage.getItem("userRole"),
+        };
+      }
+
+      const token = localStorage.getItem("token");
+
+      if (token) {
+        const payload = JSON.parse(atob(token.split(".")[1]));
+
+        return {
+          id: payload.id || payload._id || payload.userId,
+          name: payload.name || "User",
+          email: payload.email || payload.userEmail || localStorage.getItem("userEmail") || "",
+          role: payload.role || localStorage.getItem("userRole"),
+        };
+      }
+
+      return {
+        name: "User",
+        email: localStorage.getItem("userEmail") || "",
+        role: localStorage.getItem("userRole"),
+      };
+    } catch {
+      return {
+        name: "User",
+        email: localStorage.getItem("userEmail") || "",
+        role: localStorage.getItem("userRole"),
+      };
+    }
+  };
+
+  const [user] = useState(getCurrentUser());
 
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
@@ -36,6 +76,7 @@ function ContactUs() {
 
     try {
       await submitContactReport({
+        name : user.name || "User",
         email: user.email,
         subject,
         message,
@@ -93,7 +134,7 @@ function ContactUs() {
                 <label>Your Email</label>
                 <input
                   type="email"
-                  value={user.email}
+                  value={user?.email || ""}
                   readOnly
                   className="input contact-input contact-readonly"
                 />

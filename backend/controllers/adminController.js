@@ -1,5 +1,9 @@
 import AppSetting from "../models/AppSetting.js";
 import User from "../models/User.js";
+import ContactReport from "../models/ContactReport.js";
+import FilterOption from "../models/FilterOption.js";
+import Review from "../models/Review.js";
+import Recipe from "../models/Recipe.js";
 
 const RECIPE_LIMIT_KEY = "recipeLimit";
 
@@ -148,6 +152,37 @@ export const deleteUserByAdmin = async (req, res) => {
   } catch (error) {
     return res.status(500).json({
       message: "Failed to delete user.",
+      error: error.message,
+    });
+  }
+};
+
+export const getAdminStats = async (req, res) => {
+  try {
+    const totalUsers = await User.countDocuments();
+    const totalRecipes = await Recipe.countDocuments();
+    const totalReports = await ContactReport.countDocuments();
+    const pendingReports = await ContactReport.countDocuments({
+      status: "pending",
+    });
+    const totalReviews = await Review.countDocuments();
+    const hiddenReviews = await Review.countDocuments({
+      visible: false,
+    });
+    const totalFilters = await FilterOption.countDocuments();
+
+    return res.status(200).json({
+      totalUsers,
+      totalRecipes,
+      totalReports,
+      pendingReports,
+      totalReviews,
+      hiddenReviews,
+      totalFilters,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Failed to get admin stats.",
       error: error.message,
     });
   }

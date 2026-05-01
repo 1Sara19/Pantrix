@@ -54,3 +54,17 @@ export async function deleteFilterOption(id) {
 
   return data;
 }
+
+export async function getActiveFilters() {
+  const response = await fetch(`${API_BASE_URL}/api/filters`, {
+    method: "GET",
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message || "Failed to load active filters.");
+  }
+
+  return data;
+}
