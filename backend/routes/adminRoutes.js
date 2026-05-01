@@ -16,7 +16,7 @@ const router = express.Router();
 
 router.get("/stats", protect, admin, getAdminStats);
 
-router.get("/settings/recipe-limit", protect, admin, getRecipeLimit);
+router.get("/settings/recipe-limit", getRecipeLimit);
 router.put("/settings/recipe-limit", protect, admin, updateRecipeLimit);
 
 router.get("/users", protect, admin, getAllUsers);

@@ -6,6 +6,7 @@ import RecipeList from "../components/RecipeList";
 import "../styles/pages/Home.css";
 import { toast } from "sonner";
 import { suggestRecipes } from "../services/recipeService";
+import { getRecipeLimit } from "../services/adminService";
 
 export default function Home() {
   const [ingredients, setIngredients] = useState([]);
@@ -19,8 +20,22 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(6);
   const [hasMore, setHasMore] = useState(false);
   const [showFilterModal, setShowFilterModal] = useState(false);
+
+  useEffect(() => {
+    const loadRecipeLimit = async () => {
+      try {
+        const data = await getRecipeLimit();
+        setLimit(data.maxRecipes || 6);
+      } catch (error) {
+        setLimit(6);
+      }
+    };
+
+    loadRecipeLimit();
+  }, []);
 
   useEffect(() => {
     const savedMessage = localStorage.getItem("welcomeMessage");
@@ -37,7 +52,6 @@ export default function Home() {
     }
   }, []);
 
-
   useEffect(() => {
     if (ingredients.length === 0) {
       setRecipes([]);
@@ -52,12 +66,12 @@ export default function Home() {
       setPage(1);
 
       try {
-        const data = await suggestRecipes(ingredients, filters, 1, 6);
+        const data = await suggestRecipes(ingredients, filters, 1, limit);
 
         setRecipes(data.recipes || []);
-        setHasMore(data.hasMore ?? true);
+        setHasMore(data.hasMore ?? false);
 
-        if (data.source === "ai") {
+        if (data.source === "ai" || data.source === "database+ai") {
           toast.success("AI generated new recipes!");
         }
       } catch (err) {
@@ -71,7 +85,7 @@ export default function Home() {
     }, 700);
 
     return () => clearTimeout(delay);
-  }, [ingredients, filters]);
+  }, [ingredients, filters, limit]);
 
   const handleLoadMore = async () => {
     if (ingredients.length === 0 || loadingMore) return;
@@ -80,14 +94,21 @@ export default function Home() {
     setLoadingMore(true);
 
     try {
-      const data = await suggestRecipes(ingredients, filters, nextPage, 6);
+      const data = await suggestRecipes(ingredients, filters, nextPage, limit);
+      const newRecipes = data.recipes || [];
 
-      setRecipes((prev) => [...prev, ...(data.recipes || [])]);
-      setHasMore(data.hasMore ?? true);
+      if (newRecipes.length === 0) {
+        setHasMore(false);
+        return;
+      }
+
+      setRecipes((prev) => [...prev, ...newRecipes]);
+      setHasMore(data.hasMore ?? false);
       setPage(nextPage);
     } catch (err) {
       console.error(err);
-      toast.error("Server error. Please try again.");
+      toast.error("No more recipes to load.");
+      setHasMore(false);
     } finally {
       setLoadingMore(false);
     }
