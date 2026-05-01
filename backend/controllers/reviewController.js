@@ -46,7 +46,7 @@ export const getAllReviews = async (req, res) => {
   try {
     const reviews = await Review.find()
       .populate("userId", "name email")
-      .populate("recipeId", "title")
+      .populate("recipeId", "title name image imageUrl")
       .sort({ createdAt: -1 });
 
     res.json(reviews);
@@ -56,21 +56,35 @@ export const getAllReviews = async (req, res) => {
 };
 
 export const hideReview = async (req, res) => {
-  const review = await Review.findByIdAndUpdate(
-    req.params.id,
-    { visible: false },
-    { new: true }
-  );
-  res.json(review);
+  try {
+    const review = await Review.findByIdAndUpdate(
+      req.params.id,
+      { visible: false },
+      { new: true }
+    )
+      .populate("userId", "name email")
+      .populate("recipeId", "title name image imageUrl");
+
+    res.json(review);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
 export const showReview = async (req, res) => {
-  const review = await Review.findByIdAndUpdate(
-    req.params.id,
-    { visible: true },
-    { new: true }
-  );
-  res.json(review);
+  try {
+    const review = await Review.findByIdAndUpdate(
+      req.params.id,
+      { visible: true },
+      { new: true }
+    )
+      .populate("userId", "name email")
+      .populate("recipeId", "title name image imageUrl");
+
+    res.json(review);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
 export const deleteReview = async (req, res) => {
