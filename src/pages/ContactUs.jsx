@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Mail, ArrowLeft, Send, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 import "../styles/pages/ContactUs.css";
+import { submitContactReport } from "../services/contactService";
 
 function ContactUs() {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ function ContactUs() {
 
   if (!user) return null;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!subject || !message.trim()) {
@@ -33,12 +34,21 @@ function ContactUs() {
 
     setIsSubmitting(true);
 
-    setTimeout(() => {
+    try {
+      await submitContactReport({
+        email: user.email,
+        subject,
+        message,
+      });
+
       toast.success("Message sent successfully!");
       setSubject("");
       setMessage("");
+    } catch (error) {
+      toast.error(error.message || "Failed to send message");
+    } finally {
       setIsSubmitting(false);
-    }, 1000);
+    }
   };
 
   return (
