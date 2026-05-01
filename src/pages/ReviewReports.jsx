@@ -36,7 +36,7 @@ function ReviewReports() {
       setError("");
 
       const data = await getContactReports();
-      setReports(data);
+      setReports(data.contactReports || data);
     } catch (err) {
       setError(err.message || "Failed to load reports.");
     } finally {
@@ -54,7 +54,9 @@ function ReviewReports() {
 
       setReports((prev) =>
         prev.map((report) =>
-          report._id === reportId ? data.contactReport : report
+          report._id === reportId
+          ? (data.contactReport || data)
+          : report
         )
       );
 

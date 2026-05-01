@@ -17,7 +17,7 @@ const filterOptionSchema = new mongoose.Schema(
     type: {
       type: String,
       required: true,
-      enum: ["cookTime", "dietary", "allergy"],
+      enum: ["cookTime", "dietary", "allergy", "category"],
     },
 
     isActive: {
