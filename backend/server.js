@@ -7,9 +7,9 @@ import recipeRoutes from "./routes/recipeRoutes.js";
 import favoriteRoutes from "./routes/favoriteRoutes.js";
 import reviewRoutes from "./routes/reviewRoutes.js";
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
+import mealPlanRoutes from "./routes/mealPlanRoutes.js";
 
 dotenv.config();
-
 connectDB();
 
 const app = express();
@@ -17,13 +17,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.send("Pantrix backend is running");
-});
+app.use("/api/favorites", favoriteRoutes);
+app.use("/api/meal-plans", mealPlanRoutes);
 
 app.use("/api/auth", authRoutes);
 app.use("/api/recipes", recipeRoutes);
-app.use("/api/favorites", favoriteRoutes);
 app.use("/api/reviews", reviewRoutes);
 
 app.use(notFound);

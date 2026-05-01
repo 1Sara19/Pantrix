@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const reviewSchema = new mongoose.Schema(
+const mealPlanSchema = new mongoose.Schema(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -12,24 +12,22 @@ const reviewSchema = new mongoose.Schema(
       ref: "Recipe",
       required: true,
     },
-    rating: {
-      type: Number,
-      required: true,
-      min: 1,
-      max: 5,
-    },
-    comment: {
+    day: {
       type: String,
-      default: "",
+      required: true,
     },
-    visible: {
-      type: Boolean,
-      default: true,
+    mealType: {
+      type: String,
+      enum: ["breakfast", "lunch", "dinner", "snack"],
+      required: true,
     },
   },
   { timestamps: true }
 );
 
-const Review = mongoose.model("Review", reviewSchema);
+mealPlanSchema.index(
+  { userId: 1, recipeId: 1, day: 1, mealType: 1 },
+  { unique: true }
+);
 
-export default Review;
+export default mongoose.model("MealPlan", mealPlanSchema);
