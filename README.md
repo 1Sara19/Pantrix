@@ -556,7 +556,7 @@ http://localhost:5001/api
 
 ---
 ## Current Limitations
-* AI recipe generation and ingredient suggestions are working and can generate recipes based on user input. Generated recipes can also be saved in the database. However, the external AI/API service currently has a limited remaining credit balance, so only a small number of new recipes can still be generated beyond the recipes already stored in the database.
+* AI recipe generation and ingredient suggestions are working and can generate recipes based on user input. Generated recipes can also be saved in the database. However, the external AI/API service currently has a limited remaining credit balance, so only a small number of new recipes can still be generated beyond the recipes already stored in the database. The database currently includes stored recipes for ingredients such as tomato, with fewer available results for some ingredients such as chili pepper. 
 ---
 ## Additional Notes
 
