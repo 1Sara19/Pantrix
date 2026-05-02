@@ -555,3 +555,15 @@ http://localhost:5001/api
 | DELETE | `/admin/users/:id` | Delete user | Admin |
 
 ---
+
+## Additional Notes
+
+* Backend runs locally on port `5001`
+* Frontend runs using Vite
+* Protected routes require a valid JWT token
+* Admin routes require both authentication and admin authorization
+* API keys must be stored inside `.env` and should not be pushed to GitHub
+* The backend is connected to MongoDB using Mongoose
+* The frontend communicates with the backend through service files inside `src/services/`
+* Recipe search performance may sometimes be affected because the recipe suggestion/search feature is connected to an external LLM/AI API. Response time can vary depending on the API availability, network connection, and request size.
+---
