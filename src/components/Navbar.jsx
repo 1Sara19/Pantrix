@@ -3,7 +3,7 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Home, Heart, User, Calendar, Mail, LogOut } from "lucide-react";
 import RestrictedModal from "./RestrictedModal";
 import "../styles/components/Navbar.css";
-import logo from "../assets/images/pantrix.png";
+import logo from "../assets/images/Pantrix.png";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
