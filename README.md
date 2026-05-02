@@ -555,6 +555,10 @@ http://localhost:5001/api
 | DELETE | `/admin/users/:id` | Delete user | Admin |
 
 ---
+## Current Limitations
+* AI recipe generation and ingredient suggestions are working and can generate recipes based on user input. Generated recipes can also be saved in the database. 
+
+
 
 ## Additional Notes
 
