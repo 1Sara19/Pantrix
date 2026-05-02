@@ -12,3 +12,29 @@ Users can filter results based on cooking time, meal categories, and dietary res
 Registered users can save favorite recipes, manage their dietary preferences and allergies, and create meal plans. Guest users can browse and view recipes without requiring an account.
 
 ---
+
+##  Features
+
+* Search recipes based on available ingredients
+* Filter recipes by:
+
+    * Cooking time (e.g.15 / 30 minutes)
+    * Food type (e.g., vegetarian, protein-based)
+    * Dietary restrictions (e.g., no dairy, no nuts)
+* View recipe details (ingredients, steps, servings)
+* Highlight missing ingredients
+* Save favorite recipes
+* Create weekly meal plans
+* Contact Us
+* Share recipes via link
+* Login & Signup system with role selection
+* Guest browsing with restricted actions
+* Admin Dashboard:
+
+    * Manage users
+    * Manage filters
+    * Control search results limit
+    * Moderate comments
+    * Review user reports
+
+---
