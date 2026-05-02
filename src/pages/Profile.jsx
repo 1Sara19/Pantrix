@@ -31,12 +31,14 @@ function Profile() {
 
   useEffect(() => {
     const savedEmail = localStorage.getItem("userEmail") || "";
-    const savedName =
-      localStorage.getItem("userName") ||
-      (savedEmail ? savedEmail.split("@")[0] : "");
 
     const savedUserId =
       localStorage.getItem("userId") || savedEmail.toLowerCase().trim();
+
+    const savedName =
+      localStorage.getItem(`profileName_${savedUserId}`) ||
+      localStorage.getItem("userName") ||
+      (savedEmail ? savedEmail.split("@")[0] : "");
 
     const savedAllergies =
       JSON.parse(localStorage.getItem(`allergies_${savedUserId}`)) || [];
@@ -120,6 +122,7 @@ function Profile() {
       localStorage.setItem("userEmail", trimmedEmail);
 
       if (currentUserId) {
+        localStorage.setItem(`profileName_${currentUserId}`, trimmedName);
         localStorage.setItem(
           `allergies_${currentUserId}`,
           JSON.stringify(allergies)
@@ -148,6 +151,7 @@ function Profile() {
     localStorage.removeItem("userRole");
     localStorage.removeItem("userEmail");
     localStorage.removeItem("userId");
+
     navigate("/login");
   };
 
@@ -220,9 +224,7 @@ function Profile() {
                         readOnly
                       />
 
-                      <small>
-                        Email cannot be changed from the profile page.
-                      </small>
+                      <small>Email cannot be changed from the profile page.</small>
 
                       {errors.email && (
                         <small className="error-text">{errors.email}</small>
