@@ -20,10 +20,15 @@ export default function FilterPanel({ filters, setFilters }) {
       try {
         const data = await getActiveFilters();
 
-        const cookTimes = (data.cookTime || []).map((item) => ({
-          label: item.name || item.value,
-          value: item.value || item.name,
-        }));
+        const cookTimes = (data.cookTime || []).map((item) => {
+          const label = item.name || item.value;
+          const numericValue = String(item.value || item.name).replace(/\D/g, "");
+
+          return {
+            label,
+            value: numericValue,
+          };
+        });
 
         const dietary = (data.dietary || []).map(
           (item) => item.name || item.value
