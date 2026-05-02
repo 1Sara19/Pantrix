@@ -67,3 +67,32 @@ export const getMe = async (req, res) => {
     const user = await User.findById(req.user.id).select("-password");
     res.json(user);
 };
+
+export const updateProfile = async (req, res) => {
+  const user = await User.findById(req.user._id);
+
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found");
+  }
+
+  const { name, allergies } = req.body;
+
+  if (name !== undefined) {
+    user.name = name;
+  }
+
+  if (allergies !== undefined) {
+    user.allergies = allergies;
+  }
+
+  const updatedUser = await user.save();
+
+  res.json({
+    _id: updatedUser._id,
+    name: updatedUser.name,
+    email: updatedUser.email,
+    role: updatedUser.role,
+    allergies: updatedUser.allergies || [],
+  });
+};

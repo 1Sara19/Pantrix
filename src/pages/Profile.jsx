@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { User, Mail, Shield, Save, ArrowLeft, Edit2, X } from "lucide-react";
 import { toast } from "sonner";
 import { getFavorites } from "../services/favoriteService";
+import { getCurrentUser, updateProfile } from "../services/authService";
 import "../styles/pages/profile.css";
 
 function Profile() {
@@ -13,6 +14,7 @@ function Profile() {
     email: "",
     allergies: [],
     favoriteRecipes: [],
+    role: "user",
   });
 
   const [isEditing, setIsEditing] = useState(false);
@@ -30,25 +32,43 @@ function Profile() {
   });
 
   useEffect(() => {
-    const savedEmail = localStorage.getItem("userEmail") || "";
+    const loadProfile = async () => {
+      try {
+        const data = await getCurrentUser();
 
-    const savedUserId =
-      localStorage.getItem("userId") || savedEmail.toLowerCase().trim();
+        setUser({
+          name: data.name || "",
+          email: data.email || "",
+          allergies: data.allergies || [],
+          favoriteRecipes: [],
+          role: data.role || "user",
+        });
 
-    const savedName =
-      localStorage.getItem(`profileName_${savedUserId}`) ||
-      localStorage.getItem("userName") ||
-      (savedEmail ? savedEmail.split("@")[0] : "");
+        localStorage.setItem("userName", data.name || "");
+        localStorage.setItem("userEmail", data.email || "");
+        localStorage.setItem("userRole", data.role || "user");
+        localStorage.setItem("userId", data._id || data.id || "");
+      } catch (error) {
+        console.error("Failed to load profile:", error);
+        toast.error("Failed to load profile");
 
-    const savedAllergies =
-      JSON.parse(localStorage.getItem(`allergies_${savedUserId}`)) || [];
+        const savedEmail = localStorage.getItem("userEmail") || "";
+        const savedName =
+          localStorage.getItem("userName") ||
+          (savedEmail ? savedEmail.split("@")[0] : "");
+        const savedRole = localStorage.getItem("userRole") || "user";
 
-    setUser({
-      name: savedName,
-      email: savedEmail,
-      allergies: savedAllergies,
-      favoriteRecipes: [],
-    });
+        setUser({
+          name: savedName,
+          email: savedEmail,
+          allergies: [],
+          favoriteRecipes: [],
+          role: savedRole,
+        });
+      }
+    };
+
+    loadProfile();
   }, []);
 
   useEffect(() => {
@@ -93,10 +113,9 @@ function Profile() {
     setAllergies(allergies.filter((item) => item !== allergyToRemove));
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const trimmedName = name.trim();
     const trimmedEmail = email.trim();
-    const currentUserId = localStorage.getItem("userId");
 
     if (!trimmedName || !trimmedEmail) return;
 
@@ -108,31 +127,36 @@ function Profile() {
     setErrors({ email: "" });
     setIsLoading(true);
 
-    setTimeout(() => {
-      const updatedUser = {
-        ...user,
+    try {
+      const updatedUser = await updateProfile({
         name: trimmedName,
-        email: trimmedEmail,
         allergies,
-      };
+      });
 
-      setUser(updatedUser);
+      setUser({
+        ...user,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        allergies: updatedUser.allergies || [],
+        role: updatedUser.role || user.role || "user",
+      });
 
-      localStorage.setItem("userName", trimmedName);
-      localStorage.setItem("userEmail", trimmedEmail);
+      localStorage.setItem("userName", updatedUser.name || "");
+      localStorage.setItem("userEmail", updatedUser.email || "");
+      localStorage.setItem("userRole", updatedUser.role || "user");
 
-      if (currentUserId) {
-        localStorage.setItem(`profileName_${currentUserId}`, trimmedName);
-        localStorage.setItem(
-          `allergies_${currentUserId}`,
-          JSON.stringify(allergies)
-        );
+      if (updatedUser._id || updatedUser.id) {
+        localStorage.setItem("userId", updatedUser._id || updatedUser.id);
       }
 
       setIsEditing(false);
-      setIsLoading(false);
       toast.success("Profile updated successfully!");
-    }, 500);
+    } catch (error) {
+      console.error("Failed to update profile:", error);
+      toast.error(error.message || "Failed to update profile");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleCancel = () => {
@@ -151,7 +175,7 @@ function Profile() {
     localStorage.removeItem("userRole");
     localStorage.removeItem("userEmail");
     localStorage.removeItem("userId");
-
+    localStorage.removeItem("userName");
     navigate("/login");
   };
 
@@ -199,6 +223,7 @@ function Profile() {
               <div className="card-content">
                 <div className="form-group">
                   <label htmlFor="profile-name">Name</label>
+
                   {isEditing ? (
                     <input
                       id="profile-name"
@@ -214,6 +239,7 @@ function Profile() {
 
                 <div className="form-group">
                   <label htmlFor="profile-email">Email</label>
+
                   {isEditing ? (
                     <>
                       <input
@@ -305,6 +331,7 @@ function Profile() {
                   <h2>Account Actions</h2>
                   <p>Manage your session</p>
                 </div>
+
                 <div className="card-content">
                   <button
                     type="button"
@@ -335,7 +362,7 @@ function Profile() {
                 </div>
 
                 <div className="stat-box">
-                  <h3>User</h3>
+                  <h3>{user.role === "admin" ? "Admin" : "User"}</h3>
                   <p>Account Type</p>
                 </div>
               </div>

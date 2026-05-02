@@ -58,7 +58,7 @@ export async function resolveContactReport(id) {
 }
 
 export async function deleteContactReport(id) {
-  const response = await fetch(`${API_BASE_URL}/api/contact/${id}`, {
+  const response = await fetch(`${API_BASE_URL}/contact/${id}`, {
     method: "DELETE",
     headers: getAuthHeaders(),
   });
