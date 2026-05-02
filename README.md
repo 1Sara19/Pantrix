@@ -85,4 +85,79 @@ The currently supported ingredients are:
 * salad dressing
 
 ---
+##  Project Structure
 ```
+src/
+│
+├── assets/
+│   └── images/
+│       └── Pantrix.png
+│
+├──data/
+│   ├── auth.js
+│   └── recipes.js
+│
+├── components/
+│   ├── FilterPanel.jsx
+│   ├── Navbar.jsx
+│   ├── RecipeCard.jsx
+│   ├── RecipeList.jsx
+│   ├── RestrictedModal.jsx
+│   ├── ScrollToTop.jsx
+│   └── SearchBar.jsx
+│
+├── pages/
+│   ├── Home.jsx
+│   ├── Favorites.jsx
+│   ├── Profile.jsx
+│   ├── MealPlan.jsx
+│   ├── ContactUs.jsx
+│   ├── Login.jsx
+│   ├── SignUp.jsx
+│   ├── AdminDashboard.jsx
+│   ├── ManageUsers.jsx
+│   ├── ManageFilters.jsx
+│   ├── ManageComments.jsx
+│   ├── ReviewReports.jsx
+│   └── RecipeLimits.jsx
+│
+├── styles/
+│   ├── components/
+│   │   ├── FilterPanel.css
+│   │   ├── Navbar.css
+│   │   ├── RecipeCard.css
+│   │   ├── RecipeList.css
+│   │   ├── RestrictedModal.css
+│   │   ├── SearchBar.css
+|   |   └──Footer.css
+│   │
+│   ├── pages/
+│   │   ├── AdminDashboard.css
+│   │   ├── ContactUs.css
+│   │   ├── favorites.css
+│   │   ├── Home.css
+│   │   ├── login.css
+│   │   ├── ManageComments.css
+│   │   ├── ManageFilters.css
+│   │   ├── ManageUsers.css
+│   │   ├── mealplan.css
+│   │   ├── profile.css
+│   │   ├── RecipeLimits.css
+│   │   ├── ReviewReports.css
+│   │   └── signup.css
+│   │
+│   └── theme.css
+│
+├── App.jsx
+├── main.jsx
+│
+public/
+│   └── favicon.png
+│
+index.html
+package.json
+package-lock.json
+vite.config.js
+README.md
+```
+---
