@@ -38,3 +38,9 @@ Registered users can save favorite recipes, manage their dietary preferences and
     * Review user reports
 
 ---
+
+##  Demo Accounts
+### Admin
+
+* Email: ``` admin@example.com  ```
+* Password: ``` Admin#123 ```
