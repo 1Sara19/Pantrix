@@ -473,3 +473,18 @@ http://localhost:5001/api
 | GET | `/auth/me` | Get the current logged-in user | User |
 
 ---
+
+### Recipes
+
+| Method | Endpoint | Description | Access |
+|---|---|---|---|
+| GET | `/recipes` | Get all recipes | Public |
+| POST | `/recipes` | Create a new recipe | Public/Admin depending on use |
+| GET | `/recipes/:id` | Get recipe by ID | Public |
+| PUT | `/recipes/:id` | Update recipe | Public/Admin depending on use |
+| DELETE | `/recipes/:id` | Delete recipe | Public/Admin depending on use |
+| POST | `/recipes/search` | Search recipes based on selected ingredients and filters | Public |
+| POST | `/recipes/suggest` | Get recipe suggestions | Public |
+| GET | `/recipes/ingredients/suggestions` | Get ingredient autocomplete suggestions | Public |
+
+---
