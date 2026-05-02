@@ -3,6 +3,7 @@ SWE363 – Web Engineering and Development Project.
 This project focuses on building a fully interactive front-end web application.
 
 ---
+
 ##  Description
 
 Pantrix is a smart web application that helps users decide what to cook based on the ingredients they already have at home. The system matches available ingredients with suitable recipes and ranks them using a Smart Match Score, highlighting the most relevant and practical options.
