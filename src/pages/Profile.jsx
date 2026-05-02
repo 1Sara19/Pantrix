@@ -2,7 +2,9 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { User, Mail, Shield, Save, ArrowLeft, Edit2, X } from "lucide-react";
 import { toast } from "sonner";
+import { getFavorites } from "../services/favoriteService";
 import "../styles/pages/profile.css";
+
 function Profile() {
   const navigate = useNavigate();
 
@@ -21,6 +23,7 @@ function Profile() {
   const [email, setEmail] = useState("");
   const [allergies, setAllergies] = useState([]);
   const [allergyInput, setAllergyInput] = useState("");
+  const [favoriteCount, setFavoriteCount] = useState(0);
 
   const [errors, setErrors] = useState({
     email: "",
@@ -31,13 +34,9 @@ function Profile() {
     const savedName =
       localStorage.getItem("userName") ||
       (savedEmail ? savedEmail.split("@")[0] : "");
+
     const savedUserId =
       localStorage.getItem("userId") || savedEmail.toLowerCase().trim();
-
-    const favoritesKey = savedUserId ? `favorites_${savedUserId}` : null;
-    const savedFavorites = favoritesKey
-      ? JSON.parse(localStorage.getItem(favoritesKey)) || []
-      : [];
 
     const savedAllergies =
       JSON.parse(localStorage.getItem(`allergies_${savedUserId}`)) || [];
@@ -46,8 +45,22 @@ function Profile() {
       name: savedName,
       email: savedEmail,
       allergies: savedAllergies,
-      favoriteRecipes: savedFavorites,
+      favoriteRecipes: [],
     });
+  }, []);
+
+  useEffect(() => {
+    const loadFavoritesCount = async () => {
+      try {
+        const favorites = await getFavorites();
+        setFavoriteCount(Array.isArray(favorites) ? favorites.length : 0);
+      } catch (error) {
+        console.error("Failed to load favorites count:", error);
+        setFavoriteCount(0);
+      }
+    };
+
+    loadFavoritesCount();
   }, []);
 
   useEffect(() => {
@@ -81,7 +94,7 @@ function Profile() {
   const handleSave = () => {
     const trimmedName = name.trim();
     const trimmedEmail = email.trim();
-    const updatedUserId = localStorage.getItem("userId");
+    const currentUserId = localStorage.getItem("userId");
 
     if (!trimmedName || !trimmedEmail) return;
 
@@ -94,23 +107,24 @@ function Profile() {
     setIsLoading(true);
 
     setTimeout(() => {
-      const currentFavorites =
-        JSON.parse(localStorage.getItem(`favorites_${localStorage.getItem("userId")}`)) || [];
-
       const updatedUser = {
         ...user,
         name: trimmedName,
         email: trimmedEmail,
         allergies,
-        favoriteRecipes: currentFavorites,
       };
 
       setUser(updatedUser);
 
       localStorage.setItem("userName", trimmedName);
       localStorage.setItem("userEmail", trimmedEmail);
-      localStorage.setItem("userId", updatedUserId);
-      localStorage.setItem(`allergies_${updatedUserId}`, JSON.stringify(allergies));
+
+      if (currentUserId) {
+        localStorage.setItem(
+          `allergies_${currentUserId}`,
+          JSON.stringify(allergies)
+        );
+      }
 
       setIsEditing(false);
       setIsLoading(false);
@@ -205,23 +219,21 @@ function Profile() {
                         value={email}
                         readOnly
                       />
+
                       <small>
                         Email cannot be changed from the profile page.
                       </small>
 
-                      {errors.email ? (
+                      {errors.email && (
                         <small className="error-text">{errors.email}</small>
-                      ) : (
-                        <small>
-                          Note: Email changes may require verification in a
-                          production app
-                        </small>
                       )}
                     </>
                   ) : (
                     <div className="info-row">
                       <Mail size={16} />
-                      <p className="info-text">{user.email || "No email found"}</p>
+                      <p className="info-text">
+                        {user.email || "No email found"}
+                      </p>
                     </div>
                   )}
                 </div>
@@ -293,9 +305,9 @@ function Profile() {
                 </div>
                 <div className="card-content">
                   <button
-                  type="button"
-                  className="btn btn-secondary logout-btn"
-                  onClick={handleLogout}
+                    type="button"
+                    className="btn btn-secondary logout-btn"
+                    onClick={handleLogout}
                   >
                     Log Out
                   </button>
@@ -311,7 +323,7 @@ function Profile() {
 
               <div className="stats-grid">
                 <div className="stat-box">
-                  <h3>{user.favoriteRecipes.length}</h3>
+                  <h3>{favoriteCount}</h3>
                   <p>Saved Recipes</p>
                 </div>
 
@@ -329,10 +341,20 @@ function Profile() {
 
             {isEditing && (
               <div className="action-buttons">
-                <button className="btn btn-primary" onClick={handleSave}>
-                  <Save size={16} /> Save Changes
+                <button
+                  className="btn btn-primary"
+                  onClick={handleSave}
+                  disabled={isLoading}
+                >
+                  <Save size={16} />{" "}
+                  {isLoading ? "Saving..." : "Save Changes"}
                 </button>
-                <button className="btn btn-secondary" onClick={handleCancel}>
+
+                <button
+                  className="btn btn-secondary"
+                  onClick={handleCancel}
+                  disabled={isLoading}
+                >
                   Cancel
                 </button>
               </div>
@@ -340,8 +362,6 @@ function Profile() {
           </div>
         </div>
       </section>
-
-
     </div>
   );
 }
