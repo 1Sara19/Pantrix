@@ -292,3 +292,13 @@ Marks it as "Resolved"
 - Git & GitHub — Version control and team collaboration
 ---
 
+##  Figma Design
+
+A reference Figma design has been created to present the main screens and core functionalities of the Pantrix application. While the design closely reflects the structure of the final implementation, minor differences may exist.
+
+You can view the design here:  
+[View Figma Design](https://www.figma.com/design/DjsilaUGmktKrCd1DkZax4/Untitled?node-id=0-1&t=RLn08gkUd4KyVUQE-1)
+
+---
+
+
