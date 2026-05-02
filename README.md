@@ -248,3 +248,38 @@ Marks it as "Resolved"
 
 ---
 
+##  Team Members & Contributions
+
+* Sarah Alsaadan — Admin Dashboard
+
+    * Admin dashboard
+    * Manage users
+    * Manage filters
+    * Search results limit
+    * Manage comments
+    * Review reports
+
+* Ghalaa Alshahrani  — Auth & Access Control
+
+    * Login, Sign Up
+    * Role selection
+    * Guest restriction modals
+    * Documentation (README)
+
+* Reema Alqahtani  — Recipes & Search
+
+    * Home page
+    * Ingredient-based search
+    * Filters
+    * Recipe results & cards
+    * Share recipe feature
+
+* Shatha Albaraiki — User Features
+
+    * Favorites page
+    * Profile page
+    * Meal planning page
+    * Contact Us page
+
+---
+
