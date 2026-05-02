@@ -355,3 +355,25 @@ npm start
 ```
 
 ---
+
+## Backend Features
+
+* User authentication using JWT
+* Signup and login APIs
+* Get current logged-in user
+* Recipe APIs for viewing, adding, updating, deleting, searching, and suggestions
+* Ingredient suggestions API
+* Favorites APIs for logged-in users
+* Reviews/comments APIs
+* Admin review moderation: hide, show, and delete reviews
+* Weekly meal plan APIs
+* Contact report APIs
+* Admin dashboard statistics
+* Admin user management
+* Admin filter management
+* Search results limit settings
+* MongoDB integration for application data
+* Protected routes using authentication middleware
+* Admin-only routes using admin middleware
+
+---
