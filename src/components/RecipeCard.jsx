@@ -9,6 +9,7 @@ import {
 import { getReviewsByRecipe, addReview } from "../services/reviewService";
 import fallbackFoodImage from "../assets/images/fallbackImg.png";
 import "../styles/components/RecipeCard.css";
+import normalizeIngredients from "../services/normalizeIngredients.js";
 
 export default function RecipeCard({
   id,
@@ -175,11 +176,20 @@ ${window.location.origin}
   const matchedCount = matchedIngredients.length;
 
   const isIngredientMatched = (ingredient) => {
-    return matchedIngredients.some(
-      (matched) =>
-        ingredient.toLowerCase().includes(matched.toLowerCase()) ||
-        matched.toLowerCase().includes(ingredient.toLowerCase())
-    );
+    const [normalizedIngredient] = normalizeIngredients([ingredient]);
+
+    return matchedIngredients.some((matched) => {
+
+      const [normalizedMatched] = normalizeIngredients([matched]);
+
+      if (!normalizedIngredient || !normalizedMatched) return false;
+      return (
+
+        normalizedIngredient.includes(normalizedMatched) ||
+        normalizedMatched.includes(normalizedIngredient)
+      
+      );
+    });
   };
 
   return (
