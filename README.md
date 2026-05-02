@@ -301,4 +301,11 @@ You can view the design here:
 
 ---
 
+##  Notes
 
+* The project is front-end only (no backend integration yet)
+* Data is handled using localStorage
+* No API keys or environment variables are required to run this project
+* The current version supports only predefined ingredients from the static recipe dataset, since no backend integration or AI-based recipe generation is implemented yet
+
+---
