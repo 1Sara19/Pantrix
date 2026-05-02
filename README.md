@@ -178,3 +178,23 @@ README.md
    npm run dev
    ```
 ---
+
+##  Usage Instructions & Examples
+
+### As a Guest
+
+* Browse recipes
+* Search using ingredients
+* View recipe details
+* Cannot save favorites or create meal plans
+
+Example 1:  
+Guest enters: "tomato, pasta"  
+System shows matching recipes with scores  
+Guest views recipe details
+
+Example 2:  
+Guest clicks "Save to Favorites"  
+System shows "Login Required"
+
+---
