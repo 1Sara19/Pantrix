@@ -283,3 +283,12 @@ Marks it as "Resolved"
 
 ---
 
+##  Tools & Technologies Used
+
+- React.js — Main front-end framework
+- JavaScript — All application logic
+- CSS — Custom styling for all pages and components
+- Node.js & npm — Required runtime for React
+- Git & GitHub — Version control and team collaboration
+---
+
