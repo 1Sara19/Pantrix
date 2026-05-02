@@ -35,6 +35,10 @@ app.use("/api/reviews", reviewRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
+app.get("/", (req, res) => {
+  res.send("Pantrix backend is running");
+});
+
 const PORT = process.env.PORT || 5001;
 
 app.listen(PORT, () => {
