@@ -560,6 +560,7 @@ http://localhost:5001/api
 * AI recipe generation and ingredient suggestions are working and can generate recipes based on user input. Generated recipes can also be saved in the database. However, the external AI/API service currently has a limited remaining credit balance, so only a small number of new recipes can still be generated beyond the recipes already stored in the database. The database currently includes stored recipes for ingredients such as tomato, with fewer available results for some ingredients such as chili pepper. The planned solution is to increase the API credit limit or expand the database with more predefined recipes to ensure more consistent results for different ingredients.
 
 ---
+
 ## Known Issue: GitHub Contribution Statistics
 
 * GitHub contribution statistics does not fully reflect the actual work completed by the team. This issue affected our contribution evaluation in the previous phase, especially for Ghala. Although Ghala’s actual work and commits were available in her branch, the number of commits and line changes shown in GitHub’s contribution statistics appeared much lower than expected. Her line-change count stayed almost the same, which did not represent the amount of work completed.
