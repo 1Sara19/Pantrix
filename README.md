@@ -521,3 +521,14 @@ http://localhost:5001/api
 | DELETE | `/meal-plans/:id` | Delete meal plan item | User |
 
 ---
+
+### Contact Reports
+
+| Method | Endpoint | Description | Access |
+|---|---|---|---|
+| POST | `/contact` | Submit a contact report | Public |
+| GET | `/contact` | Get all contact reports | Admin |
+| PATCH | `/contact/:id/resolve` | Mark contact report as resolved | Admin |
+| DELETE | `/contact/:id` | Delete contact report | Admin |
+
+---
