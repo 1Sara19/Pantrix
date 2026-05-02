@@ -316,3 +316,42 @@ In this phase, we implemented the backend for Pantrix using `Node.js`, `Express.
 The backend connects the front-end interface with real API endpoints and database operations, replacing the previous static-only behavior with a full-stack structure.
 
 ---
+## Setup & Running the Backend(Using Terminal)
+
+1. Go to the backend folder using the command:
+```
+cd backend
+```
+
+2. Install dependencies using the command:
+```
+npm install
+```
+
+3. Create a `.env` file inside the backend folder.
+
+4. Write the file like this:
+```
+PORT=5001
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret
+AI_API_KEY=your_ai_api_key
+SPOONACULAR_API_KEY=your_spoonacular_api_key
+SERP_API_KEY=your_serp_api_key
+```
+
+5. Start the backend server for development using the command:
+```
+npm run dev
+```
+6. The server will run at:
+```
+http://localhost:5001
+```
+
+7. For production or deployment, use:
+```
+npm start
+```
+
+---
