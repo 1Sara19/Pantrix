@@ -488,3 +488,12 @@ http://localhost:5001/api
 | GET | `/recipes/ingredients/suggestions` | Get ingredient autocomplete suggestions | Public |
 
 ---
+### Favorites
+
+| Method | Endpoint | Description | Access |
+|---|---|---|---|
+| POST | `/favorites` | Add recipe to favorites | User |
+| GET | `/favorites` | Get logged-in user's favorites | User |
+| DELETE | `/favorites/:id` | Remove recipe from favorites | User |
+
+---
