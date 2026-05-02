@@ -10,7 +10,7 @@ const getAuthHeaders = () => {
 };
 
 export async function submitContactReport(contactData) {
-  const response = await fetch(`${API_BASE_URL}/api/contact`, {
+  const response = await fetch(`${API_BASE_URL}/contact`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -28,7 +28,7 @@ export async function submitContactReport(contactData) {
 }
 
 export async function getContactReports() {
-  const response = await fetch(`${API_BASE_URL}/api/contact`, {
+  const response = await fetch(`${API_BASE_URL}/contact`, {
     method: "GET",
     headers: getAuthHeaders(),
   });
@@ -43,7 +43,7 @@ export async function getContactReports() {
 }
 
 export async function resolveContactReport(id) {
-  const response = await fetch(`${API_BASE_URL}/api/contact/${id}/resolve`, {
+  const response = await fetch(`${API_BASE_URL}/contact/${id}/resolve`, {
     method: "PATCH",
     headers: getAuthHeaders(),
   });

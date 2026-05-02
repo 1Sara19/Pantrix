@@ -10,7 +10,7 @@ const getAuthHeaders = () => {
 };
 
 export async function getAllUsers() {
-  const response = await fetch(`${API_BASE_URL}/api/admin/users`, {
+  const response = await fetch(`${API_BASE_URL}/admin/users`, {
     method: "GET",
     headers: getAuthHeaders(),
   });
@@ -25,7 +25,7 @@ export async function getAllUsers() {
 }
 
 export async function updateUserByAdmin(id, userData) {
-  const response = await fetch(`${API_BASE_URL}/api/admin/users/${id}`, {
+  const response = await fetch(`${API_BASE_URL}/admin/users/${id}`, {
     method: "PUT",
     headers: getAuthHeaders(),
     body: JSON.stringify(userData),
@@ -41,7 +41,7 @@ export async function updateUserByAdmin(id, userData) {
 }
 
 export async function deleteUserByAdmin(id) {
-  const response = await fetch(`${API_BASE_URL}/api/admin/users/${id}`, {
+  const response = await fetch(`${API_BASE_URL}/admin/users/${id}`, {
     method: "DELETE",
     headers: getAuthHeaders(),
   });
@@ -56,7 +56,7 @@ export async function deleteUserByAdmin(id) {
 }
 
 export async function getRecipeLimit() {
-  const response = await fetch(`${API_BASE_URL}/api/admin/settings/recipe-limit`, {
+  const response = await fetch(`${API_BASE_URL}/admin/settings/recipe-limit`, {
     method: "GET",
     headers: getAuthHeaders(),
   });
@@ -71,7 +71,7 @@ export async function getRecipeLimit() {
 }
 
 export async function updateRecipeLimit(maxRecipes) {
-  const response = await fetch(`${API_BASE_URL}/api/admin/settings/recipe-limit`, {
+  const response = await fetch(`${API_BASE_URL}/admin/settings/recipe-limit`, {
     method: "PUT",
     headers: getAuthHeaders(),
     body: JSON.stringify({ maxRecipes }),

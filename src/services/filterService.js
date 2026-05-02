@@ -10,7 +10,7 @@ const getAuthHeaders = () => {
 };
 
 export async function getAdminFilters() {
-  const response = await fetch(`${API_BASE_URL}/api/admin/filters`, {
+  const response = await fetch(`${API_BASE_URL}/admin/filters`, {
     method: "GET",
     headers: getAuthHeaders(),
   });
@@ -25,7 +25,7 @@ export async function getAdminFilters() {
 }
 
 export async function saveFilterOption(filterData) {
-  const response = await fetch(`${API_BASE_URL}/api/admin/filters`, {
+  const response = await fetch(`${API_BASE_URL}/admin/filters`, {
     method: "POST",
     headers: getAuthHeaders(),
     body: JSON.stringify(filterData),
@@ -41,7 +41,7 @@ export async function saveFilterOption(filterData) {
 }
 
 export async function deleteFilterOption(id) {
-  const response = await fetch(`${API_BASE_URL}/api/admin/filters/${id}`, {
+  const response = await fetch(`${API_BASE_URL}/admin/filters/${id}`, {
     method: "DELETE",
     headers: getAuthHeaders(),
   });
@@ -56,7 +56,7 @@ export async function deleteFilterOption(id) {
 }
 
 export async function getActiveFilters() {
-  const response = await fetch(`${API_BASE_URL}/api/filters`, {
+  const response = await fetch(`${API_BASE_URL}/filters`, {
     method: "GET",
   });
 
