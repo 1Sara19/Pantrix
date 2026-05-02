@@ -309,3 +309,10 @@ You can view the design here:
 * The current version supports only predefined ingredients from the static recipe dataset, since no backend integration or AI-based recipe generation is implemented yet
 
 ---
+## Back-End Implementation
+
+In this phase, we implemented the backend for Pantrix using `Node.js`, `Express.js`, and `MongoDB`. The backend now handles authentication, user management, recipe storage, favorites, reviews/comments, meal plans, contact reports, filter management, and admin settings.
+
+The backend connects the front-end interface with real API endpoints and database operations, replacing the previous static-only behavior with a full-stack structure.
+
+---
