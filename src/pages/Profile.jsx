@@ -81,7 +81,7 @@ function Profile() {
   const handleSave = () => {
     const trimmedName = name.trim();
     const trimmedEmail = email.trim();
-    const updatedUserId = trimmedEmail.toLowerCase();
+    const updatedUserId = localStorage.getItem("userId");
 
     if (!trimmedName || !trimmedEmail) return;
 
@@ -200,14 +200,14 @@ function Profile() {
                     <>
                       <input
                         id="profile-email"
-                        className={`input ${errors.email ? "input-error" : ""}`}
+                        className="input"
                         type="email"
                         value={email}
-                        onChange={(e) => {
-                          setEmail(e.target.value);
-                          if (errors.email) setErrors({ email: "" });
-                        }}
+                        readOnly
                       />
+                      <small>
+                        Email cannot be changed from the profile page.
+                      </small>
 
                       {errors.email ? (
                         <small className="error-text">{errors.email}</small>
