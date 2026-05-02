@@ -15,7 +15,7 @@ export default function SearchBar({ ingredients, setIngredients }) {
 
     try {
       const res = await fetch(
-        `http://localhost:5001/api/recipes/ingredients/suggestions?query=${value}`
+        `https://pantrix-backend.onrender.com/api/recipes/ingredients/suggestions?query=${value}`
       );
 
       const data = await res.json();

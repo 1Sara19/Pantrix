@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5001/api/favorites";
+const API_URL = "https://pantrix-backend.onrender.com/api/favorites";
 
 const getToken = () => localStorage.getItem("token");
 

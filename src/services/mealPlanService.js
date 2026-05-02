@@ -1,5 +1,5 @@
 // Meal plan API functions will be added here.
-const API_URL = "http://localhost:5001/api/meal-plans";
+const API_URL = "https://pantrix-backend.onrender.com/api/meal-plans";
 
 const getToken = () => localStorage.getItem("token");
 

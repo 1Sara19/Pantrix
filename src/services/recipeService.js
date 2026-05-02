@@ -1,5 +1,5 @@
 // Recipe, search, suggestions, and AI API functions will be added here.
-const API_URL = "http://localhost:5001/api/recipes";
+const API_URL = "https://pantrix-backend.onrender.com/api/recipes";
 
 export const suggestRecipes = async (ingredients, filters, page = 1, limit = 6) => {
   const res = await fetch(`${API_URL}/suggest?page=${page}&limit=${limit}`, {

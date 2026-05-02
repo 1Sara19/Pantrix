@@ -1,5 +1,5 @@
 // Auth API functions will be added here.
-const API_URL = "http://localhost:5001/api/auth";
+const API_URL = "https://pantrix-backend.onrender.com/api/auth";
 
 export const signup = async (userData) => {
     const response = await fetch(`${API_URL}/signup`, {
