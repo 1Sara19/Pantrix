@@ -463,3 +463,13 @@ Base URL:
 http://localhost:5001/api
 ```
 ---
+
+### Authentication
+
+| Method | Endpoint | Description | Access |
+|---|---|---|---|
+| POST | `/auth/signup` | Create a new user account | Public |
+| POST | `/auth/login` | Login user and return token | Public |
+| GET | `/auth/me` | Get the current logged-in user | User |
+
+---
