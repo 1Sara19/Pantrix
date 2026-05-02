@@ -555,7 +555,7 @@ http://localhost:5001/api
 | DELETE | `/admin/users/:id` | Delete user | Admin |
 
 ---
-
+## Current Limitations
 
 ---
 ## Additional Notes
