@@ -198,3 +198,29 @@ Guest clicks "Save to Favorites"
 System shows "Login Required"
 
 ---
+
+### As a User
+
+* Sign up / log in
+* Search recipes using available ingredients
+* Apply filters (time, type, dietary)
+* Save favorite recipes
+* Set dietary preferences and allergies
+* Create weekly meal plan
+* Share recipes
+
+Example 1:  
+User enters: "chicken, rice"  
+System returns recipes with match scores  
+User saves a recipe to Favorites
+
+Example 2:  
+User selects filter: "Vegetarian" + "30 minutes"  
+System displays only matching recipes
+
+Example 3:  
+User opens Meal Plan  
+Adds a recipe to Monday dinner  
+Clicks "Save Weekly Plan"
+
+---
