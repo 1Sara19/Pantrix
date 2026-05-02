@@ -565,6 +565,7 @@ http://localhost:5001/api
 * We also noticed that when Ghala continued working in Phase 5, changes made and pushed through the webstorm did not seem to update her contribution statistics properly. However, when she edited the README directly through GitHub, the commit appeared correctly and her line-change count increased. This suggests that the issue may be related to how GitHub tracks contributions after merging or pushing changes through the development environment.
 
 *  A similar issue happened in Phase 5 for the whole team. Although the team implemented the full backend, the line-change statistics for most members did not significantly change compared to the previous phase. This does not accurately reflect the actual backend work completed by the team.
+
 ## Additional Notes
 
 * Backend runs locally on port `5001`
