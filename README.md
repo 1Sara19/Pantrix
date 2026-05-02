@@ -377,3 +377,62 @@ npm start
 * Admin-only routes using admin middleware
 
 ---
+
+## Backend Structure
+```
+backend/
+│
+├── config/
+│   └── db.js
+│
+├── controllers/
+│   ├── adminController.js
+│   ├── authController.js
+│   ├── contactController.js
+│   ├── favoriteController.js
+│   ├── filterController.js
+│   ├── mealPlanController.js
+│   ├── recipeController.js
+│   └── reviewController.js
+│
+├── middleware/
+│   ├── adminMiddleware.js
+│   ├── authMiddleware.js
+│   ├── errorMiddleware.js
+│   └── validateObjectId.js
+│
+├── models/
+│   ├── AppSetting.js
+│   ├── ContactReport.js
+│   ├── Favorite.js
+│   ├── FilterOption.js
+│   ├── MealPlan.js
+│   ├── Recipe.js
+│   ├── Review.js
+│   └── User.js
+│
+├── routes/
+│   ├── adminRoutes.js
+│   ├── authRoutes.js
+│   ├── contactRoutes.js
+│   ├── favoriteRoutes.js
+│   ├── filterRoutes.js
+│   ├── mealPlanRoutes.js
+│   ├── recipeRoutes.js
+│   └── reviewRoutes.js
+│
+├── utils/
+│   ├── aiRecipeService.js
+│   ├── generateToken.js
+│   ├── ingredientsService.js
+│   ├── matchScore.js
+│   ├── normalizeIngredients.js
+│   └── recipeImageService.js
+│
+├── .env
+├── .gitignore
+├── package.json
+├── package-lock.json
+└── server.js
+```
+---
