@@ -321,7 +321,7 @@ function Profile() {
                 </div>
 
                 <div className="stat-box">
-                  <h3>Demo</h3>
+                  <h3>User</h3>
                   <p>Account Type</p>
                 </div>
               </div>
