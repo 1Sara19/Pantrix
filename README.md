@@ -44,3 +44,10 @@ Registered users can save favorite recipes, manage their dietary preferences and
 
 * Email: ``` admin@example.com  ```
 * Password: ``` Admin#123 ```
+
+### User
+
+* Email: ``` demo@example.com  ```
+* Password: ``` User#123 ```
+
+---
