@@ -497,3 +497,16 @@ http://localhost:5001/api
 | DELETE | `/favorites/:id` | Remove recipe from favorites | User |
 
 ---
+
+### Reviews / Comments
+
+| Method | Endpoint | Description | Access |
+|---|---|---|---|
+| POST | `/reviews` | Add a review/comment | User |
+| GET | `/reviews/recipe/:recipeId` | Get reviews for a specific recipe | Public |
+| GET | `/reviews` | Get all reviews | User/Admin depending on use |
+| PATCH | `/reviews/:id/hide` | Hide a review/comment | User/Admin depending on use |
+| PATCH | `/reviews/:id/show` | Show a hidden review/comment | User/Admin depending on use |
+| DELETE | `/reviews/:id` | Delete a review/comment | User/Admin depending on use |
+
+---
