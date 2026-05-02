@@ -510,3 +510,14 @@ http://localhost:5001/api
 | DELETE | `/reviews/:id` | Delete a review/comment | User/Admin depending on use |
 
 ---
+
+### Meal Plans
+
+| Method | Endpoint | Description | Access |
+|---|---|---|---|
+| POST | `/meal-plans` | Add recipe to meal plan | User |
+| GET | `/meal-plans` | Get logged-in user's meal plan | User |
+| PUT | `/meal-plans/:id` | Update meal plan item | User |
+| DELETE | `/meal-plans/:id` | Delete meal plan item | User |
+
+---
