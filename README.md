@@ -436,3 +436,22 @@ backend/
 └── server.js
 ```
 ---
+## Frontend Services Structure
+
+The frontend also includes service files to connect the React pages and components with the backend APIs.
+```
+src/
+│
+├── services/
+│   ├── adminService.js
+│   ├── api.js
+│   ├── authService.js
+│   ├── contactService.js
+│   ├── favoriteService.js
+│   ├── filterService.js
+│   ├── mealPlanService.js
+|   ├── normalizeIngredients.js
+│   ├── recipeService.js
+│   └── reviewService.js
+```
+---
