@@ -543,3 +543,15 @@ http://localhost:5001/api
 | DELETE | `/admin/filters/:id` | Delete or deactivate a filter option | Admin |
 
 ---
+### Admin
+
+| Method | Endpoint | Description | Access |
+|---|---|---|---|
+| GET | `/admin/stats` | Get dashboard statistics | Admin |
+| GET | `/admin/settings/recipe-limit` | Get recipe search result limit | Admin |
+| PUT | `/admin/settings/recipe-limit` | Update recipe search result limit | Admin |
+| GET | `/admin/users` | Get all users | Admin |
+| PUT | `/admin/users/:id` | Update user information | Admin |
+| DELETE | `/admin/users/:id` | Delete user | Admin |
+
+---
