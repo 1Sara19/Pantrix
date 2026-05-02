@@ -10,7 +10,7 @@ const getAuthHeaders = () => {
 };
 
 export async function getAllReviews() {
-  const response = await fetch(`${API_BASE_URL}/api/reviews`, {
+  const response = await fetch(`${API_BASE_URL}/reviews`, {
     method: "GET",
     headers: getAuthHeaders(),
   });
@@ -25,7 +25,7 @@ export async function getAllReviews() {
 }
 
 export async function hideReview(id) {
-  const response = await fetch(`${API_BASE_URL}/api/reviews/${id}/hide`, {
+  const response = await fetch(`${API_BASE_URL}/reviews/${id}/hide`, {
     method: "PATCH",
     headers: getAuthHeaders(),
   });
@@ -40,7 +40,7 @@ export async function hideReview(id) {
 }
 
 export async function showReview(id) {
-  const response = await fetch(`${API_BASE_URL}/api/reviews/${id}/show`, {
+  const response = await fetch(`${API_BASE_URL}/reviews/${id}/show`, {
     method: "PATCH",
     headers: getAuthHeaders(),
   });
@@ -55,7 +55,7 @@ export async function showReview(id) {
 }
 
 export async function deleteReview(id) {
-  const response = await fetch(`${API_BASE_URL}/api/reviews/${id}`, {
+  const response = await fetch(`${API_BASE_URL}/reviews/${id}`, {
     method: "DELETE",
     headers: getAuthHeaders(),
   });
@@ -70,7 +70,7 @@ export async function deleteReview(id) {
 }
 
 export async function addReview(reviewData) {
-  const response = await fetch(`${API_BASE_URL}/api/reviews`, {
+  const response = await fetch(`${API_BASE_URL}/reviews`, {
     method: "POST",
     headers: getAuthHeaders(),
     body: JSON.stringify(reviewData),
@@ -86,7 +86,7 @@ export async function addReview(reviewData) {
 }
 
 export async function getReviewsByRecipe(recipeId) {
-  const response = await fetch(`${API_BASE_URL}/api/reviews/recipe/${recipeId}`, {
+  const response = await fetch(`${API_BASE_URL}/reviews/recipe/${recipeId}`, {
     method: "GET",
   });
 
