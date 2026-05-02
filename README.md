@@ -224,3 +224,27 @@ Adds a recipe to Monday dinner
 Clicks "Save Weekly Plan"
 
 ---
+### As an Admin
+
+* Access Admin Dashboard
+* Manage users
+* Manage filters and categories
+* Set search results limit
+* Moderate comments (hide/delete)
+* Review and resolve user reports
+
+
+Example 1:  
+Admin sets search result limit to 10 recipes  
+All users now see max 10 results per search
+
+Example 2:  
+Admin hides an inappropriate comment  
+Comment becomes invisible to users
+
+Example 3:  
+Admin reviews a report from Contact Us  
+Marks it as "Resolved"
+
+---
+
