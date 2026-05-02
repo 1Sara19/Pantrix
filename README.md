@@ -532,3 +532,14 @@ http://localhost:5001/api
 | DELETE | `/contact/:id` | Delete contact report | Admin |
 
 ---
+### Filters
+
+| Method | Endpoint | Description | Access |
+|---|---|---|---|
+| GET | `/filters` | Get active filters for users | Public |
+| GET | `/admin/filters` | Get all filters for admin | Admin |
+| POST | `/admin/filters` | Add a new filter option | Admin |
+| PUT | `/admin/filters/:id` | Update a filter option | Admin |
+| DELETE | `/admin/filters/:id` | Delete or deactivate a filter option | Admin |
+
+---
