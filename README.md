@@ -57,3 +57,32 @@ Registered users can save favorite recipes, manage their dietary preferences and
 At the current stage, Pantrix supports a predefined set of ingredients only, since the project is front-end only and does not yet include backend integration or AI-based recipe generation.
 
 The ingredient matching is currently based on the static recipe data available in the system. Therefore, users will get results only when their entered ingredients match the ingredients already defined in the existing recipe dataset.
+
+The currently supported ingredients are:
+
+* chicken
+* garlic
+* pasta
+* cream
+* tomato
+* cucumber
+* olive oil
+* feta
+* dough
+* mozzarella
+* basil
+* rosemary
+* thyme
+* shrimp
+* butter
+* lemon
+* onion
+* carrot
+* potato
+* celery
+* vegetable broth
+* lettuce
+* salad dressing
+
+---
+```
