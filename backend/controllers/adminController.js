@@ -45,7 +45,7 @@ export const updateRecipeLimit = async (req, res) => {
       { key: RECIPE_LIMIT_KEY },
       { value: parsedValue },
       {
-        new: true,
+        returnDocument: "after",
         upsert: true,
         runValidators: true,
       }
