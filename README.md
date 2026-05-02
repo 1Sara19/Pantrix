@@ -560,7 +560,7 @@ http://localhost:5001/api
   
 ---
 ## Known Issue: GitHub Contribution Statistics
-* GitHub contribution statistics does not fully reflect the actual work completed by the team.
+* GitHub contribution statistics does not fully reflect the actual work completed by the team. This issue affected our contribution evaluation in the previous phase, especially for Ghala.
 ## Additional Notes
 
 * Backend runs locally on port `5001`
