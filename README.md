@@ -561,6 +561,7 @@ http://localhost:5001/api
 
 ---
 ## Known Issue: GitHub Contribution Statistics
+
 * GitHub contribution statistics does not fully reflect the actual work completed by the team. This issue affected our contribution evaluation in the previous phase, especially for Ghala. Although Ghala’s actual work and commits were available in her branch, the number of commits and line changes shown in GitHub’s contribution statistics appeared much lower than expected. Her line-change count stayed almost the same, which did not represent the amount of work completed.
 
 * We also noticed that when Ghala continued working in Phase 5, changes made and pushed through the webstorm did not seem to update her contribution statistics properly. However, when she edited the README directly through GitHub, the commit appeared correctly and her line-change count increased. This suggests that the issue may be related to how GitHub tracks contributions after merging or pushing changes through the development environment.
